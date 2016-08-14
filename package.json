@@ -1,6 +1,6 @@
 {
   "name": "docx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "document management ",
   "main": "index.js",
   "scripts": {
