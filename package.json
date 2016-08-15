@@ -2,7 +2,7 @@
   "name": "docx",
   "version": "0.0.2",
   "description": "document management ",
-  "main": "index.js",
+  "main": "src/docx.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
