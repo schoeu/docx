@@ -1,7 +1,93 @@
 {
   "port": "8911",
   "path": "/Users/memee/Downloads/aladdin",
+  "ignoreDir": ["img"],
   "dirname": {
-    "test": "测试"
+    "case": {
+      "name": "case总结",
+      "sort": 1
+    },
+    "rules": {
+      "name": "规范",
+      "sort": 2
+    },
+    "santa": {
+      "name": "圣玛利亚",
+      "sort": 3
+    },
+    "agile-dev": {
+      "name": "敏捷开发",
+      "sort": 3
+    },
+    "aladdininfluence": {
+      "name": "模板影响面",
+      "sort": 3
+    },
+    "cardspeedup": {
+      "name": "模板性能优化",
+      "sort": 3
+    },
+    "commonupdate": {
+      "name": "通用升级",
+      "sort": 3
+    },
+    "develop": {
+      "name": "圣玛利亚",
+      "sort": 3
+    },
+    "glbcardstandard": {
+      "name": "哥伦布子卡中心",
+      "sort": 3
+    },
+    "jscommmon": {
+      "name": "js组件",
+      "sort": 3
+    },
+    "platform": {
+      "name": "平台指南",
+      "sort": 3
+    },
+    "publish": {
+      "name": "上线",
+      "sort": 3
+    },
+    "standard": {
+      "name": "开发规范",
+      "sort": 3
+    },
+    "technicalarea": {
+      "name": "技术专区",
+      "sort": 3
+    },
+    "tongji": {
+      "name": "统计相关",
+      "sort": 3
+    },
+    "wise": {
+      "name": "无线网页搜索",
+      "sort": 3
+    },
+    "devdocs": {
+      "name": "开发指导",
+      "sort": 3
+    },
+    "foot": {
+      "name": "footer改造",
+      "sort": 3
+    },
+    "glbcardstandard": {
+      "name": "哥伦布子卡中心",
+      "sort": 3
+    },
+    "glbcardstandard": {
+      "name": "哥伦布子卡中心",
+      "sort": 3
+    },
+    "glbcardstandard": {
+      "name": "哥伦布子卡中心",
+      "sort": 3
+    }
+
+
   }
 }

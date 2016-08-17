@@ -1,0 +1,48 @@
+extends layout
+
+block head
+  style.
+    html,body {
+      margin: 0;
+      padding: 0;
+
+    }
+    .nav{
+      line-height: 45px;
+    }
+    .nav-title {
+      font-weight: bold;
+    }
+    .nav-dir {
+
+    }
+    li{
+      list-style-type: none;
+    }
+    .nav-name {
+      line-height: 45px;
+      background: #ace;
+    }
+    .nav-tree {
+      width: 30%;
+    }
+    .docx-textarea {
+      width: 40%;
+      position: absolute;
+      border: 1px solid;
+      height: 100%;
+      top: 80px;
+      left: 30%;
+      padding-left: 30%;
+    }
+    .docx-head{
+      height: 80px;
+      background: #ace;
+    }
+block content
+  header.docx-head
+
+  div.docx-content
+    div.nav-tree
+      #{navData}
+    div.docx-textarea
