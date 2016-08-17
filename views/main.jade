@@ -27,13 +27,13 @@ block head
       width: 30%;
     }
     .docx-textarea {
-      width: 40%;
+      width: 70%;
       position: absolute;
       border: 1px solid;
-      height: 100%;
+      min-height: 100%;
       top: 80px;
       left: 30%;
-      padding-left: 30%;
+      padding: 0 30px;
     }
     .docx-head{
       height: 80px;
@@ -44,5 +44,7 @@ block content
 
   div.docx-content
     div.nav-tree
-      #{navData}
+      ul.accordion
+        #{navData}
     div.docx-textarea
+        #{mdData}

@@ -27,10 +27,20 @@ Docx.prototype = {
         app.set('views', path.join(__dirname, '..', 'views'));
         app.set('view engine', 'jade');
         app.use(express.static(path.join(__dirname, '..', 'public')));
-        console.log(path.join(__dirname, '..', 'public'));
 
         app.get('/', function (req, res) {
             res.render('main', {navData: htmlStr});
+        });
+
+        app.get('/*.md', function (req, res) {
+            console.log(req.query.pathName);
+            var mdPath = path.join(CONF.path, req.originalUrl);
+            if (mdPath.indexOf('.md') > -1) {
+                var file = fs.readFileSync(mdPath);
+                var content = marked(file.toString());
+                console.log(content);
+                res.render('main', {navData: htmlStr, mdData: content});
+            }
         });
 
         app.listen(CONF.port || 8910);
@@ -87,10 +97,10 @@ Docx.prototype = {
         for(var i in dirs) {
             var item = dirs[i] || {};
             if (item.type === 'md') {
-                htmlStr += '<li data-path="' + item.path + '" class="nav nav-title">' + item.title + '</li>';
+                htmlStr += '<li class="nav nav-title"><a href="' + item.path + '">' + item.title + '</a></li>';
             }
             else if (item.type === 'dir') {
-                htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name">' + item.displayName + '</div><ul>';
+                htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name link">' + item.displayName + '</i></div><ul class="submenu">';
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
