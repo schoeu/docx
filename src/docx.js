@@ -26,6 +26,8 @@ Docx.prototype = {
         // express 视图设置
         app.set('views', path.join(__dirname, '..', 'views'));
         app.set('view engine', 'jade');
+        app.use(express.static(path.join(__dirname, '..', 'public')));
+        console.log(path.join(__dirname, '..', 'public'));
 
         app.get('/', function (req, res) {
             res.render('main', {navData: htmlStr});
@@ -39,7 +41,6 @@ Docx.prototype = {
     getDocTree: function () {
         this.walker(CONF.path, dirMap);
         this.makeNav(dirMap);
-        dirMap;
     },
 
     walker: function (dirs, dirCtt) {
