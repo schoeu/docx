@@ -4,6 +4,7 @@
 
 var path = require('path');
 var fs = require('fs');
+var url = require('url');
 var express = require('express');
 var marked = require('marked');
 var CONF = require('../docx-conf.json');
@@ -28,7 +29,7 @@ Docx.prototype = {
         if (!CONF.debug) {
             app.enable('view cache');
         }
-        //app.set('views', path.join(__dirname, '..', 'views'));
+        app.set('views', path.join(__dirname, '..', 'views'));
         //app.set('view engine', 'pug');
 
         //app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -46,11 +47,17 @@ Docx.prototype = {
         });
 
         app.get('/*.md', function (req, res) {
-            var mdPath = path.join(CONF.path, req.originalUrl);
+            var relativePath = url.parse(req.originalUrl);
+            var mdPath = path.join(CONF.path, relativePath.pathname);
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
                 var content = marked(file.toString());
-                res.render('main', {navData: htmlStr, mdData: content});
+                if (req.query.pjax === 'true') {
+                    res.end(content);
+                }
+                else {
+                    res.render('main', {navData: htmlStr, mdData: content});
+                }
             }
         });
 

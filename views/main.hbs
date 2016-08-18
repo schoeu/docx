@@ -11,7 +11,6 @@
 
         }
         .nav{
-            line-height: 32px;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
@@ -19,6 +18,9 @@
         .nav a{
             text-decoration: none;
             color: #333;
+            line-height: 32px;
+            height: 32px;
+            display: block;
         }
         .nav-title {
             font-weight: bold;
@@ -78,6 +80,7 @@
     </div>
 </div>
 <script src="/javascripts/jq.min.js"></script>
+<script src="/javascripts/jq.pjax.js"></script>
 <script>
     var $win = $(window);
     $('.docx-content').height($win.height()-$('.docx-head').height());
@@ -92,6 +95,18 @@
             $target.siblings('.nav-dir').removeClass('open');
         }
     });
+
+    $.pjax({
+        selector: 'a[href$=".md"]',
+        container: '.docx-textarea', //内容替换的容器
+        show: 'fade',  //展现的动画，支持默认和fade, 可以自定义动画方式，这里为自定义的function即可。
+        cache: 2*3600,  //是否使用缓存
+        storage: false,  //是否使用本地存储
+        titleSuffix: '', //标题后缀
+        filter: function(){},
+        callback: function(){},
+    });
+
 </script>
 </body>
 </html>
