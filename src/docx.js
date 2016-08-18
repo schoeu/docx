@@ -25,7 +25,7 @@ Docx.prototype = {
         var me = this;
         // express 视图设置
         app.set('views', path.join(__dirname, '..', 'views'));
-        app.set('view engine', 'jade');
+        app.set('view engine', 'pug');
         app.use(express.static(path.join(__dirname, '..', 'public')));
 
         app.get('/', function (req, res) {
