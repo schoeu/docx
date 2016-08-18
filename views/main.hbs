@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Example App - Home</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
+    <style>
+        html,body {
+            margin: 0;
+            padding: 0;
+
+        }
+        .nav{
+            line-height: 32px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .nav a{
+            text-decoration: none;
+            color: #333;
+        }
+        .nav-title {
+            font-weight: bold;
+        }
+        li{
+            list-style-type: none;
+        }
+        .nav-name {
+            line-height: 32px;
+            background: #ace;
+        }
+        .nav-select {
+            background: #ace;
+        }
+        .nav-tree {
+            width: 30%;
+            height: 100%;
+            overflow: auto;
+            float: left;
+        }
+        .docx-textarea {
+            width: 65%;
+            min-height: 100%;
+            padding: 0 2%;
+            height: 100%;
+            overflow: auto;
+        }
+        .docx-head{
+            height: 55px;
+            background: #131e25;
+            color: #FFF;
+            line-height: 55px;
+            text-indent: 5%;
+            font-weight: bold;
+            font-size: 23px;
+        }
+        .submenu{
+            max-height: 0;
+            -webkit-transition: max-height 2s;
+            transition: max-height 2s;
+        }
+        .open>.submenu{
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body>
+<header class="docx-head">PS-DOC</header>
+<div class="docx-content">
+    <div class="nav-tree">
+        <ul class="accordion">
+            {{{navData}}}
+        </ul>
+    </div>
+    <div class="docx-textarea markdown-body">
+        {{{mdData}}}
+    </div>
+</div>
+<script src="/javascripts/jq.min.js"></script>
+<script>
+    var $win = $(window);
+    $('.docx-content').height($win.height()-$('.docx-head').height());
+
+    $('.nav-dir').on('click', function () {
+        var $target = $(this);
+        if ($target.hasClass('open')) {
+            $target.removeClass('open');
+        }
+        else {
+            $target.addClass('open');
+            $target.siblings('.nav-dir').removeClass('open');
+        }
+    });
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
   "port": "8910",
   "path": "/Users/memee/Downloads/aladdin",
   "ignoreDir": ["img"],
+  "debug": true,
   "dirname": {
     "case": {
       "name": "case总结",

@@ -9,6 +9,7 @@ var marked = require('marked');
 var CONF = require('../docx-conf.json');
 
 var app = express();
+var exphbs  = require('express-handlebars');
 var ignorDor = CONF.ignoreDir || [];
 
 var dirMap = {};
@@ -24,27 +25,36 @@ Docx.prototype = {
     init: function () {
         var me = this;
         // express 视图设置
-        app.set('views', path.join(__dirname, '..', 'views'));
-        app.set('view engine', 'pug');
-        app.use(express.static(path.join(__dirname, '..', 'public')));
+        if (!CONF.debug) {
+            app.enable('view cache');
+        }
+        //app.set('views', path.join(__dirname, '..', 'views'));
+        //app.set('view engine', 'pug');
 
+        //app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+        //app.set('view engine', 'handlebars');
+
+
+        app.engine('.hbs', exphbs({extname: '.hbs'}));
+        app.set('view engine', '.hbs');
+
+
+        app.use(express.static(path.join(__dirname, '..', 'public')));
+        
         app.get('/', function (req, res) {
             res.render('main', {navData: htmlStr});
         });
 
         app.get('/*.md', function (req, res) {
-            console.log(req.query.pathName);
             var mdPath = path.join(CONF.path, req.originalUrl);
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
                 var content = marked(file.toString());
-                console.log(content);
                 res.render('main', {navData: htmlStr, mdData: content});
             }
         });
 
         app.listen(CONF.port || 8910);
-
         this.getDocTree();
     },
 
@@ -97,10 +107,10 @@ Docx.prototype = {
         for(var i in dirs) {
             var item = dirs[i] || {};
             if (item.type === 'md') {
-                htmlStr += '<li class="nav nav-title"><a href="' + item.path + '">' + item.title + '</a></li>';
+                htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '">' + item.title + '</a></li>';
             }
             else if (item.type === 'dir') {
-                htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name link">' + item.displayName + '</i></div><ul class="submenu">';
+                htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name link">' + item.displayName + '</div><ul class="submenu">';
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
