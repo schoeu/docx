@@ -44,9 +44,11 @@
         .docx-textarea {
             width: 65%;
             min-height: 100%;
-            padding: 0 2%;
             height: 100%;
             overflow: auto;
+        }
+        .docx-text{
+            padding: 3% 2%;
         }
         .docx-head{
             height: 55px;
@@ -75,8 +77,10 @@
             {{{navData}}}
         </ul>
     </div>
-    <div class="docx-textarea markdown-body">
-        {{{mdData}}}
+    <div class="docx-textarea">
+        <div class="markdown-body docx-text">
+            {{{mdData}}}
+        </div>
     </div>
 </div>
 <script src="/javascripts/jq.min.js"></script>
@@ -99,12 +103,12 @@
     $.pjax({
         selector: 'a[href$=".md"]',
         container: '.docx-textarea', //内容替换的容器
-        show: 'fade',  //展现的动画，支持默认和fade, 可以自定义动画方式，这里为自定义的function即可。
-        cache: 2*3600,  //是否使用缓存
+        show: '',  //展现的动画，支持默认和fade, 可以自定义动画方式，这里为自定义的function即可。
+        cache: false,  //是否使用缓存  2*3600
         storage: false,  //是否使用本地存储
         titleSuffix: '', //标题后缀
         filter: function(){},
-        callback: function(){},
+        callback: function(){}
     });
 
 </script>
