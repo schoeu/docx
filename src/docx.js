@@ -8,6 +8,7 @@ var url = require('url');
 var express = require('express');
 var marked = require('marked');
 var CONF = require('../docx-conf.json');
+var glob = require('glob');
 
 var app = express();
 var exphbs  = require('express-handlebars');
