@@ -4,11 +4,13 @@
 
 var path = require('path');
 var fs = require('fs');
+var child = require('child_process');
 var url = require('url');
 var express = require('express');
 var marked = require('marked');
 var CONF = require('../docx-conf.json');
 var glob = require('glob');
+var highlight = require('highlight.js');
 
 var app = express();
 var exphbs  = require('express-handlebars');
@@ -38,8 +40,16 @@ Docx.prototype = {
 
         app.use(express.static(path.join(__dirname, '..', 'public')));
         
-        app.get('/', function (req, res) {
+        app.get('/doc', function (req, res) {
             res.render('main', {navData: htmlStr});
+        });
+
+        app.get('/lastestfiles', function (req, res) {
+            var files = me.getLastestFile();
+            res.json({
+                errorno: 0,
+                file: files
+            });
         });
 
         app.get('/*.md', function (req, res) {
@@ -47,7 +57,8 @@ Docx.prototype = {
             var mdPath = path.join(CONF.path, relativePath.pathname);
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
-                var content = marked(file.toString());
+                
+                var content = me.getMarked(file.toString());
                 if (req.headers['x-pjax'] === 'true') {
                     res.end(content);
                 }
@@ -60,7 +71,28 @@ Docx.prototype = {
         app.listen(CONF.port || 8910);
         this.getDocTree();
     },
+    
+    getMarked: function (content) {
+        var renderer = new marked.Renderer();
+        // 渲染代码
+        renderer.code = function (data, lang) {
+            data = highlight.highlightAuto(data).value;
+            if (lang) {
+                // 超过3行有提示
+                if (data.split(/\n/).length >= 3) {
+                    var html = '<pre><code class="hljs lang-'+ lang +'"><span class="hljs-lang-tips">' + lang + '</span>';
+                    return html + data + '</code></pre>';
+                }
 
+                return '<pre><code class="hljs lang-${lang}">' + data + '</code></pre>';
+            }
+
+            return '<pre><code class="hljs">' + data + '</code></pre>';
+        };
+
+        return marked(content, {renderer});
+    },
+    
     getDocTree: function () {
         this.walker(CONF.path, dirMap);
         this.makeNav(dirMap);
@@ -124,6 +156,25 @@ Docx.prototype = {
         var content = fs.readFileSync(dir);
         var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
         return titleArr[1] || '';
+    },
+
+    getLastestFile: function () {
+        var me = this;
+        var findFile;
+        var fileNames = [];
+        var execRs = child.execSync('find ' + CONF.path + ' -name "*.md" -mtime 0');
+        if (execRs) {
+            findFile = execRs.toString();
+        }
+        var fileArr = findFile.split('\n') || [];
+        fileArr.shift();
+        fileArr.pop();
+        fileArr.forEach(function (it) {
+            var title = me.getMdTitle(it);
+            fileNames.push(title);
+        });
+
+        return fileNames;
     }
 };
 
