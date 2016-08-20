@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Example App - Home</title>
     <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/highlight.css"/>
     <style>
         html,body {
             margin: 0;
@@ -30,10 +31,14 @@
         }
         .nav-name {
             line-height: 32px;
-            background: #ace;
+            background: #3369E8;
+            color: #FFF;
+            border-radius: 2px;
+            padding: 0 10px;
+            margin-bottom: 5px;
         }
         .nav-select {
-            background: #ace;
+            background: #3369E8;
         }
         .nav-tree {
             width: 30%;
@@ -42,17 +47,21 @@
             float: left;
         }
         .docx-textarea {
-            width: 65%;
+            width: 69%;
             min-height: 100%;
             height: 100%;
             overflow: auto;
+            border-left: 2px solid #3369E8;
+        }
+        .docx-marked{
+            padding: 10px 15px;
         }
         .docx-text{
             padding: 3% 2%;
         }
         .docx-head{
             height: 55px;
-            background: #131e25;
+            background: #3369E8;
             color: #FFF;
             line-height: 55px;
             text-indent: 5%;
@@ -60,25 +69,48 @@
             font-size: 23px;
         }
         .submenu{
-            max-height: 0;
-            -webkit-transition: max-height 2s;
-            transition: max-height 2s;
+            padding-left: 1em;
         }
         .open>.submenu{
             max-height: 1000px;
         }
+        .docx-searchkey{
+            height: 26px;
+            line-height: 26px;
+            width: 200px;
+            border: none;
+            text-indent: 1em;
+            border-radius: 2px;
+            margin: 10px;
+            position: absolute;
+            top: 3px;
+            right: 0;
+            outline: none;
+        }
+        .docx-trwrap{
+            padding: 10px 15px;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
-<header class="docx-head">PS-DOC</header>
+<header class="docx-head">
+    <span>PS-DOC</span>
+    <div class="doxc-search">
+        <form action="/search">
+            <input type="text" placeholder="Search..." class="docx-searchkey">
+        </form>
+    </div>
+
+</header>
 <div class="docx-content">
     <div class="nav-tree">
-        <ul class="accordion">
+        <ul class="docx-trwrap">
             {{{navData}}}
         </ul>
     </div>
-    <div class="docx-textarea">
-        <div class="markdown-body docx-text">
+    <div class="docx-textarea markdown-body">
+        <div class=" docx-marked">
             {{{mdData}}}
         </div>
     </div>
@@ -99,17 +131,9 @@
             $target.siblings('.nav-dir').removeClass('open');
         }
     });
-
-    $.pjax({
-        selector: 'a[href$=".md"]',
-        container: '.docx-textarea', //内容替换的容器
-        show: '',  //展现的动画，支持默认和fade, 可以自定义动画方式，这里为自定义的function即可。
-        cache: false,  //是否使用缓存  2*3600
-        storage: false,  //是否使用本地存储
-        titleSuffix: '', //标题后缀
-        filter: function(){},
-        callback: function(){}
-    });
+    if ($.support.pjax) {
+        $(document).pjax('a[href$=".md"]', '.docx-marked')
+    }
 
 </script>
 </body>

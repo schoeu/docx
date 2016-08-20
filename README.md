@@ -4,4 +4,4 @@
 
 ## dependencies
 
-- express
+- express,express-handlebars,marked,test1
