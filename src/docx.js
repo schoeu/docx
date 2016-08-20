@@ -30,11 +30,6 @@ Docx.prototype = {
             app.enable('view cache');
         }
         app.set('views', path.join(__dirname, '..', 'views'));
-        //app.set('view engine', 'pug');
-
-        //app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-        //app.set('view engine', 'handlebars');
-
 
         app.engine('.hbs', exphbs({extname: '.hbs'}));
         app.set('view engine', '.hbs');
@@ -52,7 +47,7 @@ Docx.prototype = {
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
                 var content = marked(file.toString());
-                if (req.query.pjax === 'true') {
+                if (req.headers['x-pjax'] === 'true') {
                     res.end(content);
                 }
                 else {
