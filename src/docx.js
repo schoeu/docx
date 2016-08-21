@@ -1,6 +1,6 @@
 /*
-* @file docx.js
-* */
+ * @file docx.js
+ * */
 
 var path = require('path');
 var fs = require('fs');
@@ -37,9 +37,8 @@ Docx.prototype = {
         app.engine('.hbs', exphbs({extname: '.hbs'}));
         app.set('view engine', '.hbs');
 
-
         app.use(express.static(path.join(__dirname, '..', 'public')));
-        
+
         app.get('/doc', function (req, res) {
             res.render('main', {navData: htmlStr});
         });
@@ -57,7 +56,7 @@ Docx.prototype = {
             var mdPath = path.join(CONF.path, relativePath.pathname);
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
-                
+
                 var content = me.getMarked(file.toString());
                 if (req.headers['x-pjax'] === 'true') {
                     res.end(content);
@@ -71,7 +70,7 @@ Docx.prototype = {
         app.listen(CONF.port || 8910);
         this.getDocTree();
     },
-    
+
     getMarked: function (content) {
         var renderer = new marked.Renderer();
         // 渲染代码
@@ -92,7 +91,7 @@ Docx.prototype = {
 
         return marked(content, {renderer});
     },
-    
+
     getDocTree: function () {
         this.walker(CONF.path, dirMap);
         this.makeNav(dirMap);
@@ -112,23 +111,27 @@ Docx.prototype = {
                 // 如果是配置中忽略的目录,则跳过
                 if (ignorDor.indexOf(it) === -1) {
                     var dirName = CONF.dirname[it] || {};
-                    dirCtt[it] = {
-                        type: 'dir',
-                        path: relPath,
-                        displayName: dirName.name || ''
-                    };
-                    dirCtt[it]['child'] = {};
-                    me.walker(childPath, dirCtt[it]['child']);
+                    // 如果没有配置文件夹目录名称,则不显示
+                    if (dirName.name) {
+                        dirCtt[it] = {
+                            type: 'dir',
+                            path: relPath,
+                            displayName: dirName.name || ''
+                        };
+                        dirCtt[it]['child'] = {};
+                        me.walker(childPath, dirCtt[it]['child']);
+                    }
                 }
             }
             // 如果是文件
             else {
                 if (path.extname(it) === '.md') {
                     var basename = path.basename(it, '.md');
+                    var title = me.getMdTitle(childPath);
                     dirCtt[basename] = {
                         type: 'md',
                         path: relPath,
-                        title: me.getMdTitle(childPath)
+                        title: title
                     };
                 }
             }
@@ -142,10 +145,10 @@ Docx.prototype = {
         for(var i in dirs) {
             var item = dirs[i] || {};
             if (item.type === 'md') {
-                htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '">' + item.title + '</a></li>';
+                htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '" data-pjax="true"><i class="iconfont">&#xe61a;</i><span class="nav-filename">' + item.title + '</span></a></li>';
             }
             else if (item.type === 'dir') {
-                htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name link">' + item.displayName + '</div><ul class="submenu">';
+                htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name link"><i class="iconfont">&#xe61f;</i><span class="nav-disname">' + item.displayName + '</span></div><ul class="docx-submenu">';
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
@@ -179,6 +182,6 @@ Docx.prototype = {
 };
 
 /*
-* start
-* */
+ * start
+ * */
 new Docx();
