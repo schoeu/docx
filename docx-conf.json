@@ -3,6 +3,8 @@
   "path": "/Users/memee/Downloads/svn/ps-fe/ps-fe-new",
   "ignoreDir": ["img",".git"],
   "debug": true,
+  "headText": "PSFE-DOC",
+  "title": "PSFE",
   "dirname": {
     "aladdin": {
       "name": "阿拉丁",
@@ -272,5 +274,12 @@
       "name": "统计指南",
       "sort": 3
     }
-  }
+  },
+  "links": [{
+    "name": "MIP",
+    "url": "http://mip.baidu.com"
+  },{
+    "name": "SUPERFRAME",
+    "url": "http://superframe.baidu.com"
+  }]
 }

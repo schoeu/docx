@@ -18,6 +18,12 @@ var ignorDor = CONF.ignoreDir || [];
 
 var dirMap = {};
 var htmlStr = '';
+var headText = CONF.headText || '';
+var locals = {
+    headText: headText,
+    title: CONF.title || headText
+};
+var links = CONF.links || [];
 
 function Docx() {
     this.init();
@@ -53,9 +59,16 @@ Docx.prototype = {
     routes: function () {
         var me = this;
 
+        // 首页路由
+        app.get('/', function (req, res) {
+            var parseObj = Object.assign({}, locals, {links: links});
+            res.render('index', parseObj);
+        });
+
         // 文档主路径
         app.get('/doc', function (req, res) {
-            res.render('main', {navData: htmlStr});
+            var parseObj = Object.assign({}, locals, {navData: htmlStr});
+            res.render('main', parseObj);
         });
 
         // API: 获取最近更新的文件列表
@@ -63,7 +76,7 @@ Docx.prototype = {
             var files = me.getLastestFile();
             res.json({
                 errorno: 0,
-                file: files
+                files: files
             });
         });
 
@@ -83,7 +96,8 @@ Docx.prototype = {
                 }
                 // 否则返回整个模板
                 else {
-                    res.render('main', {navData: htmlStr, mdData: content});
+                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                    res.render('main', parseObj);
                 }
             }
         });
@@ -201,9 +215,12 @@ Docx.prototype = {
      * @return {String} markdown文件大标题
      * */
     getMdTitle: function(dir) {
-        var content = fs.readFileSync(dir);
-        var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
-        return titleArr[1] || '';
+        if (dir) {
+            var content = fs.readFileSync(dir);
+            var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
+            return titleArr[1] || '';
+        }
+        return '';
     },
 
     /**
@@ -220,11 +237,11 @@ Docx.prototype = {
             findFile = execRs.toString();
         }
         var fileArr = findFile.split('\n') || [];
-        fileArr.shift();
-        fileArr.pop();
         fileArr.forEach(function (it) {
             var title = me.getMdTitle(it);
-            fileNames.push(title);
+            if (title) {
+                fileNames.push(title);
+            }
         });
 
         return fileNames;
