@@ -1,24 +1,48 @@
 var $win = $(window);
-$('.docx-content').height($win.height()-$('.docx-head').height());
-
-
+var $content = $('.docx-content');
+var $headHeight = $('.docx-head').height();
+var $navTree = $('.docx-trwrap');
 var pathname = location.pathname || '';
 var $target = $('[data-path="' + pathname + '"]');
-$target.addClass('nav-select');
-var $navparents = $target.parents('.nav-dir');
-$navparents.addClass('docx-open');
 
-$('.nav-dir').on('click', function (e) {
+/*
+* 文件夹状态切换
+* */
+$navTree.on('click', '.nav-name', function (e) {
     var $target = $(this);
-    if ($target.hasClass('docx-open')) {
-        $target.removeClass('docx-open');
-    }
-    else {
-        $target.addClass('docx-open');
-        $target.siblings('.nav-dir').removeClass('docx-open');
-    }
+    $target.parent().toggleClass('docx-open');
+    return false;
 });
 
+/*
+* 文件选中样式切换
+* */
+$navTree.on('click', 'li[data-path]', function (e) {
+    var $target = $(this);
+    $('.nav-select').removeClass('nav-select');
+    $target.addClass('nav-select');
+});
+
+/*
+* pjax委托
+* */
 if ($.support.pjax) {
     $(document).pjax('a[href$=".md"]', '.docx-marked');
 }
+
+function fixedSize() {
+    $content.height($win.height()-$headHeight);
+}
+
+/*
+* 窗口尺寸适应调整
+* */
+fixedSize();
+$win.on('resize', fixedSize);
+
+/*
+* 选中url中文件
+* */
+$target.addClass('nav-select');
+var $navparents = $target.parents('.nav-dir');
+$navparents.addClass('docx-open');
