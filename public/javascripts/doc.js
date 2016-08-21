@@ -37,8 +37,8 @@ function fixedSize() {
 /*
 * 窗口尺寸适应调整
 * */
-fixedSize();
-$win.on('resize', fixedSize);
+//fixedSize();
+//$win.on('resize', fixedSize);
 
 /*
 * 选中url中文件
