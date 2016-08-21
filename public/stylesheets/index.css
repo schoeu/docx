@@ -1,0 +1,50 @@
+html,body{
+    margin: 0;
+    padding: 0;
+}
+.docx-head{
+    height: 55px;
+    background: #3369E8;
+    color: #FFF;
+    line-height: 55px;
+    padding: 0 25px;
+    font-weight: bold;
+    font-size: 23px;
+}
+.doxc-search{
+    margin-top: 20px;
+}
+.docx-form-wr{
+    width: 50%;
+    margin: 16px auto;
+    box-shadow: 0 2px 43px rgba(102, 148, 255, 0.28);
+    border-radius: 5px;
+}
+.docx-searchkey{
+    height: 50px;
+    text-indent: 1em;
+    font-size: 20px;
+    border: none;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    color: #3369E8;
+}
+.docx-body{
+    width: 80%;
+    margin: 70px auto 10px auto;
+}
+.docx-linslist{
+    display: inline-block;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 2px;
+    margin-left: 3em;
+}
+.docx-linslist:first-child{
+    margin-left: 0;
+}
+.docx-linslist>a {
+    text-decoration: none;
+    color: #333;
+}

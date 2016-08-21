@@ -74,7 +74,7 @@ li{
     background: #3369E8;
     color: #FFF;
     line-height: 55px;
-    text-indent: 5%;
+    padding: 0 25px;
     font-weight: bold;
     font-size: 23px;
 }

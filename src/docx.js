@@ -1,5 +1,6 @@
-/*
+/**
  * @file docx.js
+ * @author schoeu
  * */
 
 var path = require('path');
@@ -9,7 +10,6 @@ var url = require('url');
 var express = require('express');
 var marked = require('marked');
 var CONF = require('../docx-conf.json');
-var glob = require('glob');
 var highlight = require('highlight.js');
 
 var app = express();
@@ -18,6 +18,12 @@ var ignorDor = CONF.ignoreDir || [];
 
 var dirMap = {};
 var htmlStr = '';
+var headText = CONF.headText || '';
+var locals = {
+    headText: headText,
+    title: CONF.title || headText
+};
+var links = CONF.links || [];
 
 function Docx() {
     this.init();
@@ -26,6 +32,9 @@ function Docx() {
 Docx.prototype = {
     contributor: Docx,
 
+    /**
+     * 初始化DOCX,主要初始化了express
+     * */
     init: function () {
         var me = this;
         // express 视图设置
@@ -33,47 +42,77 @@ Docx.prototype = {
             app.enable('view cache');
         }
         app.set('views', path.join(__dirname, '..', 'views'));
-
         app.engine('.hbs', exphbs({extname: '.hbs'}));
         app.set('view engine', '.hbs');
-
         app.use(express.static(path.join(__dirname, '..', 'public')));
 
-        app.get('/doc', function (req, res) {
-            res.render('doc', {navData: htmlStr});
+        // 路由处理
+        me.routes(app);
+
+        app.listen(CONF.port || 8910);
+        me.getDocTree();
+    },
+
+    /**
+     * 系统的路由定义
+     * */
+    routes: function () {
+        var me = this;
+
+        // 首页路由
+        app.get('/', function (req, res) {
+            var parseObj = Object.assign({}, locals, {links: links});
+            res.render('index', parseObj);
         });
 
+        // 文档主路径
+        app.get('/doc', function (req, res) {
+            var parseObj = Object.assign({}, locals, {navData: htmlStr});
+            res.render('main', parseObj);
+        });
+
+        // API: 获取最近更新的文件列表
         app.get('/lastestfiles', function (req, res) {
             var files = me.getLastestFile();
             res.json({
                 errorno: 0,
-                file: files
+                files: files
             });
         });
 
+        // markdown文件路由
         app.get('/*.md', function (req, res) {
             var relativePath = url.parse(req.originalUrl);
             var mdPath = path.join(CONF.path, relativePath.pathname);
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
 
+                // markdown转换成html
                 var content = me.getMarked(file.toString());
+
+                // 判断是pjax请求则返回html片段
                 if (req.headers['x-pjax'] === 'true') {
                     res.end(content);
                 }
+                // 否则返回整个模板
                 else {
-                    res.render('doc', {navData: htmlStr, mdData: content});
+                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                    res.render('main', parseObj);
                 }
             }
         });
-
-        app.listen(CONF.port || 8910);
-        this.getDocTree();
     },
 
+    /**
+     * markdown文件转html处理
+     *
+     * @param {String} content markdown字符串
+     * @return {String} html字符串
+     * */
     getMarked: function (content) {
         var renderer = new marked.Renderer();
-        // 渲染代码
+
+        // markdown中渲染代码处理
         renderer.code = function (data, lang) {
             data = highlight.highlightAuto(data).value;
             if (lang) {
@@ -92,11 +131,20 @@ Docx.prototype = {
         return marked(content, {renderer});
     },
 
+    /**
+     * 获取文件目录树
+     * */
     getDocTree: function () {
         this.walker(CONF.path, dirMap);
         this.makeNav(dirMap);
     },
 
+    /**
+     * 获取文件目录树
+     *
+     * @param {String} 文件起始路径
+     * @param {Object} 文件目录树容器
+     * */
     walker: function (dirs, dirCtt) {
         var me = this;
         var dirArr = fs.readdirSync(dirs);
@@ -138,6 +186,11 @@ Docx.prototype = {
         });
     },
 
+    /**
+     * 根据文件目录数据组装文件html
+     *
+     * @param {Array} dirs 文件目录数组
+     * */
     makeNav: function (dirs) {
         if (!dirs) {
             return false;
@@ -155,12 +208,26 @@ Docx.prototype = {
         }
     },
 
+    /**
+     * 获取markdown文件大标题
+     *
+     * @param {String} markdown文件的路径
+     * @return {String} markdown文件大标题
+     * */
     getMdTitle: function(dir) {
-        var content = fs.readFileSync(dir);
-        var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
-        return titleArr[1] || '';
+        if (dir) {
+            var content = fs.readFileSync(dir);
+            var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
+            return titleArr[1] || '';
+        }
+        return '';
     },
 
+    /**
+     * 获取最新更新文件的实现,之后做跨平台兼容
+     *
+     * @return {Array} fileNames 更改过文件的路径数组
+     * */
     getLastestFile: function () {
         var me = this;
         var findFile;
@@ -170,18 +237,18 @@ Docx.prototype = {
             findFile = execRs.toString();
         }
         var fileArr = findFile.split('\n') || [];
-        fileArr.shift();
-        fileArr.pop();
         fileArr.forEach(function (it) {
             var title = me.getMdTitle(it);
-            fileNames.push(title);
+            if (title) {
+                fileNames.push(title);
+            }
         });
 
         return fileNames;
     }
 };
 
-/*
- * start
+/**
+ * 初始化docx
  * */
 new Docx();
