@@ -43,11 +43,11 @@ li{
     padding: 0 10px;
     margin-bottom: 5px;
 }
-.nav-select {
-    background: #3369E8;
+.nav-select a{
+    color: #3369E8;
 }
 .nav-tree {
-    width: 30%;
+    width: 25%;
     height: 100%;
     overflow: auto;
     float: left;
@@ -56,7 +56,7 @@ li{
     margin-left: .5em;
 }
 .docx-textarea {
-    width: 69%;
+    width: 74%;
     min-height: 100%;
     height: 100%;
     overflow: auto;
