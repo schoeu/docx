@@ -12,7 +12,7 @@ html,body{
     font-size: 23px;
 }
 .doxc-search{
-    margin-top: 20px;
+    margin-top: 50px;
 }
 .docx-form-wr{
     width: 50%;
@@ -31,7 +31,7 @@ html,body{
     color: #3369E8;
 }
 .docx-body{
-    width: 80%;
+    width: 70%;
     margin: 70px auto 10px auto;
 }
 .docx-linslist{
@@ -47,4 +47,15 @@ html,body{
 .docx-linslist>a {
     text-decoration: none;
     color: #333;
+}
+.docx-lastest{
+    margin-top: 30px;
+    border: 1px solid #DDD;
+    height: 10em;
+    list-style: none;
+    padding: 20px;
+    border-radius: 2px;
+}
+.docx-lastest-header{
+
 }

@@ -5,6 +5,7 @@
   "debug": true,
   "headText": "PSFE-DOC",
   "title": "PSFE",
+  "index": "/readme.md",
   "dirname": {
     "aladdin": {
       "name": "阿拉丁",
@@ -276,10 +277,13 @@
     }
   },
   "links": [{
-    "name": "MIP",
+    "name": "SFE文档",
+    "url": "http://sfe.baidu.com"
+  },{
+    "name": "MIP文档",
     "url": "http://mip.baidu.com"
   },{
-    "name": "SUPERFRAME",
+    "name": "SUPERFRAME文档",
     "url": "http://superframe.baidu.com"
   }]
 }
