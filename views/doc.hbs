@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Example App - Home</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/highlight.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/doc.css"/>
+</head>
+<body>
+<header class="docx-head">
+    <span>PSFE-DOC</span>
+    <div class="doxc-search">
+        <form action="/search">
+            <input type="text" placeholder="Search..." class="docx-searchkey">
+        </form>
+    </div>
+</header>
+<div class="docx-content">
+    <div class="nav-tree">
+        <ul class="docx-trwrap">
+            {{{navData}}}
+        </ul>
+    </div>
+    <div class="docx-textarea markdown-body">
+        <div class=" docx-marked">
+            {{{mdData}}}
+        </div>
+    </div>
+</div>
+<script src="/javascripts/jq.min.js"></script>
+<script src="/javascripts/jq.pjax.js"></script>
+<script src="/javascripts/doc.js"></script>
+</body>
+</html>

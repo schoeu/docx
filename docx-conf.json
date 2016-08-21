@@ -1,9 +1,13 @@
 {
   "port": "8910",
-  "path": "/Users/memee/Downloads/aladdin",
-  "ignoreDir": ["img"],
+  "path": "/Users/memee/Downloads/svn/ps-fe/ps-fe-new",
+  "ignoreDir": ["img",".git"],
   "debug": true,
   "dirname": {
+    "aladdin": {
+      "name": "阿拉丁",
+      "sort": 1
+    },
     "case": {
       "name": "case总结",
       "sort": 1
@@ -70,6 +74,202 @@
     },
     "devdocs": {
       "name": "开发指导",
+      "sort": 3
+    },
+    "static": {
+      "name": "静态文件",
+      "sort": 3
+    },
+    "pc": {
+      "name": "PC网页搜索",
+      "sort": 3
+    },
+    "midpage": {
+      "name": "搜索中间页",
+      "sort": 3
+    },
+    "www": {
+      "name": "搜索结果页",
+      "sort": 3
+    },
+    "data": {
+      "name": "数据接口",
+      "sort": 3
+    },
+    "log": {
+      "name": "日志",
+      "sort": 3
+    },
+    "show": {
+      "name": "展现日志",
+      "sort": 3
+    },
+    "click": {
+      "name": "点击日志",
+      "sort": 3
+    },
+    "client": {
+      "name": "客户端相关规范",
+      "sort": 3
+    },
+    "process": {
+      "name": "使用和变更流程",
+      "sort": 3
+    },
+    "tools": {
+      "name": "常用工具",
+      "sort": 3
+    },
+    "action": {
+      "name": "异步日志",
+      "sort": 3
+    },
+    "framework": {
+      "name": "架构",
+      "sort": 3
+    },
+    "performance": {
+      "name": "性能优化",
+      "sort": 3
+    },
+    "tools": {
+      "name": "工具服务",
+      "sort": 3
+    },
+    "aladdin-debug": {
+      "name": "阿拉丁常见调试",
+      "sort": 3
+    },
+    "research": {
+      "name": "技术调研",
+      "sort": 3
+    },
+    "courseware": {
+      "name": "串讲文档",
+      "sort": 3
+    },
+    "grid": {
+      "name": "栅格化",
+      "sort": 3
+    },
+    "xueshu": {
+      "name": "学术",
+      "sort": 3
+    },
+    "standards": {
+      "name": "规范流程",
+      "sort": 3
+    },
+    "process": {
+      "name": "流程",
+      "sort": 3
+    },
+    "develop": {
+      "name": "开发相关",
+      "sort": 3
+    },
+    "general-dev": {
+      "name": "通用开发相关",
+      "sort": 3
+    },
+    "frontend-dev": {
+      "name": "前端开发相关",
+      "sort": 3
+    },
+    "environment-dev": {
+      "name": "环境相关",
+      "sort": 3
+    },
+    "advertise": {
+      "name": "广告",
+      "sort": 3
+    },
+    "union": {
+      "name": "联盟相关",
+      "sort": 3
+    },
+    "front-interface": {
+      "name": "前后端接口",
+      "sort": 3
+    },
+    "refactor": {
+      "name": "重构",
+      "sort": 3
+    },
+    "test": {
+      "name": "测试相关",
+      "sort": 3
+    },
+    "transcode": {
+      "name": "无线转码",
+      "sort": 3
+    },
+    "realtime": {
+      "name": "时效性",
+      "sort": 3
+    },
+    "async": {
+      "name": "异步化",
+      "sort": 3
+    },
+    "spec": {
+      "name": "规范",
+      "sort": 3
+    },
+    "component": {
+      "name": "功能组件",
+      "sort": 3
+    },
+    "sample": {
+      "name": "抽样相关",
+      "sort": 3
+    },
+    "references": {
+      "name": "资源引入",
+      "sort": 3
+    },
+    "schema": {
+      "name": "Schemas标记",
+      "sort": 3
+    },
+    "aladdin-test": {
+      "name": "阿拉丁（测试）",
+      "sort": 3
+    },
+    "tpldev": {
+      "name": "开发平台",
+      "sort": 3
+    },
+    "wireless-dev": {
+      "name": "无线开发",
+      "sort": 3
+    },
+    "new-reading": {
+      "name": "新人必读",
+      "sort": 3
+    },
+    "pc-doc": {
+      "name": "PC开发文档",
+      "sort": 3
+    },
+    "team": {
+      "name": "团队介绍",
+      "sort": 3
+    },
+    "pc-other": {
+      "name": "PC其他开发文档",
+      "sort": 3
+    },
+    "new_wise_click_doc_doing": {
+      "name": "wise点击日志（doing）",
+      "sort": 3
+    },
+    "send_guide_for_fe": {
+      "name": "发送指南",
+      "sort": 3
+    },
+    "stat_guide_for_ubs": {
+      "name": "统计指南",
       "sort": 3
     }
   }
