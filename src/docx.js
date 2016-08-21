@@ -60,15 +60,17 @@ Docx.prototype = {
         var me = this;
 
         // 首页路由
-        app.get('/', function (req, res) {
+        /*app.get('/', function (req, res) {
             var parseObj = Object.assign({}, locals, {links: links});
             res.render('index', parseObj);
-        });
+        });*/
 
         // 文档主路径
-        app.get('/doc', function (req, res) {
-            var parseObj = Object.assign({}, locals, {navData: htmlStr});
-            res.render('main', parseObj);
+        // app.get('/doc', function (req, res) {
+        app.get('/', function (req, res) {
+            // var parseObj = Object.assign({}, locals, {navData: htmlStr});
+            // res.render('main', parseObj);
+            res.redirect(CONF.index);
         });
 
         // API: 获取最近更新的文件列表

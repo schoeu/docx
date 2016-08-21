@@ -1,5 +1,5 @@
 var htmlStr = '';
-var $lastestArae = $('.docx-lastest');
+var $lastestArae = $('.docx-lastest-list');
 $.ajax({
     url: '/lastestfiles'
 }).done(function (data) {
