@@ -8,7 +8,7 @@ $target.addClass('nav-select');
 var $navparents = $target.parents('.nav-dir');
 $navparents.addClass('docx-open');
 
-$('.nav-dir').on('click', function () {
+$('.nav-dir').on('click', function (e) {
     var $target = $(this);
     if ($target.hasClass('docx-open')) {
         $target.removeClass('docx-open');
@@ -20,5 +20,5 @@ $('.nav-dir').on('click', function () {
 });
 
 if ($.support.pjax) {
-    $(document).pjax('a[href$=".md"]', '.docx-marked')
+    $(document).pjax('a[href$=".md"]', '.docx-marked');
 }

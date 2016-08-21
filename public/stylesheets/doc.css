@@ -84,6 +84,10 @@ li{
 .docx-open>.docx-submenu{
     display: block;
 }
+.nav .iconfont {
+    width: 16px;
+    height: 16px;
+}
 .docx-searchkey{
     height: 26px;
     line-height: 26px;
