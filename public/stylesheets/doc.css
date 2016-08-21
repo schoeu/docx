@@ -42,6 +42,7 @@ li{
     border-radius: 2px;
     padding: 0 10px;
     margin-bottom: 5px;
+    cursor: pointer;
 }
 .nav-select a{
     color: #3369E8;
@@ -83,6 +84,11 @@ li{
 }
 .docx-open>.docx-submenu{
     display: block;
+}
+
+.nav .iconfont {
+    width: 16px;
+    height: 16px;
 }
 .docx-searchkey{
     height: 26px;

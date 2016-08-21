@@ -1,6 +1,6 @@
 /*
-* @file docx.js
-* */
+ * @file docx.js
+ * */
 
 var path = require('path');
 var fs = require('fs');
@@ -38,7 +38,7 @@ Docx.prototype = {
         app.set('view engine', '.hbs');
 
         app.use(express.static(path.join(__dirname, '..', 'public')));
-        
+
         app.get('/doc', function (req, res) {
             res.render('doc', {navData: htmlStr});
         });
@@ -56,7 +56,7 @@ Docx.prototype = {
             var mdPath = path.join(CONF.path, relativePath.pathname);
             if (mdPath.indexOf('.md') > -1) {
                 var file = fs.readFileSync(mdPath);
-                
+
                 var content = me.getMarked(file.toString());
                 if (req.headers['x-pjax'] === 'true') {
                     res.end(content);
@@ -70,7 +70,7 @@ Docx.prototype = {
         app.listen(CONF.port || 8910);
         this.getDocTree();
     },
-    
+
     getMarked: function (content) {
         var renderer = new marked.Renderer();
         // 渲染代码
@@ -91,7 +91,7 @@ Docx.prototype = {
 
         return marked(content, {renderer});
     },
-    
+
     getDocTree: function () {
         this.walker(CONF.path, dirMap);
         this.makeNav(dirMap);
@@ -131,7 +131,7 @@ Docx.prototype = {
                     dirCtt[basename] = {
                         type: 'md',
                         path: relPath,
-                        title: me.getMdTitle(childPath)
+                        title: title
                     };
                 }
             }
@@ -148,7 +148,11 @@ Docx.prototype = {
                 htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '" data-pjax="true"><i class="iconfont">&#xe61a;</i><span class="nav-filename">' + item.title + '</span></a></li>';
             }
             else if (item.type === 'dir') {
+<<<<<<< HEAD
                 htmlStr += '<li data-path="' + item.path + '" class="nav nav-dir"><div class="nav-name link"><i class="iconfont">&#xe61f;</i><span class="nav-disname">' + item.displayName + '</span></div><ul class="docx-submenu">';
+=======
+                htmlStr += '<li data-dir="' + item.path + '" class="nav nav-dir"><div class="nav-name link"><i class="iconfont">&#xe61f;</i><span class="nav-disname">' + item.displayName + '</span></div><ul class="docx-submenu">';
+>>>>>>> newer
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
@@ -182,6 +186,6 @@ Docx.prototype = {
 };
 
 /*
-* start
-* */
+ * start
+ * */
 new Docx();
