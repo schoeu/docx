@@ -92,12 +92,13 @@ Docx.prototype = {
             var files = glob.sync(filePath) || [];
             files = files.slice(0, 20);
             files.forEach(function (it) {
+                // 判断文件是否存在
                 var file = fs.readFileSync(it);
                 var fileContent = file.toString();
                 if (fileContent.indexOf(key) > -1) {
                     searchRs.push({
                         path: it.replace(CONF.path, ''),
-                        content: me.getMarked(fileContent.substring(0,500) + '...'),
+                        content: me.getMarked(fileContent.substring(0, 500) + '...'),
                         title: me.getMdTitle(it)
                     });
                 }
@@ -107,7 +108,6 @@ Docx.prototype = {
                 data: searchRs
             });
         });
-
 
         // markdown文件路由
         app.get('/*.md', function (req, res) {
@@ -134,17 +134,19 @@ Docx.prototype = {
         // 其他资源引入
         app.get('/*', function (req, res) {
             var fileurl = path.join(CONF.path, req.url);
-            if (fileurl) {
-                fs.readFile(fileurl, function (err, data) {
-                    if (err) {
-                        throw err;
-                    }
-                    else {
-                        res.write(data);
-                        res.end();
-                    }
-                });
-            }
+            fs.stat(fileurl, function (err, stats) {
+                if (stats) {
+                    fs.readFile(fileurl, function (err, data) {
+                        if (err) {
+                            throw err;
+                        }
+                        else {
+                            res.write(data);
+                            res.end();
+                        }
+                    });
+                }
+            });
         });
     },
 

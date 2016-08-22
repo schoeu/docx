@@ -53,12 +53,13 @@ $win.on('keyup', function (e) {
             if (data.error === 0) {
                 var matchedFiles = data.data || [];
                 var htmlStr = '';
+                var emptyString =  '<div class="docx-search-content">暂无匹配文档!</div>';
                 matchedFiles.forEach(function (it) {
                     htmlStr += [
                         '<div class="docx-search-art"><a href="' + it.path + '" class="doc-search-link">',
-                        '      <p class="docx-search-title">',
-                         it.title,
-                        '      </p>',
+                        //'      <p class="docx-search-title">',
+                        // it.title,
+                        //'      </p>',
                         '      <article class="docx-search-content">',
                          it.content,
                         '      </article>',
@@ -66,7 +67,7 @@ $win.on('keyup', function (e) {
                     ].join("");
                 });
 
-                $('.docx-marked').html(htmlStr);
+                $('.docx-marked').html(htmlStr ? htmlStr : emptyString);
             }
         });
     }
