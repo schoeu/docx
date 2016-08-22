@@ -11,6 +11,7 @@ var express = require('express');
 var marked = require('marked');
 var CONF = require('../docx-conf.json');
 var highlight = require('highlight.js');
+var glob = require('glob');
 
 var app = express();
 var exphbs  = require('express-handlebars');
@@ -83,6 +84,29 @@ Docx.prototype = {
             });
         });
 
+        // API: 搜索功能
+        app.get('/search', function (req, res) {
+            var searchRs = [];
+            var key = req.query.name;
+            var filePath = path.join(CONF.path, '**/*.md');
+            var files = glob.sync(filePath) || [];
+            files.forEach(function (it) {
+                var file = fs.readFileSync(it);
+                var fileContent = file.toString();
+                if (fileContent.indexOf(key) > -1) {
+                    searchRs.push({
+                        path: it,
+                        content: fileContent,
+                        title: me.getMdTitle(it)
+                    });
+                }
+            });
+            res.json({
+                error: 0,
+                data: searchRs
+            });
+        });
+
 
         // markdown文件路由
         app.get('/*.md', function (req, res) {
@@ -107,7 +131,7 @@ Docx.prototype = {
         });
 
         // 其他资源引入
-        app.get('/*', function (req, res) {
+        app.get('/*.', function (req, res) {
             var fileurl = path.join(CONF.path, req.url);
             if (fileurl) {
                 fs.readFile(fileurl, function (err, data) {

@@ -39,3 +39,19 @@ if ($.support.pjax) {
 $target.addClass('nav-select');
 var $navparents = $target.parents('.nav-dir');
 $navparents.addClass('docx-open');
+
+/**
+ * 搜索action
+ * */
+$win.on('keyup', function (e) {
+    if (e.keyCode === 13) {
+        var key = $('.docx-searchkey').val();
+        $.ajax({
+            url: '/search',
+            data: {"name": key},
+        }).done(function (data) {
+            console.log(data);
+        });
+    }
+});
+//
