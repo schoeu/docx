@@ -90,13 +90,14 @@ Docx.prototype = {
             var key = req.query.name;
             var filePath = path.join(CONF.path, '**/*.md');
             var files = glob.sync(filePath) || [];
+            files = files.slice(0, 20);
             files.forEach(function (it) {
                 var file = fs.readFileSync(it);
                 var fileContent = file.toString();
                 if (fileContent.indexOf(key) > -1) {
                     searchRs.push({
-                        path: it,
-                        content: fileContent,
+                        path: it.replace(CONF.path, ''),
+                        content: me.getMarked(fileContent.substring(0,500) + '...'),
                         title: me.getMdTitle(it)
                     });
                 }
@@ -131,7 +132,7 @@ Docx.prototype = {
         });
 
         // 其他资源引入
-        app.get('/*.', function (req, res) {
+        app.get('/*', function (req, res) {
             var fileurl = path.join(CONF.path, req.url);
             if (fileurl) {
                 fs.readFile(fileurl, function (err, data) {

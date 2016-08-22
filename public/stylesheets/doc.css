@@ -120,3 +120,13 @@ li{
         margin: 0 auto;
     }
 }
+.docx-search-title{
+    font-size: 24px;
+    margin-bottom: 3px!important;
+}
+.docx-search-art{
+    margin-bottom: 2em;
+}
+.doc-search-link{
+    display: block;
+}

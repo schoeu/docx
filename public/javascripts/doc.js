@@ -50,7 +50,24 @@ $win.on('keyup', function (e) {
             url: '/search',
             data: {"name": key},
         }).done(function (data) {
-            console.log(data);
+            if (data.error === 0) {
+                var matchedFiles = data.data || [];
+                var htmlStr = '';
+                matchedFiles.forEach(function (it) {
+                    htmlStr += [
+                        '<div class="docx-search-art"><a href="' + it.path + '" class="doc-search-link">',
+                        '      <p class="docx-search-title">',
+                         it.title,
+                        '      </p>',
+                        '      <article class="docx-search-content">',
+                         it.content,
+                        '      </article>',
+                        '</a></div>'
+                    ].join("");
+                });
+
+                $('.docx-marked').html(htmlStr);
+            }
         });
     }
 });
