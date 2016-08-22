@@ -1,3 +1,7 @@
+/**
+ * @file 首页js
+ * */
+
 var htmlStr = '';
 var $lastestArae = $('.docx-lastest-list');
 $.ajax({

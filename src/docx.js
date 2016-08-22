@@ -46,6 +46,7 @@ Docx.prototype = {
         app.set('view engine', '.hbs');
         app.use(express.static(path.join(__dirname, '..', 'public')));
 
+
         // 路由处理
         me.routes(app);
 
@@ -82,6 +83,7 @@ Docx.prototype = {
             });
         });
 
+
         // markdown文件路由
         app.get('/*.md', function (req, res) {
             var relativePath = url.parse(req.originalUrl);
@@ -101,6 +103,22 @@ Docx.prototype = {
                     var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
                     res.render('main', parseObj);
                 }
+            }
+        });
+
+        // 其他资源引入
+        app.get('/*', function (req, res) {
+            var fileurl = path.join(CONF.path, req.url);
+            if (fileurl) {
+                fs.readFile(fileurl, function (err, data) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        res.write(data);
+                        res.end();
+                    }
+                });
             }
         });
     },

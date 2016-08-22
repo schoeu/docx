@@ -51,7 +51,7 @@ html,body{
 .docx-lastest{
     margin-top: 30px;
     border: 1px solid #DDD;
-    height: 10em;
+    min-height: 10em;
     list-style: none;
     padding: 20px;
     border-radius: 2px;
