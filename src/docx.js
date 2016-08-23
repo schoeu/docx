@@ -245,10 +245,10 @@ Docx.prototype = {
         for(var i in dirs) {
             var item = dirs[i] || {};
             if (item.type === 'md') {
-                htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '" data-pjax="true"><i class="iconfont">&#xe61a;</i><span class="nav-filename">' + item.title + '</span></a></li>';
+                htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '" data-pjax="true">' + item.title + '</a></li>';
             }
             else if (item.type === 'dir') {
-                htmlStr += '<li data-dir="' + item.path + '" class="nav nav-dir"><div class="nav-name link"><i class="iconfont">&#xe61f;</i><span class="nav-disname">' + item.displayName + '</span></div><ul class="docx-submenu">';
+                htmlStr += '<li data-dir="' + item.path + '" class=""><a href="#">' + item.displayName + '</a><ul class="docx-submenu">';
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
