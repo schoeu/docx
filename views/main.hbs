@@ -85,25 +85,20 @@
 <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
     <form role="search">
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key">
         </div>
     </form>
     <ul class="nav menu metismenu" id="docx-navs">
         {{{navData}}}
-    </ul>
-    <ul class="nav menu">
-        <li class="active"><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
-        <li><a href="widgets.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
         <li role="presentation" class="divider"></li>
-        <li><a href="login.html"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+        <li><a href="mailto:{{surposEmail}}"> 支持 </a></li>
     </ul>
-
 </div><!--/.sidebar-->
 
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
     <div class="row">
         <ol class="breadcrumb">
-            <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+            <li><a href="#">{{headMain}}{{headSub}}</a></li>
             <li class="active">Icons</li>
         </ol>
     </div><!--/.row-->
@@ -124,8 +119,8 @@
 <script src="/javascripts/jq.min.js"></script>
 <script src="/javascripts/metisMenu.min.js"></script>
 <script src="/javascripts/jq.pjax.js"></script>
-<script src="/javascripts/doc.js"></script>
 <script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/doc.js"></script>
 </body>
 
 </html>

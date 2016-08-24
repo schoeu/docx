@@ -26,9 +26,9 @@ var locals = {
     headMain: headParts[0] || '',
     headSub: headParts[1] || '',
     title: CONF.title || headText,
-    links: links
+    links: links,
+    surposEmail: CONF.surposEmail || ''
 };
-
 
 
 function Docx() {
@@ -66,18 +66,31 @@ Docx.prototype = {
     routes: function () {
         var me = this;
 
-        // 首页路由
-        /*app.get('/', function (req, res) {
-            var parseObj = Object.assign({}, locals, {links: links});
-            res.render('index', parseObj);
-        });*/
-
         // 文档主路径
-        // app.get('/doc', function (req, res) {
         app.get('/', function (req, res) {
-            var parseObj = Object.assign({}, locals, {navData: htmlStr});
-            res.render('main', parseObj);
-            // res.redirect(CONF.index);
+            res.redirect(CONF.index);
+        });
+
+        // markdown文件路由
+        app.get('/*.md', function (req, res) {
+            var relativePath = url.parse(req.originalUrl);
+            var mdPath = path.join(CONF.path, relativePath.pathname);
+            if (mdPath.indexOf('.md') > -1) {
+                var file = fs.readFileSync(mdPath);
+
+                // markdown转换成html
+                var content = me.getMarked(file.toString());
+
+                // 判断是pjax请求则返回html片段
+                if (req.headers['x-pjax'] === 'true') {
+                    res.end(content);
+                }
+                // 否则返回整个模板
+                else {
+                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                    res.render('main', parseObj);
+                }
+            }
         });
 
         // API: 获取最近更新的文件列表
@@ -112,28 +125,6 @@ Docx.prototype = {
                 error: 0,
                 data: searchRs
             });
-        });
-
-        // markdown文件路由
-        app.get('/*.md', function (req, res) {
-            var relativePath = url.parse(req.originalUrl);
-            var mdPath = path.join(CONF.path, relativePath.pathname);
-            if (mdPath.indexOf('.md') > -1) {
-                var file = fs.readFileSync(mdPath);
-
-                // markdown转换成html
-                var content = me.getMarked(file.toString());
-
-                // 判断是pjax请求则返回html片段
-                if (req.headers['x-pjax'] === 'true') {
-                    res.end(content);
-                }
-                // 否则返回整个模板
-                else {
-                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
-                    res.render('main', parseObj);
-                }
-            }
         });
 
         // 其他资源引入
