@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,7 +6,7 @@
     <title>{{title}}</title>
     <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/highlight.css"/>
-    <!--<link type="text/css" rel="stylesheet" href="/stylesheets/doc.css"/>-->
+    <link type="text/css" rel="stylesheet" href="/stylesheets/doc.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/metisMenu.min.css"/>
 </head>
 <body>
@@ -18,7 +19,7 @@
 </header>
 <div class="docx-content sidebar">
     <div class="nav-tree sidebar-nav">
-        <ul class="metismenu" id="docx-navs">
+        <ul class="nav menu metismenu" id="docx-navs">
             {{{navData}}}
         </ul>
     </div>
@@ -33,4 +34,98 @@
 <script src="/javascripts/jq.pjax.js"></script>
 <script src="/javascripts/doc.js"></script>
 </body>
+</html>
+
+-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{title}}</title>
+
+    <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/highlight.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/doc.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/metisMenu.min.css"/>
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/styles.css" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><span>{{headMain}}</span>{{headSub}}</a>
+            <ul class="user-menu">
+                <li class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 链接 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        {{#each links}}
+                            <li>
+                                <a href="{{url}}">{{name}}</a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <form role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+    </form>
+    <ul class="nav menu metismenu" id="docx-navs">
+        {{{navData}}}
+    </ul>
+    <ul class="nav menu">
+        <li class="active"><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+        <li><a href="widgets.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
+        <li role="presentation" class="divider"></li>
+        <li><a href="login.html"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+    </ul>
+
+</div><!--/.sidebar-->
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+            <li class="active">Icons</li>
+        </ol>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+
+                <div class="markdown-body">
+                    <div class="docx-marked">
+                        {{{mdData}}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--/.row-->
+</div>	<!--/.main-->
+<script src="/javascripts/jq.min.js"></script>
+<script src="/javascripts/metisMenu.min.js"></script>
+<script src="/javascripts/jq.pjax.js"></script>
+<script src="/javascripts/doc.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+</body>
+
 </html>

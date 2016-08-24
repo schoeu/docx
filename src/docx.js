@@ -19,12 +19,17 @@ var ignorDor = CONF.ignoreDir || [];
 
 var dirMap = {};
 var htmlStr = '';
-var headText = CONF.headText || '';
-var locals = {
-    headText: headText,
-    title: CONF.title || headText
-};
 var links = CONF.links || [];
+var headText = CONF.headText || '';
+var headParts = headText.split('-') || [];
+var locals = {
+    headMain: headParts[0] || '',
+    headSub: headParts[1] || '',
+    title: CONF.title || headText,
+    links: links
+};
+
+
 
 function Docx() {
     this.init();
@@ -70,9 +75,9 @@ Docx.prototype = {
         // 文档主路径
         // app.get('/doc', function (req, res) {
         app.get('/', function (req, res) {
-            // var parseObj = Object.assign({}, locals, {navData: htmlStr});
-            // res.render('main', parseObj);
-            res.redirect(CONF.index);
+            var parseObj = Object.assign({}, locals, {navData: htmlStr});
+            res.render('main', parseObj);
+            // res.redirect(CONF.index);
         });
 
         // API: 获取最近更新的文件列表
