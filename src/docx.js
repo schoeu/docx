@@ -19,15 +19,15 @@ var ignorDor = CONF.ignoreDir || [];
 
 var dirMap = {};
 var htmlStr = '';
-var links = CONF.links || [];
 var headText = CONF.headText || '';
 var headParts = headText.split('-') || [];
 var locals = {
     headMain: headParts[0] || '',
     headSub: headParts[1] || '',
     title: CONF.title || headText,
-    links: links,
-    surposEmail: CONF.surposEmail || ''
+    links: CONF.extUrls.links || [],
+    surposEmail: CONF.surposEmail || '',
+    label: CONF.extUrls.label
 };
 
 

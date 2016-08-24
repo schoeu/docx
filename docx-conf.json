@@ -277,14 +277,17 @@
       "sort": 3
     }
   },
-  "links": [{
-    "name": "SFE文档",
-    "url": "http://sfe.baidu.com"
-  },{
-    "name": "MIP文档",
-    "url": "http://mip.baidu.com"
-  },{
-    "name": "SUPERFRAME文档",
-    "url": "http://superframe.baidu.com"
-  }]
+  "extUrls": {
+    "label": "友情链接",
+    "links":[{
+      "name": "栅格文档PMD",
+      "url": "http://sfe.baidu.com/pmd/doc/"
+    },{
+      "name": "MIP文档",
+      "url": "http://mip.baidu.com"
+    },{
+      "name": "SUPERFRAME文档",
+      "url": "http://superframe.baidu.com"
+    }]
+  }
 }

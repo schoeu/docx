@@ -1,61 +1,9 @@
-html,body {
-    margin: 0;
-    padding: 0;
-
-}
-@font-face {font-family: 'iconfont';
-    src: url('/icon/iconfont.eot'); /* IE9*/
-    src: url('/icon/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('/icon/iconfont.woff') format('woff'), /* chrome、firefox */
-    url('/icon/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-    url('/icon/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
-}
-.iconfont{
-    font-family:"iconfont" !important;
-    font-size:16px;font-style:normal;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-stroke-width: 0.2px;
-    -moz-osx-font-smoothing: grayscale;
-}
-/*.nav{
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
-.nav a{
-    text-decoration: none;
-    color: #333;
-    line-height: 32px;
-    height: 32px;
-    display: block;
-    padding: 0 10px;
-    font-weight: normal;
-}
-.nav-title {
-    font-weight: bold;
-}
-li{
-    list-style-type: none;
-}*/
-/*.nav-name {
-    line-height: 32px;
-    border-radius: 2px;
-    padding: 0 10px;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-.nav-select a{
-    color: #3369E8;
-}*/
 .nav-tree {
     width: 25%;
     height: 100%;
     display: inline-block;
     vertical-align: top;
 }
-/*.nav-disname,.nav-filename{
-    margin-left: .5em;
-}*/
 .docx-textarea {
     width: 71%;
     display: inline-block;
@@ -74,14 +22,6 @@ li{
     font-weight: bold;
     font-size: 23px;
 }
-/*.docx-submenu{
-    padding-left: 1em;
-    display: none;
-}
-.docx-open>.docx-submenu{
-    display: block;
-}*/
-
 .nav .iconfont {
     width: 16px;
     height: 16px;
@@ -89,28 +29,23 @@ li{
 .docx-marked {
     padding: 10px 40px;
 }
-@media (max-width: 767px){
-    .nav-tree {
-        display: none!important;
-    }
-    .docx-textarea {
-        width: 90%;
-        display: block;
-        margin: 0 auto;
-    }
-}
-.docx-search-title{
-    font-size: 24px;
-    margin-bottom: 3px!important;
-}
-.docx-search-art{
-    margin-bottom: 2em;
-}
-.doc-search-link{
-    display: block;
-}
 .markdown-body{
     margin-top: 15px;
+}
+.docx-navs{
+    padding-bottom: 30px;
+}
+.docx-navs>li li {
+    list-style: none;
+}
+#docx-navs>li ul>li>a {
+    color: #30a5ff;
+    background-color: inherit;
+}
+.docx-submenu>li{
+    position: relative;
+    display: block;
+    padding: 10px 0;
 }
 
 

@@ -45,13 +45,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{title}}</title>
-
     <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/highlight.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/doc.css"/>
     <link type="text/css" rel="stylesheet" href="/stylesheets/metisMenu.min.css"/>
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
-    <link href="/stylesheets/styles.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/styles.css"/>
 </head>
 
 <body>
@@ -67,7 +66,7 @@
             <a class="navbar-brand" href="#"><span>{{headMain}}</span>{{headSub}}</a>
             <ul class="user-menu">
                 <li class="dropdown pull-right">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 链接 <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         {{#each links}}
                             <li>
@@ -78,7 +77,6 @@
                 </li>
             </ul>
         </div>
-
     </div><!-- /.container-fluid -->
 </nav>
 
@@ -88,7 +86,7 @@
             <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key">
         </div>
     </form>
-    <ul class="nav menu metismenu" id="docx-navs">
+    <ul class="nav menu metismenu docx-navs" id="docx-navs">
         {{{navData}}}
         <li role="presentation" class="divider"></li>
         <li><a href="mailto:{{surposEmail}}"> 支持 </a></li>
@@ -106,7 +104,6 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-
                 <div class="markdown-body">
                     <div class="docx-marked">
                         {{{mdData}}}

@@ -42,4 +42,4 @@ $win.on('keyup', function (e) {
     }
 });
 
-$('#docx-navs').metisMenu();
+$('.docx-navs').metisMenu();
