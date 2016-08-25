@@ -74,8 +74,8 @@
     padding-left: 6em;
 }
 .docx-submenu a:hover{
-    text-decoration: none!important;
-    background-color: #eee!important;
+    text-decoration: none;
+    background-color: #eee;
 }
 .active>a>.fa.arrow:before {
     content: "\f107";
@@ -101,4 +101,9 @@
     right: 16px;
     top: 12px;
 }
-
+.docx-active{
+    background-color: #30a5ff!important;
+}
+.docx-active>a {
+    color: #fff!important;
+}

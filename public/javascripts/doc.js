@@ -49,14 +49,22 @@ $win.on('keyup', function (e) {
     preventDefault: false
 });*/
 
-$(document).on('pjax:beforeReplace', function(event) {
+$(document).on('load', function(event) {
     // Prevent default timeout redirection behavior
     event.preventDefault();
-    console.log(event);
-
+    var pathname = location.pathname || '';
+    var $pathDom = $('[data-path="'+ pathname +'"]');
+    $pathDom.parents('.docx-submenu').addClass('in');
+    $pathDom.parents('[data-dir]').addClass('active');
 });
 
 $navs.metisMenu();
+
+$('.nav-title').on('click', function () {
+    $('.docx-files').removeClass('docx-active');
+    $(this).addClass('docx-active');
+    $(this).parents('.docx-dir').removeClass('active');
+});
 
 /*$('#sidebar-container').load(menuPath,function(){
         $('#side-menu').metisMenu();

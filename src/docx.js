@@ -166,23 +166,29 @@ Docx.prototype = {
 
         // 其他资源引入
         app.get('/*', function (req, res) {
-            var fileurl = path.join(CONF.path, req.url);
+            var urlArr = [];
+            var url = req.url || '';
+            if (url.indexOf('?') > -1) {
+                urlArr = url.split('?') || [];
+                url = urlArr[0];
+            }
+            var fileurl = path.join(CONF.path, url);
             if (fileurl) {
                 fileurl = decodeURIComponent(fileurl);
             }
-            fs.stat(fileurl, function (err, stats) {
-                if (stats) {
+            //fs.stat(fileurl, function (err, stats) {
+            //    if (stats) {
                     fs.readFile(fileurl, function (err, data) {
                         if (err) {
-                            throw err;
+                            console.log(err);
                         }
                         else {
                             res.write(data);
                             res.end();
                         }
                     });
-                }
-            });
+            //    }
+            //});
         });
     },
 
@@ -320,7 +326,7 @@ Docx.prototype = {
                 htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
             }
             else if (item.type === 'dir') {
-                htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" ><a href="#">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
+                htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
