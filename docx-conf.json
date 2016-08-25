@@ -1,7 +1,7 @@
 {
   "port": "8910",
   "path": "/Users/memee/Downloads/svn/ps-fe/ps-fe-new",
-  "ignoreDir": ["img",".git"],
+  "ignoreDir": ["img",".git",".svn","courseware","headline","imgs"],
   "debug": true,
   "headText": "PSFE-DOC",
   "title": "PSFE",
@@ -274,6 +274,10 @@
     },
     "stat_guide_for_ubs": {
       "name": "统计指南",
+      "sort": 3
+    },
+    "superframe": {
+      "name": "superframe",
       "sort": 3
     }
   },

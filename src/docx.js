@@ -8,6 +8,7 @@ var fs = require('fs');
 var child = require('child_process');
 var url = require('url');
 var express = require('express');
+var bodyParser = require('body-parser');
 var marked = require('marked');
 var CONF = require('../docx-conf.json');
 var highlight = require('highlight.js');
@@ -35,6 +36,27 @@ function Docx() {
     this.init();
 }
 
+var htmlCodes = [
+    '<div class="row">',
+    '        <ol class="breadcrumb">',
+    '            <li>' + headText + '</li>',
+    '                {{brandData}}',
+    '        </ol>',
+    '    </div><!--/.row-->',
+    '    <div class="row">',
+    '        <div class="col-lg-12">',
+    '            <div class="panel panel-default">',
+    '                <div class="markdown-body">',
+    '                    <div class="docx-marked">',
+    '                        {{mdData}}',
+    '                    </div>',
+    '                </div>',
+    '            </div>',
+    '        </div>',
+    '    </div>'
+].join('');
+
+
 Docx.prototype = {
     contributor: Docx,
 
@@ -51,12 +73,19 @@ Docx.prototype = {
         app.engine('.hbs', exphbs({extname: '.hbs'}));
         app.set('view engine', '.hbs');
         app.use(express.static(path.join(__dirname, '..', 'public')));
-
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: false }));
 
         // 路由处理
-        me.routes(app);
+        me.routes();
+        // 容错处理
+        app.use(function(req, res, next) {
+            var err = new Error('Not Found');
+            err.status = 404;
+            next(err);
+        });
 
-        app.listen(CONF.port || 8910);
+        app.listen(CONF.port);
         me.getDocTree();
     },
 
@@ -74,8 +103,12 @@ Docx.prototype = {
         // markdown文件路由
         app.get('/*.md', function (req, res) {
             var relativePath = url.parse(req.originalUrl);
-            var mdPath = path.join(CONF.path, relativePath.pathname);
-            if (mdPath.indexOf('.md') > -1) {
+            var pathName = relativePath.pathname || '';
+            var mdPath = path.join(CONF.path, pathName);
+            if (mdPath) {
+                mdPath = decodeURIComponent(mdPath);
+            }
+            if (path.extname(mdPath) === '.md') {
                 var file = fs.readFileSync(mdPath);
 
                 // markdown转换成html
@@ -83,7 +116,8 @@ Docx.prototype = {
 
                 // 判断是pjax请求则返回html片段
                 if (req.headers['x-pjax'] === 'true') {
-                    res.end(content);
+                    var rsPjaxDom = me.getPjaxContent(pathName, content);
+                    res.end(rsPjaxDom);
                 }
                 // 否则返回整个模板
                 else {
@@ -103,20 +137,23 @@ Docx.prototype = {
         });
 
         // API: 搜索功能
-        app.get('/search', function (req, res) {
+        app.post('/search', function (req, res) {
             var searchRs = [];
-            var key = req.query.name;
+            var key = req.body.name;
             var filePath = path.join(CONF.path, '**/*.md');
             var files = glob.sync(filePath) || [];
-            files = files.slice(0, 20);
             files.forEach(function (it) {
+                if (it) {
+                    it = decodeURIComponent(it);
+                }
                 // 判断文件是否存在
-                var file = fs.readFileSync(it);
-                var fileContent = file.toString();
-                if (fileContent.indexOf(key) > -1) {
+                // var file = fs.readFileSync(it);
+                // var fileContent = file.toString();
+                var fileTitle = me.getMdTitle(it) || '';
+                var reg = new RegExp(key,'ig');
+                if (reg.test(fileTitle)) {
                     searchRs.push({
                         path: it.replace(CONF.path, ''),
-                        content: me.getMarked(fileContent.substring(0, 500) + '...'),
                         title: me.getMdTitle(it)
                     });
                 }
@@ -130,6 +167,9 @@ Docx.prototype = {
         // 其他资源引入
         app.get('/*', function (req, res) {
             var fileurl = path.join(CONF.path, req.url);
+            if (fileurl) {
+                fileurl = decodeURIComponent(fileurl);
+            }
             fs.stat(fileurl, function (err, stats) {
                 if (stats) {
                     fs.readFile(fileurl, function (err, data) {
@@ -144,6 +184,44 @@ Docx.prototype = {
                 }
             });
         });
+    },
+
+    /**
+     * 处理&组装面包屑数据
+     * @param {String} pathName 文件路径
+     * @return {String} 转换为中文的HTML字符串
+     * */
+    getPjaxContent: function (pathName, content) {
+        var me = this;
+        var brandStr = '';
+        var pathArr = pathName.split('/');
+        var brandData = me.processBreadcrumb(pathArr);
+        brandData.forEach(function (it) {
+            brandStr += ' <li>' + it + '</li>';
+        });
+        var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
+        return rsHTML;
+    },
+
+    /**
+     * 处理&组装面包屑数据
+     * @param {Array} breadcrumb 面包屑原始数据
+     * @return {Array} 转换为中文的数据
+     * */
+    processBreadcrumb: function(breadcrumb) {
+        breadcrumb = breadcrumb || [];
+        var dirMap = [];
+        breadcrumb.forEach(function (it) {
+            if (it) {
+                if (it.indexOf('.md') > -1) {
+                }
+                else {
+                    var nameMap = CONF.dirname[it] || {};
+                    dirMap.push(nameMap.name || '');
+                }
+            }
+        });
+        return dirMap;
     },
 
     /**
@@ -196,27 +274,25 @@ Docx.prototype = {
             var childPath = path.join(dirs, it);
             var stat = fs.statSync(childPath);
             var relPath = childPath.replace(CONF.path, '');
-
             // 如果是文件夹就递归查找
             if (stat.isDirectory()) {
                 // 如果是配置中忽略的目录,则跳过
                 if (ignorDor.indexOf(it) === -1) {
                     var dirName = CONF.dirname[it] || {};
                     // 如果没有配置文件夹目录名称,则不显示
-                    if (dirName.name) {
-                        dirCtt[it] = {
-                            type: 'dir',
-                            path: relPath,
-                            displayName: dirName.name || ''
-                        };
-                        dirCtt[it]['child'] = {};
-                        me.walker(childPath, dirCtt[it]['child']);
-                    }
+                    dirCtt[it] = {
+                        type: 'dir',
+                        path: relPath,
+                        displayName: dirName.name || it ||''
+                    };
+                    dirCtt[it]['child'] = {};
+                    me.walker(childPath, dirCtt[it]['child']);
                 }
             }
             // 如果是文件
             else {
-                if (path.extname(it) === '.md') {
+                //if (path.extname(it) === '.html') {
+                if (/.[md|html]$/.test(path.extname(it))) {
                     var basename = path.basename(it, '.md');
                     var title = me.getMdTitle(childPath);
                     dirCtt[basename] = {
@@ -241,10 +317,10 @@ Docx.prototype = {
         for(var i in dirs) {
             var item = dirs[i] || {};
             if (item.type === 'md') {
-                htmlStr += '<li class="nav nav-title" data-path="' + item.path + '"><a href="' + item.path + '" data-pjax="true">' + item.title + '</a></li>';
+                htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
             }
             else if (item.type === 'dir') {
-                htmlStr += '<li data-dir="' + item.path + '" class=""><a href="#">' + item.displayName + '</a><ul class="docx-submenu">';
+                htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" ><a href="#">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
                 this.makeNav(item.child);
                 htmlStr += '</ul></li>';
             }
@@ -259,6 +335,7 @@ Docx.prototype = {
      * */
     getMdTitle: function(dir) {
         if (dir) {
+            dir = decodeURIComponent(dir);
             var content = fs.readFileSync(dir);
             var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
             return titleArr[1] || '';

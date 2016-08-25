@@ -1,3 +1,10 @@
+@font-face {font-family: 'fa';
+    src: url('/icon/fontawesome-webfont.eot'); /* IE9*/
+    src: url('/icon/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/icon/fontawesome-webfont.woff') format('woff'), /* chrome、firefox */
+    url('/icon/fontawesome-webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('/icon/fontawesome-webfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
 .nav-tree {
     width: 25%;
     height: 100%;
@@ -33,7 +40,7 @@
     margin-top: 15px;
 }
 .docx-navs{
-    padding-bottom: 30px;
+    padding-bottom: 20px;
 }
 .docx-navs>li li {
     list-style: none;
@@ -41,12 +48,57 @@
 #docx-navs>li ul>li>a {
     color: #30a5ff;
     background-color: inherit;
+    line-height: 40px;
+    display: block;
+    text-decoration: none;
 }
 .docx-submenu>li{
     position: relative;
-    display: block;
-    padding: 10px 0;
+}
+.nav-title:hover, .nav-title:focus {
+    text-decoration: none;
+    background-color: #eee;
+}
+.docx-submenu{
+    padding-left: 0;
+}
+.docx-submenu>li>a{
+    padding-left: 2em;
 }
 
+.docx-submenu>li>.docx-submenu>li>a{
+    padding-left: 4em;
+}
 
+.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
+    padding-left: 6em;
+}
+.docx-submenu a:hover{
+    text-decoration: none!important;
+    background-color: #eee!important;
+}
+.active>a>.fa.arrow:before {
+    content: "\f107";
+}
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 fa;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+/*.fa{
+    font-family:"fa" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}*/
+.sidebar .arrow {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+}
 

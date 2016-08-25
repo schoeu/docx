@@ -2,11 +2,12 @@
  * @file 文档页js
  * */
 var $win = $(window);
+var $navs = $('.docx-navs');
 /**
 * pjax委托
 * */
 if ($.support.pjax) {
-    $(document).pjax('a[href$=".md"]', '.docx-marked');
+    $(document).pjax('a[href$=".md"]', '.docx-marked-wrap');
 }
 
 /**
@@ -18,11 +19,13 @@ $win.on('keyup', function (e) {
         $.ajax({
             url: '/search',
             data: {"name": key},
+            type: 'post'
         }).done(function (data) {
             if (data.error === 0) {
                 var matchedFiles = data.data || [];
                 var htmlStr = '';
                 var emptyString =  '<div class="docx-search-content">暂无匹配文档!</div>';
+                console.log(data.data);
                 matchedFiles.forEach(function (it) {
                     htmlStr += [
                         '<div class="docx-search-art"><a href="' + it.path + '" class="doc-search-link">',
@@ -42,4 +45,26 @@ $win.on('keyup', function (e) {
     }
 });
 
-$('.docx-navs').metisMenu();
+/*$navs.metisMenu({
+    preventDefault: false
+});*/
+
+$navs.metisMenu();
+
+/*
+$navs.on('click', 'li', function () {
+    $target = $(this);
+    var brandName = [];
+    var $lis = $target.add($target.parents('li'));
+
+    $lis.each(function (i, it) {
+        var $li = $(it);
+        brandName.push($li.attr('data-title'));
+    });
+
+    var htmlStr = '<li>PSFEDOC</li>';
+    brandName.forEach(function (item) {
+        htmlStr += '<li>'+ item +'</li>';
+    });
+    $('.breadcrumb').html(htmlStr);
+});*/
