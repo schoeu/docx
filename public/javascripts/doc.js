@@ -24,7 +24,7 @@ $win.on('keyup', function (e) {
             if (data.error === 0) {
                 var matchedFiles = data.data || [];
                 var htmlStr = '';
-                var emptyString =  '<div class="docx-search-content">暂无匹配文档!</div>';
+                var emptyString = '<div class="docx-search-content">暂无匹配文档!</div>';
                 console.log(data.data);
                 matchedFiles.forEach(function (it) {
                     htmlStr += [
@@ -49,22 +49,29 @@ $win.on('keyup', function (e) {
     preventDefault: false
 });*/
 
+$(document).on('pjax:beforeReplace', function(event) {
+    // Prevent default timeout redirection behavior
+    event.preventDefault();
+    console.log(event);
+
+});
+
 $navs.metisMenu();
 
-/*
-$navs.on('click', 'li', function () {
-    $target = $(this);
-    var brandName = [];
-    var $lis = $target.add($target.parents('li'));
-
-    $lis.each(function (i, it) {
-        var $li = $(it);
-        brandName.push($li.attr('data-title'));
+/*$('#sidebar-container').load(menuPath,function(){
+        $('#side-menu').metisMenu();
+    defaultLoad();
+    //设置默认右侧菜单
+    var url = window.location;
+    var hash = location.hash;
+    if(hash == '') url = url + '#' + globalConf.firstDoc;
+    var element = $('#sidebar-container a').filter(function() {
+        return this.href == url;
+    }).addClass('active');
+    var parentUl = element.parents('ul').filter(function(){
+        if($(this).attr('data-level')){
+            $(this).addClass('in');
+            $(this).parent().addClass('active');
+        }
     });
-
-    var htmlStr = '<li>PSFEDOC</li>';
-    brandName.forEach(function (item) {
-        htmlStr += '<li>'+ item +'</li>';
-    });
-    $('.breadcrumb').html(htmlStr);
 });*/
