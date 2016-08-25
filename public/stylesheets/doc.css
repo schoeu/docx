@@ -107,3 +107,9 @@
 .docx-active>a {
     color: #fff!important;
 }
+.doc-search-link{
+    display: block;
+}
+.docx-search-art{
+    line-height: 30px;
+}

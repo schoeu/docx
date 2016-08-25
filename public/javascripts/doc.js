@@ -29,12 +29,7 @@ $win.on('keyup', function (e) {
                 matchedFiles.forEach(function (it) {
                     htmlStr += [
                         '<div class="docx-search-art"><a href="' + it.path + '" class="doc-search-link">',
-                        //'      <p class="docx-search-title">',
-                        // it.title,
-                        //'      </p>',
-                        '      <article class="docx-search-content">',
-                         it.content,
-                        '      </article>',
+                        it.title,
                         '</a></div>'
                     ].join("");
                 });
@@ -45,41 +40,25 @@ $win.on('keyup', function (e) {
     }
 });
 
-/*$navs.metisMenu({
+$navs.metisMenu({
     preventDefault: false
-});*/
+});
 
-$(document).on('load', function(event) {
+$(window).on('load', function(event) {
     // Prevent default timeout redirection behavior
     event.preventDefault();
     var pathname = location.pathname || '';
     var $pathDom = $('[data-path="'+ pathname +'"]');
     $pathDom.parents('.docx-submenu').addClass('in');
     $pathDom.parents('[data-dir]').addClass('active');
+    $docxTitle.removeClass('docx-active');
+    $(this).addClass('docx-active').parents('.docx-dir').removeClass('active');
 });
 
 $navs.metisMenu();
 
+/*var $docxTitle = $('.docx-files');
 $('.nav-title').on('click', function () {
-    $('.docx-files').removeClass('docx-active');
-    $(this).addClass('docx-active');
-    $(this).parents('.docx-dir').removeClass('active');
-});
-
-/*$('#sidebar-container').load(menuPath,function(){
-        $('#side-menu').metisMenu();
-    defaultLoad();
-    //设置默认右侧菜单
-    var url = window.location;
-    var hash = location.hash;
-    if(hash == '') url = url + '#' + globalConf.firstDoc;
-    var element = $('#sidebar-container a').filter(function() {
-        return this.href == url;
-    }).addClass('active');
-    var parentUl = element.parents('ul').filter(function(){
-        if($(this).attr('data-level')){
-            $(this).addClass('in');
-            $(this).parent().addClass('active');
-        }
-    });
+    $docxTitle.removeClass('docx-active');
+    $(this).addClass('docx-active').parents('.docx-dir').removeClass('active');
 });*/

@@ -13,6 +13,7 @@ var marked = require('marked');
 var CONF = require('../docx-conf.json');
 var highlight = require('highlight.js');
 var glob = require('glob');
+var serve_static = require('serve-static');
 
 var app = express();
 var exphbs  = require('express-handlebars');
@@ -164,32 +165,8 @@ Docx.prototype = {
             });
         });
 
-        // 其他资源引入
-        app.get('/*', function (req, res) {
-            var urlArr = [];
-            var url = req.url || '';
-            if (url.indexOf('?') > -1) {
-                urlArr = url.split('?') || [];
-                url = urlArr[0];
-            }
-            var fileurl = path.join(CONF.path, url);
-            if (fileurl) {
-                fileurl = decodeURIComponent(fileurl);
-            }
-            //fs.stat(fileurl, function (err, stats) {
-            //    if (stats) {
-                    fs.readFile(fileurl, function (err, data) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        else {
-                            res.write(data);
-                            res.end();
-                        }
-                    });
-            //    }
-            //});
-        });
+        // 委托其他静态资源
+        app.use('/', serve_static(CONF.path));
     },
 
     /**

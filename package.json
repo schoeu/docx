@@ -26,6 +26,7 @@
     "express-handlebars": "^3.0.0",
     "glob": "^7.0.5",
     "highlight.js": "^9.6.0",
-    "marked": "^0.3.6"
+    "marked": "^0.3.6",
+    "serve-static": "^1.11.1"
   }
 }
