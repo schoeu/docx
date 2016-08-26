@@ -45,7 +45,7 @@ var htmlCodes = [
     '        </ol>',
     '    </div><!--/.row-->',
     '    <div class="row">',
-    '        <div class="col-lg-12">',
+    '        <div class="col-lg-12 docx-fade">',
     '            <div class="panel panel-default">',
     '                <div class="markdown-body">',
     '                    <div class="docx-marked">',

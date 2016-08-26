@@ -17,7 +17,7 @@ p {
 }
 
 a, a:hover, a:focus {
-	color: #30a5ff;
+	color: #222;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -47,7 +47,7 @@ h3, h4 {
 }
 
 .color-gray { color: #5f6468; }
-.color-blue { color: #30a5ff; }
+.color-blue { color: #222; }
 .color-teal { color: #1ebfae; }
 .color-orange { color: #ffb53e; }
 .color-red { color: #f9243f; }
@@ -81,9 +81,9 @@ h3, h4 {
 }
 
 .form-control:focus {
-	border: 1px solid #30a5ff;
+	border: 1px solid #222;
 	outline: 0;
-	box-shadow: inset 0px 0px 0px 1px #30a5ff;
+	box-shadow: inset 0px 0px 0px 1px #222;
 }
 
 .navbar-header .navbar-brand {
@@ -95,7 +95,7 @@ h3, h4 {
 }
 
 .navbar-header .navbar-brand span {
-	color: #30a5ff;
+	color: #222;
 }
 
 /*Buttons*/
@@ -158,8 +158,8 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-	background-color: #30a5ff;
-	border-color: #30a5ff;
+	background-color: #222;
+	border-color: #222;
 }
 
 .btn-success,
@@ -258,10 +258,10 @@ a.bg-success:hover {
 }
 .bg-info {
 	color: #fff;
-	background-color: #30a5ff;
+	background-color: #222;
 }
 a.bg-info:hover {
-	background-color: #30a5ff;
+	background-color: #222;
 }
 .bg-info a {
 	color: rgba(255, 255, 255, .75);
@@ -327,7 +327,7 @@ a.bg-danger:hover {
 	margin: 0 -5px;
 }
 
-.panel-footer .input-group-btn:last-child>.btn, 
+.panel-footer .input-group-btn:last-child>.btn,
 .panel-footer .input-group-btn:last-child>.btn-group {
 	margin: 0;
 }
@@ -341,7 +341,7 @@ a.bg-danger:hover {
 	text-decoration: none;
 }
 
-.panel-blue { background: #30a5ff; color: #fff; }
+.panel-blue { background: #222; color: #fff; }
 .panel-teal { background: #1ebfae; color: #fff; }
 .panel-orange { background: #ffb53e; color: #fff; }
 .panel-red { background: #f9243f; color: #fff; }
@@ -349,8 +349,8 @@ a.bg-danger:hover {
 .panel-blue .panel-body p,
 .panel-teal .panel-body p,
 .panel-orange .panel-body p,
-.panel-red .panel-body p { 
-	color: #fff; 
+.panel-red .panel-body p {
+	color: #fff;
 	color: rgba(255, 255, 255, .8);
 }
 
@@ -364,8 +364,8 @@ a.bg-danger:hover {
 .panel-blue .text-muted,
 .panel-teal .text-muted,
 .panel-orange .text-muted,
-.panel-red .text-muted { 
-	color: rgba(255, 255, 255, .5); 
+.panel-red .text-muted {
+	color: rgba(255, 255, 255, .5);
 }
 
 .dark-overlay {
@@ -422,7 +422,7 @@ a.bg-danger:hover {
 	color: #5f6468;
 }
 
-.panel-blue .widget-left { background: #30a5ff; color: #fff; }
+.panel-blue .widget-left { background: #222; color: #fff; }
 .panel-teal .widget-left { background: #1ebfae; color: #fff; }
 .panel-orange .widget-left { background: #ffb53e; color: #fff; }
 .panel-red .widget-left { background: #f9243f; color: #fff; }
@@ -478,7 +478,7 @@ a.bg-danger:hover {
 
 .nav-pills li.active a,
 .nav-pills li.active a:hover {
-	background: #30a5ff;
+	background: #222;
 }
 
 .tab-content {
@@ -501,9 +501,9 @@ a.bg-danger:hover {
 .navbar input:focus {
 	color: #fff;
 	background: #555;
-	border: 1px solid #30a5ff;
+	border: 1px solid #222;
 	outline: 0;
-	box-shadow: inset 0px 0px 0px 1px #30a5ff;
+	box-shadow: inset 0px 0px 0px 1px #222;
 }
 
 .user-menu {
@@ -550,7 +550,7 @@ a.bg-danger:hover {
 		margin: 0;
 		padding: 0;
 		overflow-x: hidden;
-		overflow-y: auto; 
+		overflow-y: auto;
 		background-color: #fff;
 		box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
 	}
@@ -559,7 +559,7 @@ a.bg-danger:hover {
 	}
 }
 
-.sidebar ul.nav a:hover, 
+.sidebar ul.nav a:hover,
 .sidebar ul.nav li.parent ul li a:hover {
 	text-decoration: none;
 	background-color: #e9ecf2;
@@ -569,8 +569,8 @@ a.bg-danger:hover {
 .sidebar ul.nav .active > a:hover, .sidebar ul.nav li.parent a.active:hover,
 .sidebar ul.nav .active > a:focus, .sidebar ul.nav li.parent a.active:focus {
 	color: #fff;
-	background-color: #30a5ff;
-}*/
+	background-color: #222;
+}
 
 .sidebar ul.nav ul,
 .sidebar ul.nav ul li {
@@ -588,11 +588,11 @@ a.bg-danger:hover {
 .sidebar ul.nav ul.children li a {
 	height: 40px;
 	background: #f9f9f9;
-	color: #30a5ff!important;
+	color: #222!important;
 }
 
 .sidebar ul.nav li.current a {
-	background-color: #30a5ff;
+	background-color: #222;
 	color: #fff!important;
 }
 
@@ -674,7 +674,7 @@ h1.page-header {
 	width: 120px;
 }
 
-#easypiechart-blue .percent { color: #30a5ff;}
+#easypiechart-blue .percent { color: #222;}
 #easypiechart-teal .percent { color: #1ebfae;}
 #easypiechart-orange .percent { color: #ffb53e;}
 #easypiechart-red .percent { color: #ef4040;}

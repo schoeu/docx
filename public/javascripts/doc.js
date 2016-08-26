@@ -3,12 +3,21 @@
  * */
 var $win = $(window);
 var $navs = $('.docx-navs');
+var $docxTitle = $('.docx-files');
+var $docFade = $('.docx-fade');
 /**
 * pjax委托
 * */
 if ($.support.pjax) {
     $(document).pjax('a[href$=".md"]', '.docx-marked-wrap');
+    $(document).on('pjax:success', function() {
+        $('.docx-fade').addClass('docx-fade-active');
+    });
 }
+
+$win.load(function () {
+    $('.docx-fade').addClass('docx-fade-active');
+});
 
 /**
  * 搜索action
@@ -57,7 +66,7 @@ $(window).on('load', function(event) {
 
 $navs.metisMenu();
 
-/*var $docxTitle = $('.docx-files');
+/*
 $('.nav-title').on('click', function () {
     $docxTitle.removeClass('docx-active');
     $(this).addClass('docx-active').parents('.docx-dir').removeClass('active');

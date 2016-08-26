@@ -22,7 +22,7 @@
 }
 .docx-head{
     height: 55px;
-    background: #3369E8;
+    background: #222;
     color: #FFF;
     line-height: 55px;
     padding: 0 25px;
@@ -46,7 +46,7 @@
     list-style: none;
 }
 #docx-navs>li ul>li>a {
-    color: #30a5ff;
+    color: #222;
     background-color: inherit;
     line-height: 40px;
     display: block;
@@ -102,14 +102,32 @@
     top: 12px;
 }
 .docx-active{
-    background-color: #30a5ff!important;
+    background-color: #222!important;
 }
 .docx-active>a {
     color: #fff!important;
 }
-.doc-search-link{
+.doc-search-link {
     display: block;
 }
-.docx-search-art{
+.docx-search-art {
     line-height: 30px;
+}
+.docx-fade {
+    opacity: .3;
+    -webkit-transform: translate3d(-10px, 0, 0);
+    -moz-transform: translate3d(-10px, 0, 0);
+    -m-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+    -webkit-transition: all 700ms;
+    -moz-transition: all 700ms;
+    -m-transition: all 700ms;
+    transition: all 700ms;
+}
+.docx-fade-active {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -m-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }
