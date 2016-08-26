@@ -37,13 +37,14 @@ function Docx() {
     this.init();
 }
 
+
 var htmlCodes = [
     '<div class="row">',
     '        <ol class="breadcrumb">',
     '            <li>' + headText + '</li>',
     '                {{brandData}}',
     '        </ol>',
-    '    </div><!--/.row-->',
+    '    </div>,
     '    <div class="row">',
     '        <div class="col-lg-12 docx-fade">',
     '            <div class="panel panel-default">',

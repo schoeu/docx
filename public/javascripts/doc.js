@@ -4,7 +4,7 @@
 var $win = $(window);
 var $navs = $('.docx-navs');
 var $docxTitle = $('.docx-files');
-var $docFade = $('.docx-fade');
+
 /**
 * pjax委托
 * */

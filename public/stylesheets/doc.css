@@ -57,7 +57,7 @@
 }
 .nav-title:hover, .nav-title:focus {
     text-decoration: none;
-    background-color: #eee;
+    background-color: #e9ecf2;
 }
 .docx-submenu{
     padding-left: 0;
@@ -102,10 +102,8 @@
     top: 12px;
 }
 .docx-active{
-    background-color: #222!important;
-}
-.docx-active>a {
-    color: #fff!important;
+    color: #222;
+    background-color: #e9ecf2;
 }
 .doc-search-link {
     display: block;
