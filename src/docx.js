@@ -132,17 +132,8 @@ Docx.prototype = {
             }
         });
 
-        // API: 获取最近更新的文件列表
-        app.get('/lastestfiles', function (req, res) {
-            var files = me.getLastestFile();
-            res.json({
-                errorno: 0,
-                files: files
-            });
-        });
-
         // API: 搜索功能
-        app.post('/search', function (req, res) {
+        app.post('/api/search', function (req, res) {
             var searchRs = [];
             var key = req.body.name;
             var filePath = path.join(CONF.path, '**/*.md');
@@ -166,6 +157,15 @@ Docx.prototype = {
             res.json({
                 error: 0,
                 data: searchRs
+            });
+        });
+
+        // API: 文档更新钩子
+        app.get('/api/update', function (req, res) {
+            var files = me.docUpdate();
+            res.json({
+                errorno: 0,
+                files: files
             });
         });
 
@@ -331,27 +331,11 @@ Docx.prototype = {
     },
 
     /**
-     * 获取最新更新文件的实现,之后做跨平台兼容
-     *
-     * @return {Array} fileNames 更改过文件的路径数组
+     * 获取最新更新文件,重启服务
      * */
-    getLastestFile: function () {
-        var me = this;
-        var findFile;
-        var fileNames = [];
-        var execRs = child.execSync('find ' + CONF.path + ' -name "*.md" -mtime 0');
-        if (execRs) {
-            findFile = execRs.toString();
-        }
-        var fileArr = findFile.split('\n') || [];
-        fileArr.forEach(function (it) {
-            var title = me.getMdTitle(it);
-            if (title) {
-                fileNames.push(title);
-            }
-        });
-
-        return fileNames;
+    docUpdate: function () {
+        child.execSync('git pull');
+        child.execSync('pm2 restart docx.js');
     }
 };
 
