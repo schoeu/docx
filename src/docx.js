@@ -44,7 +44,7 @@ var htmlCodes = [
     '            <li>' + headText + '</li>',
     '                {{brandData}}',
     '        </ol>',
-    '    </div>,
+    '    </div>',
     '    <div class="row">',
     '        <div class="col-lg-12 docx-fade">',
     '            <div class="panel panel-default">',
