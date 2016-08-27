@@ -5,11 +5,11 @@ if (CONF.smtps) {
 }
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
-    host: CONF.warningEmail.host, // 主机
+    host: CONF.warningEmail.host,
     port: CONF.warningEmail.port,
     auth: {
-        user: CONF.warningEmail.user, // 账号
-        pass: CONF.warningEmail.pass // 密码
+        user: CONF.warningEmail.user,
+        pass: CONF.warningEmail.pass
     }
 });
 

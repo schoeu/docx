@@ -78,16 +78,16 @@ Docx.prototype = {
         app.use(express.static(path.join(__dirname, '..', 'public')));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
-        warning.sendMail('xxxx');
+
+
         // 路由处理
         me.routes();
         // 容错处理
-        app.use(function(req, res, next) {
-            var err = new Error('Not Found');
-            err.status = 404;
-            var errorMsg = err.toString();
-
-            next(err);
+        app.use(function(err, req, res, next) {
+            // 如果开启了错误邮件报警则发错邮件
+            if (err && CONF.waringFlag) {
+                warning.sendMail(err.toString());
+            }
         });
 
         app.listen(CONF.port);

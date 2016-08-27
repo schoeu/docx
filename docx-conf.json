@@ -6,7 +6,8 @@
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "index": "/readme.md",
-  "surposEmail": "liuquanyou@baidu.com",
+  "surposEmail": "xx@xxx.com",
+  "waringFlag": false,
   "warningEmail": {
     "host": "smtp.163.com",
     "port": 25,
