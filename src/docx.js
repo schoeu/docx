@@ -14,6 +14,7 @@ var CONF = require('../docx-conf.json');
 var highlight = require('highlight.js');
 var glob = require('glob');
 var serve_static = require('serve-static');
+var warning = require('./warning.js');
 
 var app = express();
 var exphbs  = require('express-handlebars');
@@ -77,13 +78,15 @@ Docx.prototype = {
         app.use(express.static(path.join(__dirname, '..', 'public')));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
-
+        warning.sendMail('xxxx');
         // 路由处理
         me.routes();
         // 容错处理
         app.use(function(req, res, next) {
             var err = new Error('Not Found');
             err.status = 404;
+            var errorMsg = err.toString();
+
             next(err);
         });
 

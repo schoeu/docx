@@ -7,6 +7,15 @@
   "title": "PSFE",
   "index": "/readme.md",
   "surposEmail": "liuquanyou@baidu.com",
+  "warningEmail": {
+    "host": "smtp.163.com",
+    "port": 25,
+    "user": "automailers@163.com",
+    "pass": "automailers1",
+    "from": "automailers@163.com",
+    "to": "xx@xxx.com",
+    "subject": "DOCX error"
+  },
   "dirname": {
     "aladdin": {
       "name": "阿拉丁",
