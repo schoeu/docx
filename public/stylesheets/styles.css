@@ -9,7 +9,7 @@ p {
 }
 
 a, a:hover, a:focus {
-	color: #222;
+	color: #4078c0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -209,6 +209,9 @@ h3, h4 {
 	text-align: center;
 	border-top: 1px solid #eee;
 	font-size: 12px;
+}
+.sidebar a{
+	color: #222;
 }
 
 /*Breadcrumbs*/
