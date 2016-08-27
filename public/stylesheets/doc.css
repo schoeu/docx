@@ -129,3 +129,7 @@
     -m-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
 }
+.docx-dir>a:hover {
+    color: #222;
+    background-color: #e9ecf2!important;
+}
