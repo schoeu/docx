@@ -278,9 +278,6 @@ Docx.prototype = {
             // 如果是文件
             else {
                 //if (path.extname(it) === '.html') {
-                if (path.extname(relPath) === '.sh') {
-                    relPath;
-                }
                 if (/^\.md$/i.test(path.extname(it))) {
                     var basename = path.basename(it, '.md');
                     var title = me.getMdTitle(childPath);
