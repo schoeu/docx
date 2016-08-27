@@ -34,7 +34,6 @@ $win.on('keyup', function (e) {
                 var matchedFiles = data.data || [];
                 var htmlStr = '';
                 var emptyString = '<div class="docx-search-content">暂无匹配文档!</div>';
-                console.log(data.data);
                 matchedFiles.forEach(function (it) {
                     htmlStr += [
                         '<div class="docx-search-art"><a href="' + it.path + '" class="doc-search-link">',
@@ -54,14 +53,13 @@ $navs.metisMenu({
 });
 
 $(window).on('load', function(event) {
-    // Prevent default timeout redirection behavior
-    event.preventDefault();
     var pathname = location.pathname || '';
     var $pathDom = $('[data-path="'+ pathname +'"]');
     $pathDom.parents('.docx-submenu').addClass('in');
     $pathDom.parents('[data-dir]').addClass('active');
     $docxTitle.removeClass('docx-active');
-    $(this).addClass('docx-active').parents('.docx-dir').removeClass('active');
+    $pathDom.addClass('docx-active').parents().remove('docx-active');
+    //$(this).addClass('docx-active').parents('.docx-dir').removeClass('active');
 });
 
 $navs.metisMenu();
