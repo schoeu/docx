@@ -113,6 +113,7 @@ Docx.prototype = {
             if (mdPath) {
                 mdPath = decodeURIComponent(mdPath);
             }
+
             if (path.extname(mdPath) === '.md') {
                 var file = fs.readFileSync(mdPath);
 
@@ -184,7 +185,7 @@ Docx.prototype = {
         var pathArr = pathName.split('/');
         var brandData = me.processBreadcrumb(pathArr);
         brandData.forEach(function (it) {
-            brandStr += ' <li>' + it + '</li>';
+            brandStr += '<li>' + it + '</li>';
         });
         var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
         return rsHTML;
@@ -229,10 +230,8 @@ Docx.prototype = {
                     var html = '<pre><code class="hljs lang-'+ lang +'"><span class="hljs-lang-tips">' + lang + '</span>';
                     return html + data + '</code></pre>';
                 }
-
                 return '<pre><code class="hljs lang-${lang}">' + data + '</code></pre>';
             }
-
             return '<pre><code class="hljs">' + data + '</code></pre>';
         };
 
@@ -279,7 +278,10 @@ Docx.prototype = {
             // 如果是文件
             else {
                 //if (path.extname(it) === '.html') {
-                if (/.[md|html]$/.test(path.extname(it))) {
+                if (path.extname(relPath) === '.sh') {
+                    relPath;
+                }
+                if (/^\.md$/i.test(path.extname(it))) {
                     var basename = path.basename(it, '.md');
                     var title = me.getMdTitle(childPath);
                     dirCtt[basename] = {
