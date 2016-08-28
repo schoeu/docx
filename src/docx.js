@@ -5,16 +5,17 @@
 
 var path = require('path');
 var fs = require('fs');
-var child = require('child_process');
 var url = require('url');
 var express = require('express');
 var bodyParser = require('body-parser');
 var marked = require('marked');
-var CONF = require('../docx-conf.json');
 var highlight = require('highlight.js');
 var glob = require('glob');
 var serve_static = require('serve-static');
+
+var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
+var update = require('./update.js');
 
 var app = express();
 var exphbs  = require('express-handlebars');
@@ -33,11 +34,9 @@ var locals = {
     label: CONF.extUrls.label
 };
 
-
 function Docx() {
     this.init();
 }
-
 
 var htmlCodes = [
     '<div class="row">',
@@ -58,7 +57,6 @@ var htmlCodes = [
     '        </div>',
     '    </div>'
 ].join('');
-
 
 Docx.prototype = {
     contributor: Docx,
@@ -162,8 +160,8 @@ Docx.prototype = {
         });
 
         // API: 文档更新钩子
-        app.get('/api/update', function (req, res) {
-            var files = me.docUpdate();
+        app.get('/api/update', function (req, res, next) {
+            var status = update(req, res, next);
             res.json({
                 errorno: 0,
                 files: files
@@ -327,14 +325,6 @@ Docx.prototype = {
             return titleArr[1] || '';
         }
         return '';
-    },
-
-    /**
-     * 获取最新更新文件,重启服务
-     * */
-    docUpdate: function () {
-        child.execSync('git pull');
-        child.execSync('pm2 restart docx.js');
     }
 };
 

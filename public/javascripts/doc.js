@@ -26,7 +26,7 @@ $win.on('keyup', function (e) {
     if (e.keyCode === 13) {
         var key = $('.docx-searchkey').val();
         $.ajax({
-            url: '/search',
+            url: '/api/search',
             data: {"name": key},
             type: 'post'
         }).done(function (data) {
