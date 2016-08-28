@@ -12,13 +12,13 @@ var marked = require('marked');
 var highlight = require('highlight.js');
 var glob = require('glob');
 var serve_static = require('serve-static');
+var exphbs  = require('express-handlebars');
 
 var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
 var update = require('./update.js');
 
 var app = express();
-var exphbs  = require('express-handlebars');
 var ignorDor = CONF.ignoreDir || [];
 
 var dirMap = {};
@@ -88,7 +88,9 @@ Docx.prototype = {
             }
         });
 
-        app.listen(CONF.port);
+        app.listen(CONF.port || 8910);
+
+        // 根据文档获取文档结构树
         me.getDocTree();
     },
 
@@ -112,22 +114,20 @@ Docx.prototype = {
                 mdPath = decodeURIComponent(mdPath);
             }
 
-            if (path.extname(mdPath) === '.md') {
-                var file = fs.readFileSync(mdPath);
+            var file = fs.readFileSync(mdPath);
 
-                // markdown转换成html
-                var content = me.getMarked(file.toString());
+            // markdown转换成html
+            var content = me.getMarked(file.toString());
 
-                // 判断是pjax请求则返回html片段
-                if (req.headers['x-pjax'] === 'true') {
-                    var rsPjaxDom = me.getPjaxContent(pathName, content);
-                    res.end(rsPjaxDom);
-                }
-                // 否则返回整个模板
-                else {
-                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
-                    res.render('main', parseObj);
-                }
+            // 判断是pjax请求则返回html片段
+            if (req.headers['x-pjax'] === 'true') {
+                var rsPjaxDom = me.getPjaxContent(pathName, content);
+                res.end(rsPjaxDom);
+            }
+            // 否则返回整个模板
+            else {
+                var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                res.render('main', parseObj);
             }
         });
 
