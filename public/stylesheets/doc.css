@@ -133,3 +133,6 @@
     color: #222;
     background-color: #e9ecf2!important;
 }
+.sidebar ul.nav .active.subactive a{
+    background-color: transparent;
+}

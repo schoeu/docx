@@ -38,7 +38,7 @@ h3, h4 {
 .form-control:focus {
 	border: 1px solid #e9ecf2;
 	outline: 0;
-	box-shadow: inset 0px 0px 0px 1px #222;
+	box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-header .navbar-brand {

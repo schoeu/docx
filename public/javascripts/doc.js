@@ -48,6 +48,7 @@ $win.on('keyup', function (e) {
     }
 });
 
+// 初始化文档目录菜单
 $navs.metisMenu({
     preventDefault: false
 });
@@ -56,16 +57,13 @@ $(window).on('load', function(event) {
     var pathname = location.pathname || '';
     var $pathDom = $('[data-path="'+ pathname +'"]');
     $pathDom.parents('.docx-submenu').addClass('in');
-    $pathDom.parents('[data-dir]').addClass('active');
+    $pathDom.parents('[data-dir]').addClass('active subactive');
     $docxTitle.removeClass('docx-active');
     $pathDom.addClass('docx-active').parents().remove('docx-active');
-    //$(this).addClass('docx-active').parents('.docx-dir').removeClass('active');
 });
 
-$navs.metisMenu();
-
-/*
+// 文档选中样式
 $('.nav-title').on('click', function () {
     $docxTitle.removeClass('docx-active');
-    $(this).addClass('docx-active').parents('.docx-dir').removeClass('active');
-});*/
+    $(this).addClass('docx-active').parents('.docx-dir').addClass('subactive');
+});
