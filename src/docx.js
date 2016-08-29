@@ -77,9 +77,12 @@ Docx.prototype = {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
 
+        // 根据文档获取文档结构树
+        me.getDocTree();
 
         // 路由处理
         me.routes();
+
         // 容错处理
         app.use(function(err, req, res, next) {
             // 如果开启了错误邮件报警则发错邮件
@@ -88,10 +91,8 @@ Docx.prototype = {
             }
         });
 
+        // 端口监听
         app.listen(CONF.port || 8910);
-
-        // 根据文档获取文档结构树
-        me.getDocTree();
     },
 
     /**
@@ -114,21 +115,23 @@ Docx.prototype = {
                 mdPath = decodeURIComponent(mdPath);
             }
 
-            var file = fs.readFileSync(mdPath);
+            // var file = fs.readFileSync(mdPath);
+            fs.readFile(mdPath, 'utf8', function (err, file) {
+                // markdown转换成html
+                var content = me.getMarked(file.toString());
 
-            // markdown转换成html
-            var content = me.getMarked(file.toString());
+                // 判断是pjax请求则返回html片段
+                if (req.headers['x-pjax'] === 'true') {
+                    var rsPjaxDom = me.getPjaxContent(pathName, content);
+                    res.end(rsPjaxDom);
+                }
 
-            // 判断是pjax请求则返回html片段
-            if (req.headers['x-pjax'] === 'true') {
-                var rsPjaxDom = me.getPjaxContent(pathName, content);
-                res.end(rsPjaxDom);
-            }
-            // 否则返回整个模板
-            else {
-                var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
-                res.render('main', parseObj);
-            }
+                // 否则返回整个模板
+                else {
+                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                    res.render('main', parseObj);
+                }
+            });
         });
 
         // API: 搜索功能
@@ -149,7 +152,7 @@ Docx.prototype = {
                 if (reg.test(fileTitle)) {
                     searchRs.push({
                         path: it.replace(CONF.path, ''),
-                        title: me.getMdTitle(it)
+                        title: fileTitle
                     });
                 }
             });
