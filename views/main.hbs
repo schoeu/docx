@@ -42,40 +42,44 @@
         </nav>
 
         <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar" role="navigation">
-            <form role="search" action="javascript:void(0);">
-                <div class="form-group">
-                    <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key">
-                </div>
-            </form>
-            <ul class="nav menu metismenu docx-navs" id="docx-navs">
-                {{{navData}}}
-                <li role="presentation" class="divider"></li>
-                <li><a href="mailto:{{surposEmail}}"> 支持 </a></li>
-            </ul>
+            <div>
+                <form role="search" action="javascript:void(0);">
+                    <div class="form-group">
+                        <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key">
+                    </div>
+                </form>
+                <ul class="nav menu metismenu docx-navs" id="docx-navs">
+                    {{{navData}}}
+                    <li role="presentation" class="divider"></li>
+                    <li><a href="mailto:{{surposEmail}}"> 支持 </a></li>
+                </ul>
+            </div>
         </div><!--/.sidebar-->
 
         <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main docx-marked-wrap container-fluid">
-        <div class="row">
-            <ol class="breadcrumb">
-                <li>{{headMain}}{{headSub}}</li>
-                {{#each brandData}}
-                    <li class="active">{{this}}</li>
-                {{/each}}
-            </ol>
-        </div><!--/.row-->
+            <div>
+                <div class="row">
+                    <ol class="breadcrumb">
+                        <li>{{headMain}}{{headSub}}</li>
+                        {{#each brandData}}
+                        <li class="active">{{this}}</li>
+                        {{/each}}
+                    </ol>
+                </div><!--/.row-->
 
-        <div class="row">
-            <div class="col-lg-12 docx-fade">
-                <div class="panel panel-default">
-                    <div class="markdown-body">
-                        <div class="docx-marked">
-                            {{{mdData}}}
+                <div class="row">
+                    <div class="col-lg-12 docx-fade">
+                        <div class="panel panel-default">
+                            <div class="markdown-body">
+                                <div class="docx-marked">
+                                    {{{mdData}}}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div><!--/.row-->
             </div>
-        </div><!--/.row-->
-    </div>	<!--/.main-->
+        </div>	<!--/.main-->
     </div>
 </div>
 <script src="/javascripts/jq.min.js"></script>

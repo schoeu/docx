@@ -3,7 +3,9 @@
  * */
 var $win = $(window);
 var $navs = $('.docx-navs');
+var $navbarH = $('.navbar').height();
 var $docxTitle = $('.docx-files');
+var $docxBd = $('.docx-body');
 
 /**
 * pjax委托
@@ -17,6 +19,10 @@ if ($.support.pjax) {
 
 $win.load(function () {
     $('.docx-fade').addClass('docx-fade-active');
+
+    $win.on('resize', function () {
+        $docxBd.height($win.height() - $navbarH);
+    });
 });
 
 /**

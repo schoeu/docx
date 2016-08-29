@@ -223,3 +223,29 @@ h3, h4 {
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 	margin: 0 ;
 }
+@media (min-width: 1400px) {
+	.docx-wrapper{
+		max-width: 1400px;
+		margin: 0 auto;
+		position: relative;
+	}
+	.sidebar {
+		position: absolute;
+		display: block;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+		margin: 0;
+		padding: 0;
+		overflow-x: hidden;
+		overflow-y: auto;
+		background-color: #fff;
+		box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
+	}
+	.docx-marked-wrap{
+		overflow-y: auto;
+		overflow-x: hidden;
+		height: 100%;
+	}
+}
