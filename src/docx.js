@@ -354,14 +354,21 @@ Docx.prototype = {
         var sortMap = [];
         var rs = [];
         map.forEach(function (it) {
-            var itemName = dirname[it.itemName] || {};
-            sortMap.push(itemName.sort || 0);
+            var item = dirname[it.itemName] || {};
+            if (it.type !== 'dir') {
+                item.sort = 10000;
+            }
+            sortMap.push(item.sort || 0);
         });
+        
         sortMap.sort(function (a, b) {return b - a});
 
         map.forEach(function (it, i) {
             var itemName = dirname[it.itemName] || {};
             var sortNum = itemName.sort || 0;
+            if (it.type !== 'dir') {
+                sortNum = 10000;
+            }
             var index = sortMap.indexOf(sortNum);
             rs[index] = it;
         });
