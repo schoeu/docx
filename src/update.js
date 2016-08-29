@@ -1,3 +1,8 @@
+/**
+ * @file update.js
+ * @author schoeu
+ * 文件更新钩子
+ * */
 var child_process = require('child_process');
 var CONF = require('../docx-conf.json');
 

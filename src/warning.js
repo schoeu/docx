@@ -1,3 +1,8 @@
+/**
+ * @file warning.js
+ * @author schoeu
+ * 邮件报警实现
+ * */
 var nodemailer = require('nodemailer');
 var CONF = require('../docx-conf.json');
 if (CONF.smtps) {
