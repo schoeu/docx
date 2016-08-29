@@ -20,7 +20,7 @@
   "dirname": {
     "aladdin": {
       "name": "阿拉丁",
-      "sort": 1
+      "sort": 13
     },
     "case": {
       "name": "case总结",
@@ -104,15 +104,15 @@
     },
     "www": {
       "name": "搜索结果页",
-      "sort": 3
+      "sort": 4
     },
     "data": {
       "name": "数据接口",
-      "sort": 3
+      "sort": 8
     },
     "log": {
       "name": "日志",
-      "sort": 3
+      "sort": 11
     },
     "show": {
       "name": "展现日志",
@@ -132,7 +132,7 @@
     },
     "tools": {
       "name": "常用工具",
-      "sort": 3
+      "sort": 6
     },
     "action": {
       "name": "异步日志",
@@ -144,23 +144,20 @@
     },
     "performance": {
       "name": "性能优化",
-      "sort": 3
+      "sort": 8
     },
     "tools": {
       "name": "工具服务",
-      "sort": 3
+      "sort": 6
     },
     "aladdin-debug": {
-      "name": "阿拉丁常见调试",
-      "sort": 3
+      "name": "阿拉丁常见调试"
     },
     "research": {
-      "name": "技术调研",
-      "sort": 3
+      "name": "技术调研"
     },
     "courseware": {
-      "name": "串讲文档",
-      "sort": 3
+      "name": "串讲文档"
     },
     "grid": {
       "name": "栅格化",
@@ -168,15 +165,14 @@
     },
     "xueshu": {
       "name": "学术",
-      "sort": 3
+      "sort": 1
     },
     "standards": {
       "name": "规范流程",
-      "sort": 3
+      "sort": 12
     },
     "process": {
-      "name": "流程",
-      "sort": 3
+      "name": "流程"
     },
     "develop": {
       "name": "开发相关",
@@ -196,15 +192,13 @@
     },
     "advertise": {
       "name": "广告",
-      "sort": 3
+      "sort": 0
     },
     "union": {
-      "name": "联盟相关",
-      "sort": 3
+      "name": "联盟相关"
     },
     "front-interface": {
-      "name": "前后端接口",
-      "sort": 3
+      "name": "前后端接口"
     },
     "refactor": {
       "name": "重构",
@@ -216,11 +210,11 @@
     },
     "transcode": {
       "name": "无线转码",
-      "sort": 3
+      "sort": 5
     },
     "realtime": {
       "name": "时效性",
-      "sort": 3
+      "sort": 9
     },
     "async": {
       "name": "异步化",
@@ -243,16 +237,13 @@
       "sort": 3
     },
     "schema": {
-      "name": "Schemas标记",
-      "sort": 3
+      "name": "Schemas标记"
     },
     "aladdin-test": {
-      "name": "阿拉丁（测试）",
-      "sort": 3
+      "name": "阿拉丁（测试）"
     },
     "tpldev": {
-      "name": "开发平台",
-      "sort": 3
+      "name": "开发平台"
     },
     "wireless-dev": {
       "name": "无线开发",
@@ -288,7 +279,7 @@
     },
     "superframe": {
       "name": "superframe",
-      "sort": 3
+      "sort": 10
     }
   },
   "extUrls": {

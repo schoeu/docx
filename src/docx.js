@@ -260,8 +260,9 @@ Docx.prototype = {
      * */
     walker: function (dirs) {
         var me = this;
-        var dirCtt = {};
-        docWalker(dirs, dirCtt);
+        //var dirCtt = {};
+        var testArr = [];
+        docWalker(dirs, testArr);
         function docWalker(dirs, dirCtt) {
             var dirArr = fs.readdirSync(dirs);
             dirArr = dirArr || [];
@@ -275,13 +276,23 @@ Docx.prototype = {
                     if (ignorDor.indexOf(it) === -1) {
                         var dirName = CONF.dirname[it] || {};
                         // 如果没有配置文件夹目录名称,则不显示
-                        dirCtt[it] = {
+                        /*dirCtt[it] = {
+                            itemName: it,
                             type: 'dir',
                             path: relPath,
                             displayName: dirName.name || it ||''
-                        };
-                        dirCtt[it]['child'] = {};
-                        docWalker(childPath, dirCtt[it]['child']);
+                        };*/
+
+                        var childArr = [];
+                        dirCtt.push({
+                            itemName: it,
+                            type: 'dir',
+                            path: relPath,
+                            displayName: dirName.name || it ||'',
+                            child: childArr
+                        });
+                        // dirCtt[it]['child'] = {};
+                        docWalker(childPath, childArr);
                     }
                 }
                 // 如果是文件
@@ -290,16 +301,24 @@ Docx.prototype = {
                     if (/^\.md$/i.test(path.extname(it))) {
                         var basename = path.basename(it, '.md');
                         var title = me.getMdTitle(childPath);
-                        dirCtt[basename] = {
+                        /*dirCtt[basename] = {
+                            itemName: basename,
                             type: 'md',
                             path: relPath,
                             title: title
-                        };
+                        };*/
+
+                        dirCtt.push({
+                            itemName: basename,
+                            type: 'md',
+                            path: relPath,
+                            title: title
+                        });
                     }
                 }
             });
         }
-        return dirCtt;
+        return testArr;
     },
 
     /**
@@ -308,31 +327,46 @@ Docx.prototype = {
      * @param {Array} dirs 文件目录数组
      * */
     makeNav: function (dirs) {
-        if (!dirs) {
-            return false;
-        }
-        for(var i in dirs) {
-            var item = dirs[i] || {};
-            if (item.type === 'md') {
-                htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
-            }
-            else if (item.type === 'dir') {
-                htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
-                this.makeNav(item.child);
-                htmlStr += '</ul></li>';
+        if (Array.isArray(dirs) && dirs.length) {
+            for(var i = 0; i< dirs.length; i++) {
+                var item = dirs[i] || {};
+                if (item.type === 'md') {
+                    htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
+                }
+                else if (item.type === 'dir') {
+                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
+                    this.makeNav(item.child);
+                    htmlStr += '</ul></li>';
+                }
             }
         }
     },
 
     /**
-     * 根据配置对文档进行排序
+     * 根据配置对文档进行排序,暂支持根目录文件夹排序
      *
      * @param {Object} map 文档结构数据
-     * @return {Object} map 排序后的文档结构数据
+     * @return {Object} rs 排序后的文档结构数组
      * */
     dirSort: function (map) {
-        
-        return map;
+        map = map || [];
+        var dirname = CONF.dirname || {};
+        var sortMap = [];
+        var rs = [];
+        map.forEach(function (it) {
+            var itemName = dirname[it.itemName] || {};
+            sortMap.push(itemName.sort || 0);
+        });
+        sortMap.sort(function (a, b) {return b - a});
+
+        map.forEach(function (it, i) {
+            var itemName = dirname[it.itemName] || {};
+            var sortNum = itemName.sort || 0;
+            var index = sortMap.indexOf(sortNum);
+            rs[index] = it;
+        });
+
+        return rs;
     },
 
     /**
