@@ -12,7 +12,8 @@
     "url": "git+https://github.com/schoeu/docx.git"
   },
   "keywords": [
-    "markdown"
+    "markdown",
+    "doc"
   ],
   "author": "schoeu",
   "license": "MIT",

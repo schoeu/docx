@@ -23,6 +23,8 @@ $win.load(function () {
     $win.on('resize', function () {
         $docxBd.height($win.height() - $navbarH);
     });
+
+    $docxBd.height($win.height() - $navbarH);
 });
 
 /**
