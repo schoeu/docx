@@ -21,7 +21,6 @@ var update = require('./update.js');
 var app = express();
 var ignorDor = CONF.ignoreDir || [];
 
-var dirMap = {};
 var htmlStr = '';
 var headText = CONF.headText || '';
 var headParts = headText.split('-') || [];
@@ -199,18 +198,18 @@ Docx.prototype = {
      * */
     processBreadcrumb: function(breadcrumb) {
         breadcrumb = breadcrumb || [];
-        var dirMap = [];
+        var dirMaps = [];
         breadcrumb.forEach(function (it) {
             if (it) {
                 if (it.indexOf('.md') > -1) {
                 }
                 else {
                     var nameMap = CONF.dirname[it] || {};
-                    dirMap.push(nameMap.name || '');
+                    dirMaps.push(nameMap.name || '');
                 }
             }
         });
-        return dirMap;
+        return dirMaps;
     },
 
     /**
@@ -243,53 +242,64 @@ Docx.prototype = {
      * 获取文件目录树
      * */
     getDocTree: function () {
-        this.walker(CONF.path, dirMap);
-        this.makeNav(dirMap);
+        // 根据markdown文档生成文档树
+        var dirMap = this.walker(CONF.path);
+
+        // 根据配置规则对文档进行排序
+        var dirRsMap = this.dirSort(dirMap);
+
+        // 根据排序后的文档树数据生成文档DOM
+        this.makeNav(dirRsMap);
     },
 
     /**
      * 获取文件目录树
      *
      * @param {String} 文件起始路径
-     * @param {Object} 文件目录树容器
+     * @return {Object} 文件目录树
      * */
-    walker: function (dirs, dirCtt) {
+    walker: function (dirs) {
         var me = this;
-        var dirArr = fs.readdirSync(dirs);
-        dirArr = dirArr || [];
-        dirArr.forEach(function(it) {
-            var childPath = path.join(dirs, it);
-            var stat = fs.statSync(childPath);
-            var relPath = childPath.replace(CONF.path, '');
-            // 如果是文件夹就递归查找
-            if (stat.isDirectory()) {
-                // 如果是配置中忽略的目录,则跳过
-                if (ignorDor.indexOf(it) === -1) {
-                    var dirName = CONF.dirname[it] || {};
-                    // 如果没有配置文件夹目录名称,则不显示
-                    dirCtt[it] = {
-                        type: 'dir',
-                        path: relPath,
-                        displayName: dirName.name || it ||''
-                    };
-                    dirCtt[it]['child'] = {};
-                    me.walker(childPath, dirCtt[it]['child']);
+        var dirCtt = {};
+        docWalker(dirs, dirCtt);
+        function docWalker(dirs, dirCtt) {
+            var dirArr = fs.readdirSync(dirs);
+            dirArr = dirArr || [];
+            dirArr.forEach(function(it) {
+                var childPath = path.join(dirs, it);
+                var stat = fs.statSync(childPath);
+                var relPath = childPath.replace(CONF.path, '');
+                // 如果是文件夹就递归查找
+                if (stat.isDirectory()) {
+                    // 如果是配置中忽略的目录,则跳过
+                    if (ignorDor.indexOf(it) === -1) {
+                        var dirName = CONF.dirname[it] || {};
+                        // 如果没有配置文件夹目录名称,则不显示
+                        dirCtt[it] = {
+                            type: 'dir',
+                            path: relPath,
+                            displayName: dirName.name || it ||''
+                        };
+                        dirCtt[it]['child'] = {};
+                        docWalker(childPath, dirCtt[it]['child']);
+                    }
                 }
-            }
-            // 如果是文件
-            else {
-                //if (path.extname(it) === '.html') {
-                if (/^\.md$/i.test(path.extname(it))) {
-                    var basename = path.basename(it, '.md');
-                    var title = me.getMdTitle(childPath);
-                    dirCtt[basename] = {
-                        type: 'md',
-                        path: relPath,
-                        title: title
-                    };
+                // 如果是文件
+                else {
+                    //if (path.extname(it) === '.html') {
+                    if (/^\.md$/i.test(path.extname(it))) {
+                        var basename = path.basename(it, '.md');
+                        var title = me.getMdTitle(childPath);
+                        dirCtt[basename] = {
+                            type: 'md',
+                            path: relPath,
+                            title: title
+                        };
+                    }
                 }
-            }
-        });
+            });
+        }
+        return dirCtt;
     },
 
     /**
@@ -312,6 +322,17 @@ Docx.prototype = {
                 htmlStr += '</ul></li>';
             }
         }
+    },
+
+    /**
+     * 根据配置对文档进行排序
+     *
+     * @param {Object} map 文档结构数据
+     * @return {Object} map 排序后的文档结构数据
+     * */
+    dirSort: function (map) {
+        
+        return map;
     },
 
     /**
