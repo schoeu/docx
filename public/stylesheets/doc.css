@@ -73,6 +73,9 @@
 .docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
     padding-left: 6em;
 }
+.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
+    padding-left: 8em;
+}
 .docx-submenu a:hover{
     text-decoration: none;
     background-color: #eee;
