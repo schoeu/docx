@@ -8,7 +8,6 @@ var CONF = require('../docx-conf.json');
 if (CONF.smtps) {
 
 }
-// create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
     host: CONF.warningEmail.host,
     port: CONF.warningEmail.port,
@@ -19,12 +18,10 @@ var transporter = nodemailer.createTransport({
 });
 
 function sendMail(content) {
-    // send mail with defined transport object
-    // setup e-mail data with unicode symbols
     var mailOptions = {
-        from: CONF.warningEmail.from, // sender address
+        from: CONF.warningEmail.from,
         to: CONF.warningEmail.to,
-        subject: CONF.warningEmail.subject, // Subject line
+        subject: CONF.warningEmail.subject,
         text: content || ''
     };
     transporter.sendMail(mailOptions, function(error, info){
