@@ -73,7 +73,7 @@ $(window).on('load', function(event) {
 
 // 文档选中样式
 $docxTitle.on('click', function () {
-    $('.active').remove('active');
+    $('.active').removeClass('active');
     $docxTitle.removeClass('docx-active');
     $(this).addClass('docx-active').parents('.docx-dir').addClass('subactive');
 });
