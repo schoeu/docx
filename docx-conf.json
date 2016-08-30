@@ -17,6 +17,10 @@
     "to": "xx@xxx.com",
     "subject": "DOCX error"
   },
+  "searchConf": {
+    "matchDeep": 1,
+    "matchWidth": 120
+  },
   "dirname": {
     "aladdin": {
       "name": "阿拉丁",

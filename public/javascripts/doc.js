@@ -44,11 +44,20 @@ $win.on('keyup', function (e) {
                 var htmlStr = '';
                 var emptyString = '<div class="docx-search-content">暂无匹配文档!</div>';
                 matchedFiles.forEach(function (it) {
-                    htmlStr += [
-                        '<div class="docx-search-art"><a href="' + it.path + '" class="doc-search-link">',
-                        it.title,
-                        '</a></div>'
-                    ].join("");
+                    htmlStr +=  [
+                        '<div class="docx-search-art">',
+                        '    <div class="docx-search-title">',
+                        '        <a href="' + it.path + '" class="doc-search-link">',
+                                    it.title,
+                        '        </a>',
+                        '    </div>',
+                        '    <div class="docx-search-content">',
+                        '        <a href="' + it.path + '" class="doc-search-link">',
+                                    it.content,
+                        '        </a>',
+                        '    </div>',
+                        '</div>'
+                    ].join('');
                 });
 
                 $('.docx-marked').html(htmlStr ? htmlStr : emptyString);

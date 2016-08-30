@@ -15,6 +15,7 @@ var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
 
 var CONF = require('../docx-conf.json');
+var searchConf = CONF.searchConf || {};
 var warning = require('./warning.js');
 var update = require('./update.js');
 
@@ -137,26 +138,54 @@ Docx.prototype = {
         app.post('/api/search', function (req, res) {
             var searchRs = [];
             var key = req.body.name;
+            var keyLength = key.length || 0;
             var filePath = path.join(CONF.path, '**/*.md');
             var files = glob.sync(filePath) || [];
-            files.forEach(function (it) {
-                if (it) {
-                    it = decodeURIComponent(it);
-                }
-                // 判断文件是否存在
-                // var file = fs.readFileSync(it);
-                // var fileContent = file.toString();
-                var fileTitle = me.getMdTitle(it) || '';
-                var reg = new RegExp(key,'ig');
-                if (reg.test(fileTitle)) {
-                    searchRs.push({
-                        path: it.replace(CONF.path, ''),
-                        title: fileTitle
-                    });
-                }
-            });
+            var reg = new RegExp(key,'img');
+            var titleReg = /^\s*\#+\s?(.+)/;
+            if (keyLength) {
+                files.forEach(function (it) {
+                    if (it) {
+                        it = decodeURIComponent(it);
+                    }
+                    var file = fs.readFileSync(it);
+                    //var fileContent = file.toString() || '';
+                    var content = file.toString();
+                    //var content = me.getMarked(file.toString());
+                    var titleArr =  titleReg.exec(content) || [];
+                    var matchContent = [];
+                    var matchIdx = 0;
+                    var lastIndex = 0;
+                    while ((lastIndex = content.indexOf(key, lastIndex)) > 0) {
+                        // 最多查找前N个相关
+                        if (matchIdx < searchConf.matchDeep) {
+                            var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
+                            var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
+                                return '<span class="hljs-string">' + m + '</span>';
+                            });
+                            matchContent.push(rpStr + '...');
+                            matchIdx ++;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+
+                    if (matchContent.length) {
+                        searchRs.push({
+                            path: it.replace(CONF.path, ''),
+                            title: titleArr[1] || '',
+                            content: matchContent.toString()
+                        });
+                    }
+                });
+                res.json({
+                    error: 0,
+                    data: searchRs
+                });
+            }
             res.json({
-                error: 0,
+                error: 1,
                 data: searchRs
             });
         });
