@@ -260,7 +260,6 @@ Docx.prototype = {
      * */
     walker: function (dirs) {
         var me = this;
-        //var dirCtt = {};
         var testArr = [];
         docWalker(dirs, testArr);
         function docWalker(dirs, dirCtt) {
@@ -276,13 +275,6 @@ Docx.prototype = {
                     if (ignorDor.indexOf(it) === -1) {
                         var dirName = CONF.dirname[it] || {};
                         // 如果没有配置文件夹目录名称,则不显示
-                        /*dirCtt[it] = {
-                            itemName: it,
-                            type: 'dir',
-                            path: relPath,
-                            displayName: dirName.name || it ||''
-                        };*/
-
                         var childArr = [];
                         dirCtt.push({
                             itemName: it,
@@ -291,23 +283,14 @@ Docx.prototype = {
                             displayName: dirName.name || it ||'',
                             child: childArr
                         });
-                        // dirCtt[it]['child'] = {};
                         docWalker(childPath, childArr);
                     }
                 }
                 // 如果是文件
                 else {
-                    //if (path.extname(it) === '.html') {
                     if (/^\.md$/i.test(path.extname(it))) {
                         var basename = path.basename(it, '.md');
                         var title = me.getMdTitle(childPath);
-                        /*dirCtt[basename] = {
-                            itemName: basename,
-                            type: 'md',
-                            path: relPath,
-                            title: title
-                        };*/
-
                         dirCtt.push({
                             itemName: basename,
                             type: 'md',
@@ -356,18 +339,18 @@ Docx.prototype = {
         map.forEach(function (it) {
             var item = dirname[it.itemName] || {};
             if (it.type !== 'dir') {
-                item.sort = 10000;
+                item.sort = 0;
             }
             sortMap.push(item.sort || 0);
         });
-        
-        sortMap.sort(function (a, b) {return b - a});
+
+        sortMap.sort(function (a, b) {return a - b});
 
         map.forEach(function (it, i) {
             var itemName = dirname[it.itemName] || {};
             var sortNum = itemName.sort || 0;
             if (it.type !== 'dir') {
-                sortNum = 10000;
+                sortNum = 0;
             }
             var index = sortMap.indexOf(sortNum);
             rs[index] = it;
@@ -389,6 +372,7 @@ Docx.prototype = {
             var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
             return titleArr[1] || '';
         }
+
         return '';
     }
 };

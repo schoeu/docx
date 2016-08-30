@@ -20,135 +20,134 @@
   "dirname": {
     "aladdin": {
       "name": "阿拉丁",
-      "sort": 13
-    },
-    "case": {
-      "name": "case总结",
       "sort": 1
-    },
-    "rules": {
-      "name": "规范",
-      "sort": 2
-    },
-    "santa": {
-      "name": "圣玛利亚",
-      "sort": 3
-    },
-    "agile-dev": {
-      "name": "敏捷开发",
-      "sort": 3
-    },
-    "aladdininfluence": {
-      "name": "模板影响面",
-      "sort": 3
-    },
-    "cardspeedup": {
-      "name": "模板性能优化",
-      "sort": 3
-    },
-    "commonupdate": {
-      "name": "通用升级",
-      "sort": 3
-    },
-    "develop": {
-      "name": "圣玛利亚",
-      "sort": 3
-    },
-    "glbcardstandard": {
-      "name": "哥伦布子卡中心",
-      "sort": 3
-    },
-    "jscommmon": {
-      "name": "js组件",
-      "sort": 3
-    },
-    "platform": {
-      "name": "平台指南",
-      "sort": 3
-    },
-    "publish": {
-      "name": "上线",
-      "sort": 3
-    },
-    "standard": {
-      "name": "开发规范",
-      "sort": 3
-    },
-    "technicalarea": {
-      "name": "技术专区",
-      "sort": 3
-    },
-    "tongji": {
-      "name": "统计相关",
-      "sort": 3
-    },
-    "wise": {
-      "name": "无线网页搜索",
-      "sort": 3
-    },
-    "devdocs": {
-      "name": "开发指导",
-      "sort": 3
-    },
-    "static": {
-      "name": "静态文件",
-      "sort": 3
-    },
-    "pc": {
-      "name": "PC网页搜索",
-      "sort": 3
-    },
-    "midpage": {
-      "name": "搜索中间页",
-      "sort": 3
     },
     "www": {
       "name": "搜索结果页",
-      "sort": 4
+      "sort": 2
     },
-    "data": {
-      "name": "数据接口",
-      "sort": 8
+    "references": {
+      "name": "资源引入",
+      "sort": 3
+    },
+    "superframe": {
+      "name": "superframe",
+      "sort": 4
     },
     "log": {
       "name": "日志",
-      "sort": 11
+      "sort": 5
     },
-    "show": {
-      "name": "展现日志",
-      "sort": 3
-    },
-    "click": {
-      "name": "点击日志",
-      "sort": 3
-    },
-    "client": {
-      "name": "客户端相关规范",
-      "sort": 3
-    },
-    "process": {
-      "name": "使用和变更流程",
-      "sort": 3
-    },
-    "tools": {
-      "name": "常用工具",
+    "standards": {
+      "name": "规范流程",
       "sort": 6
     },
-    "action": {
-      "name": "异步日志",
-      "sort": 3
+    "transcode": {
+      "name": "无线转码",
+      "sort": 7
     },
-    "framework": {
-      "name": "架构",
-      "sort": 3
+    "realtime": {
+      "name": "时效性",
+      "sort": 8
     },
     "performance": {
       "name": "性能优化",
-      "sort": 8
+      "sort": 9
+    },
+    "data": {
+      "name": "数据接口",
+      "sort": 10
     },
     "tools": {
       "name": "工具服务",
-      "sort": 6
+      "sort": 11
+    },
+    "xueshu": {
+      "name": "学术",
+      "sort": 12
+    },
+
+    "advertise": {
+      "name": "广告",
+      "sort": 13
+    },
+    "case": {
+      "name": "case总结"
+    },
+    "rules": {
+      "name": "规范"
+    },
+    "santa": {
+      "name": "圣玛利亚"
+    },
+    "agile-dev": {
+      "name": "敏捷开发"
+    },
+    "aladdininfluence": {
+      "name": "模板影响面"
+    },
+    "cardspeedup": {
+      "name": "模板性能优化"
+    },
+    "commonupdate": {
+      "name": "通用升级"
+    },
+    "develop": {
+      "name": "圣玛利亚"
+    },
+    "glbcardstandard": {
+      "name": "哥伦布子卡中心"
+    },
+    "jscommmon": {
+      "name": "js组件"
+    },
+    "platform": {
+      "name": "平台指南"
+    },
+    "publish": {
+      "name": "上线"
+    },
+    "standard": {
+      "name": "开发规范"
+    },
+    "technicalarea": {
+      "name": "技术专区"
+    },
+    "tongji": {
+      "name": "统计相关"
+    },
+    "wise": {
+      "name": "无线网页搜索"
+    },
+    "devdocs": {
+      "name": "开发指导"
+    },
+    "static": {
+      "name": "静态文件"
+    },
+    "pc": {
+      "name": "PC网页搜索"
+    },
+    "midpage": {
+      "name": "搜索中间页"
+    },
+    "show": {
+      "name": "展现日志"
+    },
+    "click": {
+      "name": "点击日志"
+    },
+    "client": {
+      "name": "客户端相关规范"
+    },
+    "process": {
+      "name": "使用和变更流程"
+    },
+    "action": {
+      "name": "异步日志"
+    },
+    "framework": {
+      "name": "架构"
     },
     "aladdin-debug": {
       "name": "阿拉丁常见调试"
@@ -160,39 +159,22 @@
       "name": "串讲文档"
     },
     "grid": {
-      "name": "栅格化",
-      "sort": 3
-    },
-    "xueshu": {
-      "name": "学术",
-      "sort": 1
-    },
-    "standards": {
-      "name": "规范流程",
-      "sort": 12
+      "name": "栅格化"
     },
     "process": {
       "name": "流程"
     },
     "develop": {
-      "name": "开发相关",
-      "sort": 3
+      "name": "开发相关"
     },
     "general-dev": {
-      "name": "通用开发相关",
-      "sort": 3
+      "name": "通用开发相关"
     },
     "frontend-dev": {
-      "name": "前端开发相关",
-      "sort": 3
+      "name": "前端开发相关"
     },
     "environment-dev": {
-      "name": "环境相关",
-      "sort": 3
-    },
-    "advertise": {
-      "name": "广告",
-      "sort": 0
+      "name": "环境相关"
     },
     "union": {
       "name": "联盟相关"
@@ -201,40 +183,22 @@
       "name": "前后端接口"
     },
     "refactor": {
-      "name": "重构",
-      "sort": 3
+      "name": "重构"
     },
     "test": {
-      "name": "测试相关",
-      "sort": 3
-    },
-    "transcode": {
-      "name": "无线转码",
-      "sort": 5
-    },
-    "realtime": {
-      "name": "时效性",
-      "sort": 9
+      "name": "测试相关"
     },
     "async": {
-      "name": "异步化",
-      "sort": 3
+      "name": "异步化"
     },
     "spec": {
-      "name": "规范",
-      "sort": 3
+      "name": "规范"
     },
     "component": {
-      "name": "功能组件",
-      "sort": 3
+      "name": "功能组件"
     },
     "sample": {
-      "name": "抽样相关",
-      "sort": 3
-    },
-    "references": {
-      "name": "资源引入",
-      "sort": 3
+      "name": "抽样相关"
     },
     "schema": {
       "name": "Schemas标记"
@@ -246,40 +210,28 @@
       "name": "开发平台"
     },
     "wireless-dev": {
-      "name": "无线开发",
-      "sort": 3
+      "name": "无线开发"
     },
     "new-reading": {
-      "name": "新人必读",
-      "sort": 3
+      "name": "新人必读"
     },
     "pc-doc": {
-      "name": "PC开发文档",
-      "sort": 3
+      "name": "PC开发文档"
     },
     "team": {
-      "name": "团队介绍",
-      "sort": 3
+      "name": "团队介绍"
     },
     "pc-other": {
-      "name": "PC其他开发文档",
-      "sort": 3
+      "name": "PC其他开发文档"
     },
     "new_wise_click_doc_doing": {
-      "name": "wise点击日志（doing）",
-      "sort": 3
+      "name": "wise点击日志（doing）"
     },
     "send_guide_for_fe": {
-      "name": "发送指南",
-      "sort": 3
+      "name": "发送指南"
     },
     "stat_guide_for_ubs": {
-      "name": "统计指南",
-      "sort": 3
-    },
-    "superframe": {
-      "name": "superframe",
-      "sort": 10
+      "name": "统计指南"
     }
   },
   "extUrls": {
