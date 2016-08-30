@@ -6,6 +6,7 @@ var $navs = $('.docx-navs');
 var $navbarH = $('.navbar').height();
 var $docxTitle = $('.docx-files');
 var $docxBd = $('.docx-body');
+var $docxDir = $('.docx-dir');
 
 /**
 * pjax委托
@@ -71,7 +72,12 @@ $(window).on('load', function(event) {
 });
 
 // 文档选中样式
-$('.nav-title').on('click', function () {
+$docxTitle.on('click', function () {
+    $('.active').remove('active');
     $docxTitle.removeClass('docx-active');
     $(this).addClass('docx-active').parents('.docx-dir').addClass('subactive');
+});
+
+$docxDir.on('click', function () {
+    $('.docx-navs>.docx-active').removeClass('docx-active');
 });

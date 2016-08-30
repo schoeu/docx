@@ -55,10 +55,10 @@
 .docx-submenu>li{
     position: relative;
 }
-.nav-title:hover, .nav-title:focus {
+/*.nav-title:hover, .nav-title:focus {
     text-decoration: none;
     background-color: #e9ecf2;
-}
+}*/
 .docx-submenu{
     padding-left: 0;
 }
@@ -104,7 +104,7 @@
     right: 16px;
     top: 12px;
 }
-.docx-active{
+.docx-active,.docx-active:hover{
     color: #222;
     background-color: #e9ecf2;
 }
