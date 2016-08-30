@@ -139,3 +139,257 @@
 .sidebar ul.nav .active.subactive a{
     background-color: transparent;
 }
+.nav>li>a{
+    padding: 12px 15px;
+}
+body {
+    background: #f1f4f7;
+    padding-top: 50px;
+    color: #5f6468;
+}
+
+p {
+    color: #777;
+}
+
+a, a:hover, a:focus {
+    color: #4078c0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #5f6468;
+}
+
+h1 {
+    font-weight: 300;
+    font-size: 40px;
+}
+
+h2 {
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+h3, h4 {
+    font-weight: 300;
+}
+
+.form-control {
+    border: 1px solid #eee;
+    box-shadow: none;
+}
+
+.form-control:focus {
+    border: 1px solid #e9ecf2;
+    outline: 0;
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-header .navbar-brand {
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.navbar-header .navbar-brand span {
+    color: #fff;
+}
+
+/*Panels*/
+
+.panel {
+    border: 0;
+}
+
+.panel-heading {
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.025em;
+    height: 66px;
+    line-height: 45px;
+}
+
+.panel-default .panel-heading {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    color: #5f6468;
+}
+
+
+/*Navbar*/
+
+.navbar {
+    border: 0;
+}
+
+.navbar input {
+    border: 0;
+    background: #444;
+    color: #fff;
+}
+
+.navbar input:focus {
+    color: #fff;
+    background: #555;
+    border: 1px solid #222;
+    outline: 0;
+    box-shadow: inset 0px 0px 0px 1px #222;
+}
+
+.user-menu {
+    display: inline-block;
+    margin-top: 14px;
+    margin-right: 10px;
+    float: right;
+    list-style: none;
+    padding: 0;
+}
+
+.user-menu a {
+    color: #fff;
+}
+
+.user-menu a:hover, .user-menu a:focus {
+    text-decoration: none;
+}
+
+/* Sidebar */
+
+.sidebar {
+    display: block;
+    background-color: #fff;
+    padding: 0;
+    display: none;
+}
+
+.sidebar form {
+    padding: 20px 15px 5px 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        display: block;
+        position: fixed;
+        top: 50px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: #fff;
+        box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
+    }
+    .navbar-header {
+        width: 100%;
+    }
+}
+
+.sidebar ul.nav a:hover,
+.sidebar ul.nav li.parent ul li a:hover {
+    text-decoration: none;
+    background-color: #e9ecf2;
+}
+
+.sidebar ul.nav .active a, .sidebar ul.nav li.parent a.active,
+.sidebar ul.nav .active > a:hover, .sidebar ul.nav li.parent a.active:hover,
+.sidebar ul.nav .active > a:focus, .sidebar ul.nav li.parent a.active:focus {
+    color: #222;
+    background-color: #e9ecf2;
+}
+
+.sidebar ul.nav ul,
+.sidebar ul.nav ul li {
+    list-style: none;
+    list-style-type: none;
+}
+
+.sidebar ul.nav ul.children {
+    width: auto;
+    padding: 0;
+    margin: 0;
+    background: #f9f9f9;
+}
+
+.sidebar ul.nav ul.children li a {
+    height: 40px;
+    background: #f9f9f9;
+    color: #222!important;
+}
+
+.sidebar ul.nav li.current a {
+    background-color: #222;
+    color: #fff!important;
+}
+
+.sidebar ul.nav li.parent ul li a {
+    border: none;
+    display:block;
+    padding-left: 30px;
+    line-height: 40px;
+}
+
+
+.sidebar span.glyphicon {
+    margin-right: 10px;
+}
+
+.sidebar ul.nav li.divider {
+    border-bottom: 1px solid #eee;
+    margin: 20px 0;
+}
+
+.sidebar .attribution {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+}
+.sidebar a{
+    color: #222;
+}
+
+/*Breadcrumbs*/
+
+.breadcrumb {
+    border-radius: 0;
+    padding: 10px 15px;
+    background: #e9ecf2;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    margin: 0 ;
+}
+@media (min-width: 1500px) {
+    .docx-wrapper{
+        max-width: 1500px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .sidebar {
+        position: absolute;
+        display: block;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: #fff;
+        box-shadow: 1px 0px 10px rgba(0, 0, 0, .05);
+    }
+    .docx-marked-wrap{
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
+    }
+}

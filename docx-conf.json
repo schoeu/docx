@@ -26,8 +26,8 @@
       "name": "搜索结果页",
       "sort": 2
     },
-    "references": {
-      "name": "资源引入",
+    "standards": {
+      "name": "规范流程",
       "sort": 3
     },
     "superframe": {
@@ -38,20 +38,20 @@
       "name": "日志",
       "sort": 5
     },
-    "standards": {
-      "name": "规范流程",
-      "sort": 6
-    },
     "transcode": {
       "name": "无线转码",
-      "sort": 7
+      "sort": 6
     },
     "realtime": {
       "name": "时效性",
-      "sort": 8
+      "sort": 7
     },
     "performance": {
       "name": "性能优化",
+      "sort": 8
+    },
+    "references": {
+      "name": "资源引入",
       "sort": 9
     },
     "data": {
@@ -66,7 +66,6 @@
       "name": "学术",
       "sort": 12
     },
-
     "advertise": {
       "name": "广告",
       "sort": 13
