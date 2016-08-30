@@ -258,7 +258,6 @@ h3, h4 {
 /* Sidebar */
 
 .sidebar {
-    display: block;
     background-color: #fff;
     padding: 0;
     display: none;
@@ -278,7 +277,6 @@ h3, h4 {
         bottom: 0;
         left: 0;
         z-index: 1000;
-        display: block;
         margin: 0;
         padding: 0;
         overflow-x: hidden;
@@ -294,13 +292,6 @@ h3, h4 {
 .sidebar ul.nav a:hover,
 .sidebar ul.nav li.parent ul li a:hover {
     text-decoration: none;
-    background-color: #e9ecf2;
-}
-
-.sidebar ul.nav .active a, .sidebar ul.nav li.parent a.active,
-.sidebar ul.nav .active > a:hover, .sidebar ul.nav li.parent a.active:hover,
-.sidebar ul.nav .active > a:focus, .sidebar ul.nav li.parent a.active:focus {
-    color: #222;
     background-color: #e9ecf2;
 }
 

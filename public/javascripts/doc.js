@@ -6,7 +6,7 @@ var $navs = $('.docx-navs');
 var $navbarH = $('.navbar').height();
 var $docxTitle = $('.docx-files');
 var $docxBd = $('.docx-body');
-var $docxDir = $('.docx-dir');
+var $docxDir = $('.docx-dir>a');
 
 /**
 * pjax委托
@@ -58,9 +58,7 @@ $win.on('keyup', function (e) {
 });
 
 // 初始化文档目录菜单
-$navs.metisMenu({
-    preventDefault: false
-});
+$navs.metisMenu();
 
 $(window).on('load', function(event) {
     var pathname = location.pathname || '';
@@ -71,13 +69,7 @@ $(window).on('load', function(event) {
     $pathDom.addClass('docx-active').parents().remove('docx-active');
 });
 
-// 文档选中样式
-$docxTitle.on('click', function () {
-    $('.active').removeClass('active');
-    $docxTitle.removeClass('docx-active');
-    $(this).addClass('docx-active').parents('.docx-dir').addClass('subactive');
-});
-
-$docxDir.on('click', function () {
-    $('.docx-navs>.docx-active').removeClass('docx-active');
+$docxTitle.add($docxDir).on('click', function () {
+    $('.docx-active').removeClass('docx-active');
+    $(this).addClass('docx-active');
 });
