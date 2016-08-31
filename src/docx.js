@@ -149,10 +149,12 @@ Docx.prototype = {
                         it = decodeURIComponent(it);
                     }
                     var file = fs.readFileSync(it);
-                    //var fileContent = file.toString() || '';
                     var content = file.toString();
-                    //var content = me.getMarked(file.toString());
                     var titleArr =  titleReg.exec(content) || [];
+                    var titleStr = titleArr[1] || '';
+                    titleStr = titleStr.replace(reg, function (m) {
+                        return '<span class="hljs-string">' + m + '</span>';
+                    });
                     var matchContent = [];
                     var matchIdx = 0;
                     var lastIndex = 0;
@@ -174,7 +176,7 @@ Docx.prototype = {
                     if (matchContent.length) {
                         searchRs.push({
                             path: it.replace(CONF.path, ''),
-                            title: titleArr[1] || '',
+                            title: titleStr,
                             content: matchContent.toString()
                         });
                     }

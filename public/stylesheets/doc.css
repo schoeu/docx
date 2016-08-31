@@ -402,3 +402,18 @@ h3, h4 {
     line-height: 27px;
     border-radius: 3px;
 }
+.docx-submenu a:before{
+    position: relative;
+    content: '';
+    display: block;
+    width: 3px;
+    height: 3px;
+    border: 1px solid #666;
+    border-radius: 50%;
+    top: 22px;
+    background-color: #666;
+    left: -7px;
+}
+.docx-submenu a{
+    color: #666!important;
+}
