@@ -11,9 +11,9 @@
   "warningEmail": {
     "host": "smtp.163.com",
     "port": 25,
-    "user": "automailers@163.com",
-    "pass": "automailers1",
-    "from": "automailers@163.com",
+    "user": "xx@163.com",
+    "pass": "password",
+    "from": "xx@163.com",
     "to": "xx@xxx.com",
     "subject": "DOCX error"
   },
