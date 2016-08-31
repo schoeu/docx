@@ -151,9 +151,18 @@ Docx.prototype = {
                     var content = fs.readFileSync(it).toString();
                     var titleArr =  titleReg.exec(content) || [];
                     var titleStr = titleArr[1] || '';
+                    var replacedStr = '';
+                    var titleMatch = '';
                     var matchContent = [];
+                    if (reg.test(titleStr)) {
+                        // 飘红title关键字
+                        titleMatch = titleStr.replace(reg, function (m) {
+                            return '<span class="hljs-string">' + m + '</span>';
+                        });
+                    }
+
                     // 飘红title关键字
-                    titleStr = titleStr.replace(reg, function (m) {
+                    replacedStr = titleStr.replace(reg, function (m) {
                         return '<span class="hljs-string">' + m + '</span>';
                     });
 
@@ -179,10 +188,10 @@ Docx.prototype = {
                             }
                         }
                     }
-                    if (matchContent.length) {
+                    if (titleMatch || matchContent.length) {
                         searchRs.push({
                             path: it.replace(CONF.path, ''),
-                            title: titleStr,
+                            title: matchContent.length ? replacedStr : titleMatch,
                             content: matchContent.toString()
                         });
                     }
