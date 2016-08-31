@@ -134,6 +134,37 @@ Docx.prototype = {
             });
         });
 
+        // API: 标题匹配
+        app.post('/api/titleSearch', function (req, res) {
+            var me = this;
+            var matchedRs = [];
+            var key = req.body.name;
+            var reg = new RegExp(key,'img');
+            var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
+            if (key.length) {
+                files.forEach(function (it) {
+                    var title = me.getMdTitle(it);
+
+                    // 飘红title关键字
+                    var titleStr = title.replace(reg, function (m) {
+                        return '<span class="hljs-string">' + m + '</span>';
+                    });
+
+                    // 保存title匹配结果
+                    matchedRs.push({
+                        path: it.replace(CONF.path, ''),
+                        title: titleStr
+                    });
+                });
+
+                // 搜索成功,返回内容
+                res.json({
+                    error: 0,
+                    data: matchedRs
+                });
+            }
+        }),
+
         // API: 搜索功能
         app.post('/api/search', function (req, res) {
             var searchRs = [];
@@ -193,12 +224,6 @@ Docx.prototype = {
                     data: searchRs
                 });
             }
-
-            // 没有key,或者搜索失败
-            res.json({
-                error: 1,
-                data: searchRs
-            });
         });
 
         // API: 文档更新钩子
