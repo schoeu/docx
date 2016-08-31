@@ -42,7 +42,7 @@ $win.on('keyup', function (e) {
             if (data.error === 0) {
                 var matchedFiles = data.data || [];
                 var htmlStr = '';
-                var emptyString = '<div class="docx-search-content">暂无匹配文档!</div>';
+                var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
                 matchedFiles.forEach(function (it) {
                     htmlStr +=  [
                         '<div class="docx-search-art">',

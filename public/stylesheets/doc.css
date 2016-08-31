@@ -380,14 +380,10 @@ h3, h4 {
 }
 .docx-search-title{
     font-size: 18px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .docx-search-content{
-    padding: 16px;
-    overflow: auto;
-    line-height: 27px;
     background-color: #f7f7f7;
-    border-radius: 3px;
 }
 .docx-search-content>a,.docx-search-content>a:hover{
     color: #333;
@@ -399,4 +395,10 @@ h3, h4 {
 .docx-search-art {
     line-height: 30px;
     margin: 15px 0;
+}
+.docx-search-nocontent,.docx-search-content{
+    padding: 16px;
+    overflow: auto;
+    line-height: 27px;
+    border-radius: 3px;
 }
