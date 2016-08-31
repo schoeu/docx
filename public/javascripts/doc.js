@@ -32,38 +32,36 @@ $win.load(function () {
  * 搜索action
  * */
 $win.on('keyup', function (e) {
-    if (e.keyCode === 13) {
-        var key = $('.docx-searchkey').val();
-        $.ajax({
-            url: '/api/search',
-            data: {"name": key},
-            type: 'post'
-        }).done(function (data) {
-            if (data.error === 0) {
-                var matchedFiles = data.data || [];
-                var htmlStr = '';
-                var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
-                matchedFiles.forEach(function (it) {
-                    htmlStr +=  [
-                        '<div class="docx-search-art">',
-                        '    <div class="docx-search-title">',
-                        '        <a href="' + it.path + '" class="doc-search-link">',
-                                    it.title,
-                        '        </a>',
-                        '    </div>',
-                        '    <div class="docx-search-content">',
-                        '        <a href="' + it.path + '" class="doc-search-link">',
-                                    it.content,
-                        '        </a>',
-                        '    </div>',
-                        '</div>'
-                    ].join('');
-                });
+    var key = $('.docx-searchkey').val();
+    $.ajax({
+        url: '/api/titleSearch',
+        data: {"name": key},
+        type: 'post'
+    }).done(function (data) {
+        if (data.error === 0) {
+            var matchedFiles = data.data || [];
+            var htmlStr = '';
+            var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
+            matchedFiles.forEach(function (it) {
+                htmlStr +=  [
+                    '<div class="docx-search-art">',
+                    '    <div class="docx-search-title">',
+                    '        <a href="' + it.path + '" class="doc-search-link">',
+                                it.title,
+                    '        </a>',
+                    '    </div>',
+                    '    <div class="docx-search-content">',
+                    '        <a href="' + it.path + '" class="doc-search-link">',
+                                it.content,
+                    '        </a>',
+                    '    </div>',
+                    '</div>'
+                ].join('');
+            });
 
-                $('.docx-marked').html(htmlStr ? htmlStr : emptyString);
-            }
-        });
-    }
+            $('.docx-marked').html(htmlStr ? htmlStr : emptyString);
+        }
+    });
 });
 
 // 初始化文档目录菜单

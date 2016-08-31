@@ -134,41 +134,11 @@ Docx.prototype = {
             });
         });
 
-        // API: 标题匹配
-        app.post('/api/titleSearch', function (req, res) {
-            var me = this;
-            var matchedRs = [];
-            var key = req.body.name;
-            var reg = new RegExp(key,'img');
-            var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-            if (key.length) {
-                files.forEach(function (it) {
-                    var title = me.getMdTitle(it);
-
-                    // 飘红title关键字
-                    var titleStr = title.replace(reg, function (m) {
-                        return '<span class="hljs-string">' + m + '</span>';
-                    });
-
-                    // 保存title匹配结果
-                    matchedRs.push({
-                        path: it.replace(CONF.path, ''),
-                        title: titleStr
-                    });
-                });
-
-                // 搜索成功,返回内容
-                res.json({
-                    error: 0,
-                    data: matchedRs
-                });
-            }
-        }),
-
         // API: 搜索功能
         app.post('/api/search', function (req, res) {
             var searchRs = [];
             var key = req.body.name;
+            var searchType = req.body.type;
             var keyLength = key.length || 0;
             var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
             var titleReg = /^\s*\#+\s?(.+)/;
@@ -181,34 +151,34 @@ Docx.prototype = {
                     var content = fs.readFileSync(it).toString();
                     var titleArr =  titleReg.exec(content) || [];
                     var titleStr = titleArr[1] || '';
-
+                    var matchContent = [];
                     // 飘红title关键字
                     titleStr = titleStr.replace(reg, function (m) {
                         return '<span class="hljs-string">' + m + '</span>';
                     });
 
-                    var matchContent = [];
-                    var matchIdx = 0;
-                    var lastIndex = 0;
-                    var lastestIdx = lastIndex;
-                    for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
-                        if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
+                    if (searchType !== 'title') {
+                        var matchIdx = 0;
+                        var lastIndex = 0;
+                        var lastestIdx = lastIndex;
+                        for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
+                            if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
 
-                            // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
-                            var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
+                                // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
+                                var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
 
-                            // 飘红内容关键字
-                            var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
-                                return '<span class="hljs-string">' + m + '</span>';
-                            });
+                                // 飘红内容关键字
+                                var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
+                                    return '<span class="hljs-string">' + m + '</span>';
+                                });
 
-                            // 保存匹配结果
-                            matchContent.push(rpStr + '...');
-                            matchIdx ++;
-                            lastestIdx = lastIndex;
+                                // 保存匹配结果
+                                matchContent.push(rpStr + '...');
+                                matchIdx ++;
+                                lastestIdx = lastIndex;
+                            }
                         }
                     }
-
                     if (matchContent.length) {
                         searchRs.push({
                             path: it.replace(CONF.path, ''),
