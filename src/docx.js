@@ -139,48 +139,44 @@ Docx.prototype = {
             var searchRs = [];
             var key = req.body.name;
             var keyLength = key.length || 0;
-            var filePath = path.join(CONF.path, '**/*.md');
-            var files = glob.sync(filePath) || [];
+            var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
             var titleReg = /^\s*\#+\s?(.+)/;
+            var reg = new RegExp(key,'img');
             if (keyLength) {
                 files.forEach(function (it) {
                     if (it) {
                         it = decodeURIComponent(it);
                     }
-                    var reg = new RegExp(key,'img');
                     var content = fs.readFileSync(it).toString();
                     var titleArr =  titleReg.exec(content) || [];
                     var titleStr = titleArr[1] || '';
+
+                    // 飘红title关键字
                     titleStr = titleStr.replace(reg, function (m) {
                         return '<span class="hljs-string">' + m + '</span>';
                     });
+
                     var matchContent = [];
                     var matchIdx = 0;
                     var lastIndex = 0;
                     var lastestIdx = lastIndex;
                     for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
                         if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
+
+                            // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
                             var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
+
+                            // 飘红内容关键字
                             var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
                                 return '<span class="hljs-string">' + m + '</span>';
                             });
+
+                            // 保存匹配结果
                             matchContent.push(rpStr + '...');
                             matchIdx ++;
                             lastestIdx = lastIndex;
                         }
                     }
-
-                    /*while ((lastIndex = content.indexOf(key, lastIndex)) > 0) {
-                    //while (reg.exec(content) && matchIdx < searchConf.matchDeep) {
-                        // 最多查找前N个相关
-                        var lastIdx = reg.lastIndex;
-                        var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
-                        var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
-                            return '<span class="hljs-string">' + m + '</span>';
-                        });
-                        matchContent.push(rpStr + '...');
-                        matchIdx ++;
-                    }*/
 
                     if (matchContent.length) {
                         searchRs.push({
@@ -190,11 +186,15 @@ Docx.prototype = {
                         });
                     }
                 });
+
+                // 搜索成功,返回内容
                 res.json({
                     error: 0,
                     data: searchRs
                 });
             }
+
+            // 没有key,或者搜索失败
             res.json({
                 error: 1,
                 data: searchRs
@@ -202,13 +202,7 @@ Docx.prototype = {
         });
 
         // API: 文档更新钩子
-        app.get('/api/update', function (req, res, next) {
-            var status = update(req, res, next);
-            res.json({
-                errorno: 0,
-                files: files
-            });
-        });
+        app.get('/api/update', update);
 
         // 委托其他静态资源
         app.use('/', serve_static(CONF.path));
