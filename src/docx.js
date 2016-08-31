@@ -141,15 +141,14 @@ Docx.prototype = {
             var keyLength = key.length || 0;
             var filePath = path.join(CONF.path, '**/*.md');
             var files = glob.sync(filePath) || [];
-            var reg = new RegExp(key,'img');
             var titleReg = /^\s*\#+\s?(.+)/;
             if (keyLength) {
                 files.forEach(function (it) {
                     if (it) {
                         it = decodeURIComponent(it);
                     }
-                    var file = fs.readFileSync(it);
-                    var content = file.toString();
+                    var reg = new RegExp(key,'img');
+                    var content = fs.readFileSync(it).toString();
                     var titleArr =  titleReg.exec(content) || [];
                     var titleStr = titleArr[1] || '';
                     titleStr = titleStr.replace(reg, function (m) {
@@ -158,20 +157,30 @@ Docx.prototype = {
                     var matchContent = [];
                     var matchIdx = 0;
                     var lastIndex = 0;
-                    while ((lastIndex = content.indexOf(key, lastIndex)) > 0) {
-                        // 最多查找前N个相关
-                        if (matchIdx < searchConf.matchDeep) {
+                    var lastestIdx = lastIndex;
+                    for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
+                        if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
                             var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
                             var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
                                 return '<span class="hljs-string">' + m + '</span>';
                             });
                             matchContent.push(rpStr + '...');
                             matchIdx ++;
-                        }
-                        else {
-                            break;
+                            lastestIdx = lastIndex;
                         }
                     }
+
+                    /*while ((lastIndex = content.indexOf(key, lastIndex)) > 0) {
+                    //while (reg.exec(content) && matchIdx < searchConf.matchDeep) {
+                        // 最多查找前N个相关
+                        var lastIdx = reg.lastIndex;
+                        var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
+                        var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
+                            return '<span class="hljs-string">' + m + '</span>';
+                        });
+                        matchContent.push(rpStr + '...');
+                        matchIdx ++;
+                    }*/
 
                     if (matchContent.length) {
                         searchRs.push({
