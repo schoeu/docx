@@ -35,7 +35,7 @@ $win.load(function () {
 /**
  * 搜索action
  * */
-$searchIpt.on('keyup', function (e) {
+$searchIpt.on('input', function (e) {
     $sug.show();
     var key = $('.docx-searchkey').val();
     $.ajax({

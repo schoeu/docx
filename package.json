@@ -1,6 +1,6 @@
 {
   "name": "node-docx",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "document management ",
   "main": "src/docx.js",
   "scripts": {

@@ -62,19 +62,41 @@
 .docx-submenu{
     padding-left: 0;
 }
+
 .docx-submenu>li>a{
-    padding-left: 2em;
+    padding-left: 3em;
 }
 
 .docx-submenu>li>.docx-submenu>li>a{
-    padding-left: 4em;
+    padding-left: 5em;
 }
 
+.docx-submenu>li>.docx-submenu>li>a:before{
+    background-color: transparent;
+}
+.docx-submenu>li>a:before,.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
+    position: relative;
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border: 1px solid #666;
+    border-radius: 50%;
+    top: 22px;
+    left: -7px;
+}
 .docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
-    padding-left: 6em;
+    padding-left: 7.5em;
+}
+
+.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li>a:before{
+    background-color: #666;
 }
 .docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
-    padding-left: 8em;
+    padding-left: 10em;
+}
+.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
+    background-color: transparent;
 }
 .docx-submenu a:hover{
     text-decoration: none;
@@ -402,18 +424,6 @@ h3, h4 {
     line-height: 27px;
     border-radius: 3px;
 }
-.docx-submenu a:before{
-    position: relative;
-    content: '';
-    display: block;
-    width: 3px;
-    height: 3px;
-    border: 1px solid #666;
-    border-radius: 50%;
-    top: 22px;
-    background-color: #666;
-    left: -7px;
-}
 .docx-submenu a{
     color: #666!important;
 }
@@ -444,7 +454,7 @@ h3, h4 {
     padding: 3px 20px;
     clear: both;
     font-weight: 400;
-    line-height: 1.42857143;
+    line-height: 25px;
     color: #333;
     white-space: nowrap;
     overflow: hidden;

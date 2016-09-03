@@ -153,12 +153,14 @@ Docx.prototype = {
                     var titleStr = titleArr[1] || '';
                     var replacedStr = '';
                     var titleMatch = '';
+                    var isTitleMatch = false;
                     var matchContent = [];
                     if (reg.test(titleStr)) {
                         // 飘红title关键字
                         titleMatch = titleStr.replace(reg, function (m) {
                             return '<span class="hljs-string">' + m + '</span>';
                         });
+                        isTitleMatch = true;
                     }
 
                     // 飘红title关键字
@@ -189,11 +191,18 @@ Docx.prototype = {
                         }
                     }
                     if (titleMatch || matchContent.length) {
-                        searchRs.push({
+                        var searchData = {
                             path: it.replace(CONF.path, ''),
                             title: matchContent.length ? replacedStr : titleMatch,
                             content: matchContent.toString()
-                        });
+                        };
+
+                        if (isTitleMatch) {
+                            searchRs.unshift(searchData);
+                        }
+                        else {
+                            searchRs.push(searchData);
+                        }
                     }
                 });
 
