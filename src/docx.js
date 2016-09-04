@@ -296,7 +296,7 @@ Docx.prototype = {
                     htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
                 }
                 else if (item.type === 'dir') {
-                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
+                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="' + item.path + '">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
                     this.makeNav(item.child);
                     htmlStr += '</ul></li>';
                 }

@@ -10,6 +10,12 @@ var glob = require('glob');
 var CONF = require('../docx-conf.json');
 var searchConf = CONF.searchConf || {};
 
+/**
+ * 内容搜索
+ * @param {String} key 处理过的关键词正则
+ * @param {String} content 文档内容
+ * @return {String} 匹配到的文档字符串
+ * */
 function searchContent(key, content) {
     var matchIdx = 0;
     var matchContent = [];
@@ -43,6 +49,12 @@ function searchContent(key, content) {
     return matchContent.join('...');
 }
 
+/**
+ * 搜索主方法
+ * @param {String} key 处理过的关键词正则
+ * @param {String} content 文档内容
+ * @return {String} 匹配到的文档字符串
+ * */
 function search(type, key) {
     key = key || '';
     key = key.replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');

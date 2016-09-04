@@ -15,12 +15,16 @@ var $sugul = $('.docx-sugul');
 * pjax委托
 * */
 if ($.support.pjax) {
-    $(document).pjax('a[href$=".md"]', '.docx-marked-wrap');
+    $(document).pjax('a[href]', '.docx-marked-wrap');
+    $(document).pjax('a[aria-expanded="false"]', '.docx-marked-wrap');
     $(document).on('pjax:success', function() {
         $('.docx-fade').addClass('docx-fade-active');
         $sug.hide();
     });
 }
+
+
+
 
 $win.load(function () {
     $('.docx-fade').addClass('docx-fade-active');
