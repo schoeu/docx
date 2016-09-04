@@ -14,11 +14,13 @@ function searchContent(key, content) {
     var matchIdx = 0;
     var matchContent = [];
     var lastestIdx = 0;
-    var reg = new RegExp(key,'img');
+    var reg = new RegExp(key,'ig');
     var lastIndex = 0;
     var keyLength = key.length;
 
-    for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
+    while(reg.exec(content)) {
+        var lastIndex = reg.lastIndex;
+    //for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
         if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
 
             // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
