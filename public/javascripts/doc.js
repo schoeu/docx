@@ -46,11 +46,11 @@ $searchIpt.on('input', function (e) {
         },
         type: 'post'
     }).done(function (data) {
-        if (data.error === 0) {
-            var matchedFiles = data.data || [];
+        var rsData = data.data;
+        if (Array.isArray(rsData) && rsData.length) {
             var htmlStr = '';
             var emptyString = '<div class="docx-search-nocontent">暂无匹配文档</div>';
-            matchedFiles.slice(0, 10).forEach(function (it) {
+            rsData.slice(0, 10).forEach(function (it) {
                 htmlStr +=  '<li><a href="'+ it.path +'">'+ it.title +'</a></li>';
             });
 
@@ -70,11 +70,11 @@ $docxBd.on('click', '.docx-fullse', function () {
         },
         type: 'post'
     }).done(function (data) {
-        if (data.error === 0) {
-            var matchedFiles = data.data || [];
+        var rsData = data.data;
+        if (Array.isArray(rsData) && rsData.length) {
             var htmlStr = '';
             var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
-            matchedFiles.forEach(function (it) {
+            rsData.forEach(function (it) {
                 htmlStr +=  [
                     '<div class="docx-search-art">',
                     '    <div class="docx-search-title">',

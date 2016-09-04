@@ -15,9 +15,9 @@ var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
 
 var CONF = require('../docx-conf.json');
-var searchConf = CONF.searchConf || {};
 var warning = require('./warning.js');
 var update = require('./update.js');
+var search = require('./search.js');
 
 var app = express();
 var ignorDor = CONF.ignoreDir || [];
@@ -136,86 +136,18 @@ Docx.prototype = {
 
         // API: 搜索功能
         app.post('/api/search', function (req, res) {
-            var searchRs = [];
             var key = req.body.name;
             var searchType = req.body.type;
-            var keyLength = key.length || 0;
-            var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-            var titleReg = /^\s*\#+\s?(.+)/;
-            var reg = new RegExp(key,'img');
-            if (keyLength) {
-                files.forEach(function (it) {
-                    if (it) {
-                        it = decodeURIComponent(it);
-                    }
-                    var content = fs.readFileSync(it).toString();
-                    var titleArr =  titleReg.exec(content) || [];
-                    var titleStr = titleArr[1] || '';
-                    var replacedStr = '';
-                    var titleMatch = '';
-                    var isTitleMatch = false;
-                    var matchContent = [];
-                    if (reg.test(titleStr)) {
-                        // 飘红title关键字
-                        titleMatch = titleStr.replace(reg, function (m) {
-                            return '<span class="hljs-string">' + m + '</span>';
-                        });
-                        isTitleMatch = true;
-                    }
+            var searchRs = search(searchType, key);
 
-                    // 飘红title关键字
-                    replacedStr = titleStr.replace(reg, function (m) {
-                        return '<span class="hljs-string">' + m + '</span>';
-                    });
-
-                    if (searchType !== 'title') {
-                        var matchIdx = 0;
-                        var lastIndex = 0;
-                        var lastestIdx = lastIndex;
-                        for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
-                            if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
-
-                                // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
-                                var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
-
-                                // 飘红内容关键字
-                                var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
-                                    return '<span class="hljs-string">' + m + '</span>';
-                                });
-
-                                // 保存匹配结果
-                                matchContent.push(rpStr + '...');
-                                matchIdx ++;
-                                lastestIdx = lastIndex;
-                            }
-                        }
-                    }
-                    if (titleMatch || matchContent.length) {
-                        var searchData = {
-                            path: it.replace(CONF.path, ''),
-                            title: matchContent.length ? replacedStr : titleMatch,
-                            content: matchContent.toString()
-                        };
-
-                        if (isTitleMatch) {
-                            searchRs.unshift(searchData);
-                        }
-                        else {
-                            searchRs.push(searchData);
-                        }
-                    }
-                });
-
-                // 搜索成功,返回内容
-                res.json({
-                    error: 0,
-                    data: searchRs
-                });
-            }
+            // 搜索成功,返回内容
+            res.json({
+                data: searchRs
+            });
         });
 
         // API: 文档更新钩子
-        app.get('/api/update', update);
+        app.post('/api/update', update);
 
         // 委托其他静态资源
         app.use('/', serve_static(CONF.path));

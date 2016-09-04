@@ -18,7 +18,7 @@
     "subject": "DOCX error"
   },
   "searchConf": {
-    "matchDeep": 2,
+    "matchDeep": 1,
     "matchWidth": 120
   },
   "dirname": {
