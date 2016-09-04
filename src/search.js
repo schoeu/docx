@@ -15,12 +15,11 @@ function searchContent(key, content) {
     var matchContent = [];
     var lastestIdx = 0;
     var reg = new RegExp(key,'ig');
-    var lastIndex = 0;
     var keyLength = key.length;
 
     while(reg.exec(content)) {
         var lastIndex = reg.lastIndex;
-    //for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
+    // for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
         if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
 
             // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
@@ -46,6 +45,7 @@ function searchContent(key, content) {
 
 function search(type, key) {
     key = key || '';
+    key = key.replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');
     var keyLength = key.length;
     var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
     var titleReg = /^\s*\#+\s?(.+)/;
@@ -60,14 +60,14 @@ function search(type, key) {
             // markdown内容
             var content = fs.readFileSync(it).toString();
 
-            // 飘红title关键字
-            content = content.replace(reg, function (m) {
-                return '<span class="hljs-string">' + m + '</span>';
-            });
-
             // 标题内容
             var titleArr =  titleReg.exec(content) || [];
             var titleStr = titleArr[1] || '';
+
+            // 飘红title关键字
+            titleStr = titleStr.replace(reg, function (m) {
+                return '<span class="hljs-string">' + m + '</span>';
+            });
 
             if (type === 'title') {
                 if (reg.exec(titleStr)) {
@@ -80,16 +80,27 @@ function search(type, key) {
             }
             else {
                 var contentMt = searchContent(key, content);
-                if (contentMt) {
-                    var searchCData = {
-                        path: it.replace(CONF.path, ''),
-                        title: titleStr,
-                        content: contentMt
-                    };
-                    if (reg.exec(titleStr)) {
-                        searchRs.unshift(searchCData);
+                // 飘红title关键字
+                contentMt = contentMt.replace(reg, function (m) {
+                    return '<span class="hljs-string">' + m + '</span>';
+                });
+
+                var searchCData = {
+                    path: it.replace(CONF.path, ''),
+                    title: titleStr,
+                    content: contentMt
+                };
+
+                // 如果只有标题匹配,内容无字段匹配
+                if (reg.exec(titleStr)) {
+                    if (!contentMt) {
+                        searchCData.content = content.substring(0, searchConf.matchWidth) + '...';
                     }
-                    else {
+                    searchRs.unshift(searchCData);
+                }
+                // 内容匹配
+                else {
+                    if (contentMt) {
                         searchRs.push(searchCData);
                     }
                 }

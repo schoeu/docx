@@ -47,17 +47,16 @@ $searchIpt.on('input', function (e) {
         type: 'post'
     }).done(function (data) {
         var rsData = data.data;
+        var htmlStr = '';
+        var emptyString = '<div class="docx-search-nocontent">暂无匹配文档</div>';
         if (Array.isArray(rsData) && rsData.length) {
-            var htmlStr = '';
-            var emptyString = '<div class="docx-search-nocontent">暂无匹配文档</div>';
             rsData.slice(0, 10).forEach(function (it) {
                 htmlStr +=  '<li><a href="'+ it.path +'">'+ it.title +'</a></li>';
             });
 
             htmlStr += '<li class="docx-fullse"><a href="#">全文搜索<span class="hljs-string">' + key + '</span></a></li>';
-
-            $sugul.html(htmlStr ? htmlStr : emptyString);
         }
+        $sugul.html(htmlStr ? htmlStr : emptyString);
     });
 });
 
@@ -71,9 +70,9 @@ $docxBd.on('click', '.docx-fullse', function () {
         type: 'post'
     }).done(function (data) {
         var rsData = data.data;
+        var htmlStr = '';
+        var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
         if (Array.isArray(rsData) && rsData.length) {
-            var htmlStr = '';
-            var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
             rsData.forEach(function (it) {
                 htmlStr +=  [
                     '<div class="docx-search-art">',
@@ -91,8 +90,8 @@ $docxBd.on('click', '.docx-fullse', function () {
                 ].join('');
             });
             $sug.hide();
-            $('.docx-marked').html(htmlStr ? htmlStr : emptyString);
         }
+        $('.docx-marked').html(htmlStr ? htmlStr : emptyString);
     });
 });
 
