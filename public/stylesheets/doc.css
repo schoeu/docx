@@ -36,9 +36,6 @@
 .docx-marked {
     padding: 10px 40px;
 }
-.markdown-body{
-    margin-top: 15px;
-}
 .docx-navs{
     padding-bottom: 20px;
 }
@@ -131,6 +128,7 @@
     background-color: #e9ecf2;
 }
 .docx-fade {
+    padding-top: 15px;
     opacity: .3;
     -webkit-transform: translate3d(-10px, 0, 0);
     -moz-transform: translate3d(-10px, 0, 0);
