@@ -14,19 +14,7 @@ function update(req, res) {
         if (err) {
             console.error(err);
         }
-
-        // 如果有更新package.json文件则重启node进程
-        if (result.toString().indexOf('package.json') > -1) {
-            // 重启node进程
-            child_process.exec('pm2 restart docx', {
-                cwd: CONF.path
-            }, function () {
-                res.end('ok');
-            });
-        }
-        else {
-            res.end('ok');
-        }
+        res.end('ok');
     });
 }
 

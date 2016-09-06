@@ -161,26 +161,24 @@ Docx.prototype = {
         var mdPath = path.join(CONF.path, pathName);
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
-            if (stat) {
-                fs.readFile(mdPath, 'utf8', function (err, file) {
-                    if (file) {
-                        // markdown转换成html
-                        var content = me.getMarked(file.toString());
+            stat && fs.readFile(mdPath, 'utf8', function (err, file) {
+                if (file) {
+                    // markdown转换成html
+                    var content = me.getMarked(file.toString());
 
-                        // 判断是pjax请求则返回html片段
-                        if (req.headers['x-pjax'] === 'true') {
-                            var rsPjaxDom = me.getPjaxContent(pathName, content);
-                            res.end(rsPjaxDom);
-                        }
-
-                        // 否则返回整个模板
-                        else {
-                            var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
-                            res.render('main', parseObj);
-                        }
+                    // 判断是pjax请求则返回html片段
+                    if (req.headers['x-pjax'] === 'true') {
+                        var rsPjaxDom = me.getPjaxContent(pathName, content);
+                        res.end(rsPjaxDom);
                     }
-                });
-            }
+
+                    // 否则返回整个模板
+                    else {
+                        var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                        res.render('main', parseObj);
+                    }
+                }
+            });
         });
     },
 
