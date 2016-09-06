@@ -110,7 +110,7 @@ Docx.prototype = {
         app.get(/.+.md$/, me.mdHandler.bind(me));
 
         // 目录路由
-        app.get(/^\/[\w|\/]{1,}$/, me.mdHandler.bind(me));
+        // app.get(/^\/[\w|\/]{1,}$/, me.mdHandler.bind(me));
 
         // API: 搜索功能
         app.post('/api/search', function (req, res) {
@@ -148,64 +148,22 @@ Docx.prototype = {
         return rsHTML;
     },
 
+    /**
+     * 处理mardown文档请求
+     * @param {Object} req 请求对象
+     * @param {Object} res 相应对象
+     * */
     mdHandler: function (req, res) {
         var me = this;
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-        var extPath = pathName;
 
-        if (path.extname(pathName) === '') {
-            extPath = path.join(pathName, CONF.index || 'readme.md');
-        }
-
-        var mdPath = path.join(CONF.path, extPath);
+        var mdPath = path.join(CONF.path, pathName);
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
-            if (err) {
-                fs.readdir(path.join(CONF.path, pathName), function (err, files) {
-                    if (Array.isArray(files) && files.length) {
-                        for(var i=0; i<files.length; i++) {
-                            var file = files[i];
-                            if (path.extname(file) === '.md') {
-                                extPath = file;
-                                break;
-                            }
-                        }
-                        mdPath = path.join(CONF.path, pathName, extPath);
-                        mdPath = decodeURIComponent(mdPath);
-                        // var file = fs.readFileSync(mdPath);
-                        fs.readFile(mdPath, 'utf8', function (err, file) {
-                            if (err) {
-
-                            }
-                            else {
-                                // markdown转换成html
-                                var content = me.getMarked(file.toString());
-
-                                // 判断是pjax请求则返回html片段
-                                if (req.headers['x-pjax'] === 'true') {
-                                    var rsPjaxDom = me.getPjaxContent(pathName, content);
-                                    res.end(rsPjaxDom);
-                                }
-
-                                // 否则返回整个模板
-                                else {
-                                    var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
-                                    res.render('main', parseObj);
-                                }
-                            }
-
-                        });
-                    }
-                });
-            }
-            else {
-                // var file = fs.readFileSync(mdPath);
+            if (stat) {
                 fs.readFile(mdPath, 'utf8', function (err, file) {
-                    if (err) {
-
-                    }
-                    else {
+                    if (file) {
                         // markdown转换成html
                         var content = me.getMarked(file.toString());
 
@@ -221,7 +179,6 @@ Docx.prototype = {
                             res.render('main', parseObj);
                         }
                     }
-
                 });
             }
         });
@@ -353,7 +310,7 @@ Docx.prototype = {
                     htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
                 }
                 else if (item.type === 'dir') {
-                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="' + item.path + '" class="docx-dirsa">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
+                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#" class="docx-dirsa">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
                     this.makeNav(item.child);
                     htmlStr += '</ul></li>';
                 }
