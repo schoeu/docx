@@ -24,6 +24,7 @@ if ($.support.pjax) {
             return;
         }
         $.pjax.click(event, {container: container})
+        event.preventDefault();
     });
     $(document).on('pjax:success', function() {
         $('.docx-fade').addClass('docx-fade-active');
@@ -108,7 +109,9 @@ $docxBd.on('click', '.docx-fullse', function () {
 });
 
 // 初始化文档目录菜单
-$navs.metisMenu();
+$navs.metisMenu({
+    preventDefault: false
+});
 
 $(window).on('load', function(event) {
     var pathname = location.pathname || '';

@@ -125,7 +125,7 @@ Docx.prototype = {
         });
 
         // API: 文档更新钩子
-        app.post('/api/update', update);
+        app.all('/api/update', update);
 
         // 委托其他静态资源
         app.use('/', serve_static(CONF.path));
