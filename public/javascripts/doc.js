@@ -49,7 +49,7 @@ $win.load(function () {
  * */
 $searchIpt.on('input', function (e) {
     $sug.show();
-    var key = $('.docx-searchkey').val();
+    var key =$searchIpt.val();
     $.ajax({
         url: '/api/search',
         data: {
@@ -65,15 +65,14 @@ $searchIpt.on('input', function (e) {
             rsData.slice(0, 10).forEach(function (it) {
                 htmlStr +=  '<li><a href="'+ it.path +'">'+ it.title +'</a></li>';
             });
-
-            htmlStr += '<li class="docx-fullse"><a href="#">全文搜索<span class="hljs-string">' + key + '</span></a></li>';
         }
+        htmlStr += '<li class="docx-fullse"><a href="#">全文搜索<span class="hljs-string">' + key + '</span></a></li>';
         $sugul.html(htmlStr ? htmlStr : emptyString);
     });
 });
 
 $docxBd.on('click', '.docx-fullse', function () {
-    var key = $('.docx-searchkey').val();
+    var key = $searchIpt.val();
     $.ajax({
         url: '/api/search',
         data: {
