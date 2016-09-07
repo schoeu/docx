@@ -7,8 +7,12 @@
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
+var nodejieba = require("nodejieba");
 var CONF = require('../docx-conf.json');
 var searchConf = CONF.searchConf || {};
+
+// 加载分词库
+nodejieba.load();
 
 /**
  * 内容搜索
@@ -57,11 +61,12 @@ function searchContent(key, content) {
  * */
 function search(type, key) {
     key = key || '';
-    key = key.replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');
+    var keys = nodejieba.cut(key, true);
+    var cutkeys = keys.join(' ').replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');
     var keyLength = key.length;
     var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
     var titleReg = /^\s*\#+\s?(.+)/;
-    var reg = new RegExp(key,'img');
+    var reg = new RegExp(cutkeys,'img');
     var searchRs = [];
     // 如果有关键词,则开始搜索
     if (keyLength) {
