@@ -8,6 +8,7 @@
   "index": "/readme.md",
   "surposEmail": "xx@xxx.com",
   "waringFlag": false,
+  "maxCache": 500,
   "warningEmail": {
     "host": "smtp.163.com",
     "port": 25,

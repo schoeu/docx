@@ -27,9 +27,11 @@
     "express-handlebars": "^3.0.0",
     "glob": "^7.0.5",
     "highlight.js": "^9.6.0",
+    "lru-cache": "^4.0.1",
     "marked": "^0.3.6",
     "nodejieba": "^2.2.3",
     "nodemailer": "^2.5.0",
+    "pinyin": "^2.8.0",
     "serve-static": "^1.11.1"
   },
   "devDependencies": {}

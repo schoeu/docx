@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var marked = require('marked');
 var highlight = require('highlight.js');
 var glob = require('glob');
+var lru = require("lru-cache");
 var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
 
@@ -18,6 +19,7 @@ var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
 var update = require('./update.js');
 var search = require('./search.js');
+var cache = lru(CONF.maxCache || 500);
 
 var app = express();
 var ignorDor = CONF.ignoreDir || [];

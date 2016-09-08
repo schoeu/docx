@@ -59,17 +59,18 @@ function searchContent(key, content) {
  * @param {String} content 文档内容
  * @return {String} 匹配到的文档字符串
  * */
+
 function search(type, key) {
     key = key || '';
-    var keys = nodejieba.cut(key, true);
-    var cutkeys = keys.join(' ').replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');
-    var keyLength = key.length;
-    var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-    var titleReg = /^\s*\#+\s?(.+)/;
-    var reg = new RegExp(cutkeys,'img');
-    var searchRs = [];
+    var keyLength = key.trim().length;
     // 如果有关键词,则开始搜索
     if (keyLength) {
+        var keys = nodejieba.cut(key, true);
+        var cutkeys = keys.join(' ').replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');
+        var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
+        var titleReg = /^\s*\#+\s?(.+)/;
+        var reg = new RegExp(cutkeys,'img');
+        var searchRs = [];
         files.forEach(function (it) {
             if (it) {
                 it = decodeURIComponent(it);
