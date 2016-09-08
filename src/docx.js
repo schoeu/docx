@@ -167,7 +167,17 @@ Docx.prototype = {
                 if (file) {
                     // markdown转换成html
                     var content = me.getMarked(file.toString());
-
+                    
+                    if (cache.has(pathName)) {
+                        var title = me.getMdTitle(mdPath);
+                        cache.set(pathName, {
+                            content: content,
+                            title: title,
+                            content_spell: '',
+                            title_spell: ''
+                        });
+                    }
+                    
                     // 判断是pjax请求则返回html片段
                     if (req.headers['x-pjax'] === 'true') {
                         var rsPjaxDom = me.getPjaxContent(pathName, content);
