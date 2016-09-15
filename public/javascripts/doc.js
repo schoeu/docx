@@ -82,6 +82,8 @@ $docxBd.on('click', '.docx-fullse', function () {
         var emptyString = '<div class="docx-search-nocontent">暂无匹配文档!</div>';
         if (Array.isArray(rsData) && rsData.length) {
             rsData.forEach(function (it) {
+                var content = it.content || '';
+                content = content.replace(/<(table).*?<\/\1>|<table.*?>|<\/table>/g,'');
                 htmlStr +=  [
                     '<div class="docx-search-art">',
                     '    <div class="docx-search-title">',
@@ -91,7 +93,7 @@ $docxBd.on('click', '.docx-fullse', function () {
                     '    </div>',
                     '    <div class="docx-search-content">',
                     '        <a href="' + it.path + '" class="doc-search-link">',
-                    it.content,
+                    content,
                     '        </a>',
                     '    </div>',
                     '</div>'

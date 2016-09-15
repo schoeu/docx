@@ -35,8 +35,12 @@ function searchContent(key, content) {
             // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
             var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
 
+            matched = matched.replace(/\s/img, '')
+                .replace(/<img.*?>/,'')
+                .replace(/<h(\d)>.*?<\/h\1>/g,'');
+
             // 飘红内容关键字
-            var rpStr = matched.replace(/\s/img, '').replace(/[<>]/g,'').replace(reg, function (m) {
+            var rpStr = matched.replace(reg, function (m) {
                 return '<span class="hljs-string">' + m + '</span>';
             });
 
@@ -97,11 +101,7 @@ function search(type, key) {
                 }
             }
             else {
-                var contentMt = searchContent(key, content);
-                // 飘红title关键字
-                contentMt = contentMt.replace(reg, function (m) {
-                    return '<span class="hljs-string">' + m + '</span>';
-                });
+                var contentMt = searchContent(cutkeys, content);
 
                 var searchCData = {
                     path: it.replace(CONF.path, ''),
