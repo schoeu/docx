@@ -66,7 +66,7 @@ function search(type, key) {
     // 如果有关键词,则开始搜索
     if (keyLength) {
         var keys = nodejieba.cut(key, true);
-        var cutkeys = keys.join(' ').replace(/\s+/img, '.*').replace(/^(\.\*)*|(\.\*)*$/img, '');
+        var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
         var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
         var titleReg = /^\s*\#+\s?(.+)/;
         var reg = new RegExp(cutkeys,'img');
