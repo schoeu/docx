@@ -11,7 +11,6 @@ var bodyParser = require('body-parser');
 var marked = require('marked');
 var highlight = require('highlight.js');
 var glob = require('glob');
-var lru = require("lru-cache");
 var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
 
@@ -19,7 +18,6 @@ var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
 var update = require('./update.js');
 var search = require('./search.js');
-var cache = lru(CONF.maxCache || 500);
 
 var app = express();
 var ignorDor = CONF.ignoreDir || [];
@@ -111,9 +109,6 @@ Docx.prototype = {
         // markdown文件路由
         app.get(/.+.md$/, me.mdHandler.bind(me));
 
-        // 目录路由
-        // app.get(/^\/[\w|\/]{1,}$/, me.mdHandler.bind(me));
-
         // API: 搜索功能
         app.post('/api/search', function (req, res) {
             var key = req.body.name;
@@ -167,17 +162,7 @@ Docx.prototype = {
                 if (file) {
                     // markdown转换成html
                     var content = me.getMarked(file.toString());
-                    
-                    if (cache.has(pathName)) {
-                        var title = me.getMdTitle(mdPath);
-                        cache.set(pathName, {
-                            content: content,
-                            title: title,
-                            content_spell: '',
-                            title_spell: ''
-                        });
-                    }
-                    
+
                     // 判断是pjax请求则返回html片段
                     if (req.headers['x-pjax'] === 'true') {
                         var rsPjaxDom = me.getPjaxContent(pathName, content);
@@ -203,13 +188,9 @@ Docx.prototype = {
         breadcrumb = breadcrumb || [];
         var dirMaps = [];
         breadcrumb.forEach(function (it) {
-            if (it) {
-                if (it.indexOf('.md') > -1) {
-                }
-                else {
-                    var nameMap = CONF.dirname[it] || {};
-                    dirMaps.push(nameMap.name || '');
-                }
+            if (it && it.indexOf('.md') < 0) {
+                var nameMap = CONF.dirname[it] || {};
+                dirMaps.push(nameMap.name || '');
             }
         });
         return dirMaps;

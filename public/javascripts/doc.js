@@ -10,6 +10,7 @@ var $docxDir = $('.docx-dir>a');
 var $searchIpt = $('.docx-searchkey');
 var $sug = $('.docx-sug');
 var $sugul = $('.docx-sugul');
+var actCls = 'docx-sugact';
 
 /**
 * pjax委托
@@ -30,9 +31,6 @@ if ($.support.pjax) {
         $sug.hide();
     });
 }
-
-
-
 
 $win.load(function () {
     $('.docx-fade').addClass('docx-fade-active');
@@ -122,4 +120,27 @@ $(window).on('load', function(event) {
 $docxTitle.add($docxDir).on('click', function () {
     $('.docx-active').removeClass('docx-active');
     $(this).addClass('docx-active');
+});
+
+$searchIpt.on('keyup', function (e) {
+    var keyCode = e.keyCode;
+    var $lis = $('.docx-sugul>li');
+    var $act = $('.docx-sugact');
+    if (keyCode === 38) {
+        if ($act.length === 0) {
+            $lis.last().addClass(actCls);
+        } else if (!$act.is(':first-child')){
+            $act.removeClass().prev().addClass(actCls);
+        }
+    }
+    else if(keyCode === 40){
+        if ($act.length === 0) {
+            $lis.first().addClass(actCls);
+        } else if (!$act.is(':last-child')){
+            $act.removeClass().next().addClass(actCls);
+        }
+    }
+    else if (keyCode === 13) {
+        $act.find('a').click();
+    }
 });
