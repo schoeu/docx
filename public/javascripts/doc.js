@@ -124,7 +124,7 @@ $docxTitle.add($docxDir).on('click', function () {
     $(this).addClass('docx-active');
 });
 
-$searchIpt.on('keyup', function (e) {
+$searchIpt.on('keydown', function (e) {
     var keyCode = e.keyCode;
     var $lis = $('.docx-sugul>li');
     var $act = $('.docx-sugact');
