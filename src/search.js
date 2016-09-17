@@ -7,7 +7,8 @@
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
-var nodejieba = require("nodejieba");
+var nodejieba = require('nodejieba');
+var pinyinlite = require('pinyinlite');
 var CONF = require('../docx-conf.json');
 var searchConf = CONF.searchConf || {};
 
