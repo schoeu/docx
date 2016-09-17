@@ -46,8 +46,8 @@ $win.load(function () {
  * 搜索action
  * */
 $searchIpt.on('input', function (e) {
-    $sug.show();
     var key =$searchIpt.val();
+    key ? $sug.show() : $sug.hide();
     $.ajax({
         url: '/api/search',
         data: {
@@ -134,12 +134,20 @@ $searchIpt.on('keydown', function (e) {
         } else if (!$act.is(':first-child')){
             $act.removeClass().prev().addClass(actCls);
         }
+        else {
+            $act.removeClass();
+            $lis.last().addClass(actCls);
+        }
     }
     else if(keyCode === 40){
         if ($act.length === 0) {
             $lis.first().addClass(actCls);
         } else if (!$act.is(':last-child')){
             $act.removeClass().next().addClass(actCls);
+        }
+        else {
+            $act.removeClass();
+            $lis.first().addClass(actCls);
         }
     }
     else if (keyCode === 13) {
