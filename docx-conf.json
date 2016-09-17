@@ -1,7 +1,7 @@
 {
   "port": "8910",
   "path": "/Users/memee/Downloads/svn/ps-fe/ps-fe-new",
-  "ignoreDir": ["img",".git",".svn","courseware","headline","imgs"],
+  "ignoreDir": ["img",".git",".svn","courseware","headline","imgs","js","less"],
   "debug": true,
   "headText": "PSFE-DOC",
   "title": "PSFE",

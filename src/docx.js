@@ -255,6 +255,7 @@ Docx.prototype = {
                 var relPath = childPath.replace(CONF.path, '');
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
+
                     // 如果是配置中忽略的目录,则跳过
                     if (ignorDor.indexOf(it) === -1) {
                         var dirName = CONF.dirname[it] || {};
@@ -272,12 +273,12 @@ Docx.prototype = {
                 }
                 // 如果是文件
                 else {
-                    if (/^\.md$/i.test(path.extname(it))) {
-                        var basename = path.basename(it, '.md');
+                    if (/^\.md$|html$|htm$/i.test(path.extname(it))) {
+                        var basename = path.basename(it, path.extname(it));
                         var title = me.getMdTitle(childPath);
                         dirCtt.push({
                             itemName: basename,
-                            type: 'md',
+                            type: 'file',
                             path: relPath,
                             title: title
                         });
@@ -297,7 +298,7 @@ Docx.prototype = {
         if (Array.isArray(dirs) && dirs.length) {
             for(var i = 0; i< dirs.length; i++) {
                 var item = dirs[i] || {};
-                if (item.type === 'md') {
+                if (item.type === 'file') {
                     htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
                 }
                 else if (item.type === 'dir') {
@@ -350,14 +351,26 @@ Docx.prototype = {
      * @return {String} markdown文件大标题
      * */
     getMdTitle: function(dir) {
-        if (dir) {
-            dir = decodeURIComponent(dir);
-            var content = fs.readFileSync(dir);
-            var titleArr =  /^\s*\#+\s?(.+)/.exec(content.toString()) || [];
+        if (!dir) {
+            return '';
+        }
+        var titleArr = [];
+        var ext = path.extname(dir);
+        dir = decodeURIComponent(dir);
+        var content = fs.readFileSync(dir).toString();
+
+        if (ext === '.md') {
+            titleArr =  /^\s*\#+\s?(.+)/.exec(content);
             return titleArr[1] || '';
         }
+        else if (ext === '.html' || ext === '.htm'){
+            titleArr = /<title>(.+?)<\/title>/.exec(content);
+            return titleArr[1] || '';
+        }
+        else {
+            return '';
+        }
 
-        return '';
     }
 };
 

@@ -16,14 +16,10 @@ var actCls = 'docx-sugact';
 * pjax委托
 * */
 if ($.support.pjax) {
-    $(document).pjax('a[href$=".md"]', '.docx-marked-wrap');
+    $(document).pjax('a[href^="/"]', '.docx-marked-wrap');
     // 使用pjax更底层的方法,可控性更强
     /*$(document).on('click', 'a[href^="/"]', function(event) {
-        var $target = $(this);
         var container = $docxBd.find('.docx-marked-wrap');
-        if ($target.is('.docx-dirsa') && ($target.attr('aria-expanded') === 'false')) {
-            return;
-        }
         $.pjax.click(event, {container: container})
     });*/
     $(document).on('pjax:success', function() {
