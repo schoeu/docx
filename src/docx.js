@@ -9,6 +9,7 @@ var url = require('url');
 var express = require('express');
 var bodyParser = require('body-parser');
 var marked = require('marked');
+var pinyinlite = require('pinyinlite');
 var highlight = require('highlight.js');
 var glob = require('glob');
 var serve_static = require('serve-static');
@@ -18,6 +19,7 @@ var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
 var update = require('./update.js');
 var search = require('./search.js');
+var utils = require('./utils.js');
 
 var app = express();
 var ignorDor = CONF.ignoreDir || [];
@@ -277,7 +279,7 @@ Docx.prototype = {
 
                     if (/^\.md$|html$|htm$/i.test(path.extname(it))) {
                         var basename = path.basename(it, path.extname(it));
-                        var title = me.getMdTitle(childPath);
+                        var title = utils.getMdTitle(childPath);
                         dirCtt.push({
                             itemName: basename,
                             type: 'file',

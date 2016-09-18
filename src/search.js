@@ -9,8 +9,23 @@ var path = require('path');
 var glob = require('glob');
 var Segment = require('segment');
 var pinyinlite = require('pinyinlite');
+var utils = require('./utils.js');
 var CONF = require('../docx-conf.json');
 var searchConf = CONF.searchConf || {};
+
+var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
+var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
+var files = mdFiles.concat(htmlFiles);
+var titleCache = {
+    titles:[],
+    titlesSpell:[]
+};
+files.forEach(function (it) {
+    var title = utils.getMdTitle(it);
+    titleCache.titles.push(title);
+    titleCache.titlesSpell.push(pinyinlite(title).join(' '));
+});
+
 
 // 创建实例
 var segment = new Segment();
@@ -65,7 +80,7 @@ function searchContent(key, content) {
  * @return {Array} 匹配到的文档字符串数组
  * */
 
-function search(type, key) {
+function search(type, key, titleCache) {
     key = key || '';
     var keyLength = key.trim().length;
     // 如果有关键词,则开始搜索
@@ -76,9 +91,7 @@ function search(type, key) {
             simple: true
         });
 
-
         var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
-        var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
         var titleReg = /^\s*\#+\s?(.+)/;
         var reg = new RegExp(cutkeys,'img');
         var searchRs = [];
