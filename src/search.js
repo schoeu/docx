@@ -80,13 +80,11 @@ function searchContent(key, content) {
  * @return {Array} 匹配到的文档字符串数组
  * */
 
-function search(type, key, titleCache) {
+function search(type, key) {
     key = key || '';
     var keyLength = key.trim().length;
     // 如果有关键词,则开始搜索
     if (keyLength) {
-        //var keys = nodejieba.cut(key, true);
-
         var keys = segment.doSegment(key, {
             simple: true
         });
