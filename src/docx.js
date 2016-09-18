@@ -131,6 +131,7 @@ Docx.prototype = {
     /**
      * 处理&组装面包屑数据
      * @param {String} pathName 文件路径
+     * @param {String} content markdown内容
      * @return {String} 转换为中文的HTML字符串
      * */
     getPjaxContent: function (pathName, content) {
@@ -239,7 +240,7 @@ Docx.prototype = {
     /**
      * 获取文件目录树
      *
-     * @param {String} 文件起始路径
+     * @param {String} 文档根目录路径
      * @return {Object} 文件目录树
      * */
     walker: function (dirs) {
