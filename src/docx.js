@@ -273,6 +273,7 @@ Docx.prototype = {
                 }
                 // 如果是文件
                 else {
+
                     if (/^\.md$|html$|htm$/i.test(path.extname(it))) {
                         var basename = path.basename(it, path.extname(it));
                         var title = me.getMdTitle(childPath);
@@ -298,6 +299,9 @@ Docx.prototype = {
         if (Array.isArray(dirs) && dirs.length) {
             for(var i = 0; i< dirs.length; i++) {
                 var item = dirs[i] || {};
+                if (!item) {
+                    continue;
+                }
                 if (item.type === 'file') {
                     htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
                 }
@@ -321,6 +325,7 @@ Docx.prototype = {
         var dirname = CONF.dirname || {};
         var sortMap = [];
         var rs = [];
+        var fileArr = [];
         map.forEach(function (it) {
             var item = dirname[it.itemName] || {};
             if (it.type !== 'dir') {
@@ -331,17 +336,19 @@ Docx.prototype = {
 
         sortMap.sort(function (a, b) {return a - b});
 
-        map.forEach(function (it, i) {
+        map.forEach(function (it) {
             var itemName = dirname[it.itemName] || {};
             var sortNum = itemName.sort || 0;
             if (it.type !== 'dir') {
-                sortNum = 0;
+                fileArr.push(it);
             }
-            var index = sortMap.indexOf(sortNum);
-            rs[index] = it;
+            else {
+                var index = sortMap.indexOf(sortNum);
+                rs[index] = it;
+            }
         });
 
-        return rs;
+        return fileArr.concat(rs);
     },
 
     /**
