@@ -32,9 +32,7 @@ function searchContent(key, content) {
 
     while(reg.exec(content)) {
         var lastIndex = reg.lastIndex;
-    // for(;(lastIndex = content.indexOf(key, lastIndex + keyLength)) > 0;) {
         if ((matchIdx < searchConf.matchDeep) && (lastIndex - lastestIdx > searchConf.matchWidth)) {
-
             // 匹配结果位置在配置范围内的则忽略,以防多次截取相同范围内容
             var matched = content.substring(lastIndex - searchConf.matchWidth, lastIndex + searchConf.matchWidth + keyLength);
 
@@ -62,9 +60,9 @@ function searchContent(key, content) {
 
 /**
  * 搜索主方法
- * @param {String} key 处理过的关键词正则
- * @param {String} content 文档内容
- * @return {String} 匹配到的文档字符串
+ * @param {String} type 搜索类型
+ * @param {String} key 关键字
+ * @return {Array} 匹配到的文档字符串数组
  * */
 
 function search(type, key) {
