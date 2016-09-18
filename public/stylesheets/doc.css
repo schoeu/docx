@@ -213,11 +213,13 @@ h3, h4 {
 
 /*Panels*/
 
-.panel {
+.docx-panel {
     border: 0;
+    background-color: #fff;
+    border-radius: 4px;
 }
 
-.panel-heading {
+.docx-panel-heading {
     font-size: 18px;
     font-weight: 300;
     letter-spacing: 0.025em;
@@ -225,7 +227,7 @@ h3, h4 {
     line-height: 45px;
 }
 
-.panel-default .panel-heading {
+.docx-panel-default .docx-panel-heading {
     background: #fff;
     border-bottom: 1px solid #eee;
     color: #5f6468;

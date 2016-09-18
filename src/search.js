@@ -7,13 +7,15 @@
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
-var nodejieba = require('nodejieba');
+var Segment = require('segment');
 var pinyinlite = require('pinyinlite');
 var CONF = require('../docx-conf.json');
 var searchConf = CONF.searchConf || {};
 
-// 加载分词库
-nodejieba.load();
+// 创建实例
+var segment = new Segment();
+// 使用默认的识别模块及字典，载入字典文件需要1秒，仅初始化时执行一次即可
+segment.useDefault();
 
 /**
  * 内容搜索
@@ -70,7 +72,13 @@ function search(type, key) {
     var keyLength = key.trim().length;
     // 如果有关键词,则开始搜索
     if (keyLength) {
-        var keys = nodejieba.cut(key, true);
+        //var keys = nodejieba.cut(key, true);
+
+        var keys = segment.doSegment(key, {
+            simple: true
+        });
+
+
         var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
         var files = glob.sync(path.join(CONF.path, '**/*.md')) || [];
         var titleReg = /^\s*\#+\s?(.+)/;
