@@ -13,7 +13,8 @@
   },
   "keywords": [
     "markdown",
-    "doc"
+    "doc",
+    "markdown management"
   ],
   "author": "schoeu",
   "license": "MIT",
@@ -27,7 +28,6 @@
     "express-handlebars": "^3.0.0",
     "glob": "^7.0.5",
     "highlight.js": "^9.6.0",
-    "lru-cache": "^4.0.1",
     "marked": "^0.3.6",
     "nodemailer": "^2.5.0",
     "pinyinlite": "^1.0.1",
