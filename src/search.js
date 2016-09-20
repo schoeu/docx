@@ -8,6 +8,8 @@ var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
 var Segment = require('segment');
+var _ = require('lodash');
+var product = require('cartesian-product');
 var pinyinlite = require('pinyinlite');
 var utils = require('./utils.js');
 var CONF = require('../docx-conf.json');
@@ -22,8 +24,16 @@ var titleCache = {
 };
 files.forEach(function (it) {
     var title = utils.getMdTitle(it);
+    var pinyinRs = pinyinlite(title).filter(function (p) {return p.length > 0;});
+
+    var productRs = product(pinyinRs);
+
+    var infRs = productRs.map(function (item) {
+        return item.join('')
+    });
+
     titleCache.titles.push(title);
-    titleCache.titlesSpell.push(pinyinlite(title).join(' '));
+    titleCache.titlesSpell.push(infRs);
 });
 
 
@@ -110,6 +120,27 @@ function search(type, key) {
             });
 
             if (type === 'title') {
+                titleCache.titlesSpell.forEach(function (it) {
+                    var items = it;
+                    for(var i=0;i<items.length;i++) {
+                        var str = items[i] || '';
+
+                        if (reg.exec(str)) {
+                            var idx = reg.lastIndex;
+
+                            var title = titleCache.titles.substring(idx, idx);
+
+                            var searchData = {
+                                path: it.replace(CONF.path, ''),
+                                title: titleStr
+                            };
+                            searchRs.push(searchData);
+                            break;
+                        }
+                    }
+                });
+
+
                 if (reg.exec(titleStr)) {
                     var searchData = {
                         path: it.replace(CONF.path, ''),
@@ -117,6 +148,14 @@ function search(type, key) {
                     };
                     searchRs.push(searchData);
                 }
+
+                /*if (reg.exec(titleStr)) {
+                    var searchData = {
+                        path: it.replace(CONF.path, ''),
+                        title: titleStr
+                    };
+                    searchRs.push(searchData);
+                }*/
             }
             else {
                 var contentMt = searchContent(cutkeys, content);

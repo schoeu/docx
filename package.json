@@ -24,10 +24,12 @@
   "homepage": "https://github.com/schoeu/docx#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "cartesian-product": "^2.1.2",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
     "glob": "^7.0.5",
     "highlight.js": "^9.6.0",
+    "lodash": "^4.15.0",
     "marked": "^0.3.6",
     "nodemailer": "^2.5.0",
     "pinyinlite": "^1.0.1",

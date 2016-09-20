@@ -68,16 +68,31 @@ Docx.prototype = {
      * */
     init: function () {
         var me = this;
+
+        // 文件夹命名设置默认为空
+        me.dirname = {};
+
         // express 视图设置
         if (!CONF.debug) {
             app.enable('view cache');
         }
+
         app.set('views', path.join(__dirname, '..', 'views'));
         app.engine('.hbs', exphbs({extname: '.hbs'}));
         app.set('view engine', '.hbs');
         app.use(express.static(path.join(__dirname, '..', 'public')));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
+
+        // 在构建doctree前解析文件名命令配置
+        var dirsConf = path.join(CONF.path, CONF.dirsConfName || 'map.json');
+        try {
+            var stat = fs.statSync(dirsConf);
+            if (stat) {
+                me.dirname = require(dirsConf);
+            }
+        }
+        catch (e) {}
 
         // 根据文档获取文档结构树
         me.getDocTree();
@@ -188,11 +203,12 @@ Docx.prototype = {
      * @return {Array} 转换为中文的数据
      * */
     processBreadcrumb: function(breadcrumb) {
+        var me = this;
         breadcrumb = breadcrumb || [];
         var dirMaps = [];
         breadcrumb.forEach(function (it) {
             if (it && it.indexOf('.md') < 0) {
-                var nameMap = CONF.dirname[it] || {};
+                var nameMap = me.dirname[it] || {};
                 dirMaps.push(nameMap.name || '');
             }
         });
@@ -261,7 +277,7 @@ Docx.prototype = {
 
                     // 如果是配置中忽略的目录,则跳过
                     if (ignorDor.indexOf(it) === -1) {
-                        var dirName = CONF.dirname[it] || {};
+                        var dirName = me.dirname[it] || {};
                         // 如果没有配置文件夹目录名称,则不显示
                         var childArr = [];
                         dirCtt.push({
@@ -324,8 +340,9 @@ Docx.prototype = {
      * @return {Object} rs 排序后的文档结构数组
      * */
     dirSort: function (map) {
+        var me = this;
         map = map || [];
-        var dirname = CONF.dirname || {};
+        var dirname = me.dirname || {};
         var sortMap = [];
         var rs = [];
         var fileArr = [];
