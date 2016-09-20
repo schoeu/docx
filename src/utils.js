@@ -23,11 +23,11 @@ module.exports = {
         var content = fs.readFileSync(dir).toString();
 
         if (ext === '.md') {
-            titleArr =  /^\s*\#+\s?(.+)/.exec(content);
+            titleArr =  /^\s*\#+\s?(.+)/.exec(content) || [];
             return titleArr[1] || '';
         }
         else if (ext === '.html' || ext === '.htm'){
-            titleArr = /<title>(.+?)<\/title>/.exec(content);
+            titleArr = /<title>(.+?)<\/title>/.exec(content) || [];
             return titleArr[1] || '';
         }
         else {

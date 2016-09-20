@@ -12,6 +12,7 @@ var marked = require('marked');
 var pinyinlite = require('pinyinlite');
 var highlight = require('highlight.js');
 var glob = require('glob');
+var _ = require('lodash');
 var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
 
@@ -343,61 +344,35 @@ Docx.prototype = {
         var me = this;
         map = map || [];
         var dirname = me.dirname || {};
-        var sortMap = [];
-        var rs = [];
-        var fileArr = [];
-        map.forEach(function (it) {
-            var item = dirname[it.itemName] || {};
-            if (it.type !== 'dir') {
-                item.sort = 0;
-            }
-            sortMap.push(item.sort || 0);
-        });
+        if (!_.isEmpty(dirname)) {
+            var sortMap = [];
+            var rs = [];
+            var fileArr = [];
+            map.forEach(function (it) {
+                var item = dirname[it.itemName] || {};
+                if (it.type !== 'dir') {
+                    item.sort = 0;
+                }
+                sortMap.push(item.sort || 0);
+            });
 
-        sortMap.sort(function (a, b) {return a - b});
+            sortMap.sort(function (a, b) {return a - b});
 
-        map.forEach(function (it) {
-            var itemName = dirname[it.itemName] || {};
-            var sortNum = itemName.sort || 0;
-            if (it.type !== 'dir') {
-                fileArr.push(it);
-            }
-            else {
-                var index = sortMap.indexOf(sortNum);
-                rs[index] = it;
-            }
-        });
+            map.forEach(function (it) {
+                var itemName = dirname[it.itemName] || {};
+                var sortNum = itemName.sort || 0;
+                if (it.type !== 'dir') {
+                    fileArr.push(it);
+                }
+                else {
+                    var index = sortMap.indexOf(sortNum);
+                    rs[index] = it;
+                }
+            });
 
-        return fileArr.concat(rs);
-    },
-
-    /**
-     * 获取markdown文件大标题
-     *
-     * @param {String} markdown文件的路径
-     * @return {String} markdown文件大标题
-     * */
-    getMdTitle: function(dir) {
-        if (!dir) {
-            return '';
+            return fileArr.concat(rs);
         }
-        var titleArr = [];
-        var ext = path.extname(dir);
-        dir = decodeURIComponent(dir);
-        var content = fs.readFileSync(dir).toString();
-
-        if (ext === '.md') {
-            titleArr =  /^\s*\#+\s?(.+)/.exec(content);
-            return titleArr[1] || '';
-        }
-        else if (ext === '.html' || ext === '.htm'){
-            titleArr = /<title>(.+?)<\/title>/.exec(content);
-            return titleArr[1] || '';
-        }
-        else {
-            return '';
-        }
-
+        return map;
     }
 };
 
