@@ -7,35 +7,11 @@
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
-var Segment = require('segment');
 var _ = require('lodash');
-var product = require('cartesian-product');
-var pinyinlite = require('pinyinlite');
-var utils = require('./utils.js');
+var Segment = require('segment');
 var CONF = require('../docx-conf.json');
 var searchConf = CONF.searchConf || {};
-
-var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
-var files = mdFiles.concat(htmlFiles);
-var titleCache = {
-    titles:[],
-    titlesSpell:[]
-};
-files.forEach(function (it) {
-    var title = utils.getMdTitle(it);
-    var pinyinRs = pinyinlite(title).filter(function (p) {return p.length > 0;});
-
-    var productRs = product(pinyinRs);
-
-    var infRs = productRs.map(function (item) {
-        return item.join('')
-    });
-
-    titleCache.titles.push(title);
-    titleCache.titlesSpell.push(infRs);
-});
-
+var cache = require('../cache.json');
 
 // 创建实例
 var segment = new Segment();
@@ -63,7 +39,8 @@ function searchContent(key, content) {
 
             matched = matched.replace(/\s/img, '')
                 .replace(/<img.*?>/,'')
-                .replace(/<h(\d)>.*?<\/h\1>/g,'');
+                .replace(/<h(\d)>.*?<\/h\1>/g,'')
+                .replace(/strong/img, '');
 
             // 飘红内容关键字
             var rpStr = matched.replace(reg, function (m) {
@@ -92,13 +69,71 @@ function searchContent(key, content) {
 
 function search(type, key) {
     key = key || '';
-    var keyLength = key.trim().length;
+
     // 如果有关键词,则开始搜索
-    if (keyLength) {
+    if (!key.trim().length) {
+        return [];
+    }
+    if (type === 'title') {
+        var titleSe = [];
+        cache.forEach(function (it) {
+            var em = [key];
+            var isGet = false;
+            var pos = it.pos || [];
+            var title = it.title || '';
+            var initials = it.initials || '';
+
+            // spell检索
+            var sIdx = it.spell.indexOf(key);
+            if (sIdx > -1) {
+                var pIdx = pos.indexOf(sIdx);
+                if (pIdx > -1) {
+                    var wordCount = 0;
+                    for (var i=pIdx; i<pos.length; i++) {
+                        if ((sIdx + key.length) <= pos[i]) {
+                            break;
+                        }
+                        wordCount ++;
+                    }
+                    var sele = title.substr(pIdx, wordCount);
+                    em.push(sele);
+                    isGet = true;
+                }
+            }
+
+            // initials检索
+            var iIdex = initials.indexOf(key);
+            if (iIdex > -1) {
+                var iele = title.substr(iIdex, key.length);
+                em.push(iele);
+                isGet = true;
+            }
+
+            // 飘红
+            em = _.uniq(em);
+            em.forEach(function (emItem) {
+                var itemReg = new RegExp(emItem, 'img');
+                title = title.replace(itemReg, function (m) {
+                    return '<span class="hljs-string">' + m + '</span>';
+                })
+            });
+
+            if (isGet) {
+                titleSe.push({
+                    path: it.path,
+                    title: title
+                });
+            }
+        });
+        return titleSe;
+    }
+    else {
         var keys = segment.doSegment(key, {
             simple: true
         });
-
+        var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
+        var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
+        var files = mdFiles.concat(htmlFiles);
         var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
         var titleReg = /^\s*\#+\s?(.+)/;
         var reg = new RegExp(cutkeys,'img');
@@ -119,70 +154,30 @@ function search(type, key) {
                 return '<span class="hljs-string">' + m + '</span>';
             });
 
-            if (type === 'title') {
-                titleCache.titlesSpell.forEach(function (it) {
-                    var items = it;
-                    for(var i=0;i<items.length;i++) {
-                        var str = items[i] || '';
+            var contentMt = searchContent(cutkeys, content);
 
-                        if (reg.exec(str)) {
-                            var idx = reg.lastIndex;
+            var searchCData = {
+                path: it.replace(CONF.path, ''),
+                title: titleStr,
+                content: contentMt
+            };
 
-                            var title = titleCache.titles.substring(idx, idx);
-
-                            var searchData = {
-                                path: it.replace(CONF.path, ''),
-                                title: titleStr
-                            };
-                            searchRs.push(searchData);
-                            break;
-                        }
-                    }
-                });
-
-
-                if (reg.exec(titleStr)) {
-                    var searchData = {
-                        path: it.replace(CONF.path, ''),
-                        title: titleStr
-                    };
-                    searchRs.push(searchData);
+            // 如果只有标题匹配,内容无字段匹配
+            if (reg.exec(titleStr)) {
+                if (!contentMt) {
+                    searchCData.content = content.substring(0, searchConf.matchWidth) + '...';
                 }
-
-                /*if (reg.exec(titleStr)) {
-                    var searchData = {
-                        path: it.replace(CONF.path, ''),
-                        title: titleStr
-                    };
-                    searchRs.push(searchData);
-                }*/
+                searchRs.unshift(searchCData);
             }
+            // 内容匹配
             else {
-                var contentMt = searchContent(cutkeys, content);
-
-                var searchCData = {
-                    path: it.replace(CONF.path, ''),
-                    title: titleStr,
-                    content: contentMt
-                };
-
-                // 如果只有标题匹配,内容无字段匹配
-                if (reg.exec(titleStr)) {
-                    if (!contentMt) {
-                        searchCData.content = content.substring(0, searchConf.matchWidth) + '...';
-                    }
-                    searchRs.unshift(searchCData);
-                }
-                // 内容匹配
-                else {
-                    if (contentMt) {
-                        searchRs.push(searchCData);
-                    }
+                if (contentMt) {
+                    searchRs.push(searchCData);
                 }
             }
         });
+        return searchRs;
     }
-    return searchRs;
 }
 
 module.exports = search;

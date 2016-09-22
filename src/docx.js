@@ -8,10 +8,6 @@ var fs = require('fs');
 var url = require('url');
 var express = require('express');
 var bodyParser = require('body-parser');
-var marked = require('marked');
-var pinyinlite = require('pinyinlite');
-var highlight = require('highlight.js');
-var glob = require('glob');
 var _ = require('lodash');
 var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
@@ -19,8 +15,12 @@ var exphbs  = require('express-handlebars');
 var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
 var update = require('./update.js');
-var search = require('./search.js');
 var utils = require('./utils.js');
+
+// 文件预处理
+var preprocessor = require('./preprocessor.js');
+preprocessor.init();
+var search = require('./search.js');
 
 var app = express();
 var ignorDor = CONF.ignoreDir || [];
@@ -38,6 +38,7 @@ var locals = {
 };
 
 function Docx() {
+    // 初始化docx
     this.init();
 }
 
@@ -180,7 +181,7 @@ Docx.prototype = {
             stat && fs.readFile(mdPath, 'utf8', function (err, file) {
                 if (file) {
                     // markdown转换成html
-                    var content = me.getMarked(file.toString());
+                    var content = utils.getMarked(file.toString());
 
                     // 判断是pjax请求则返回html片段
                     if (req.headers['x-pjax'] === 'true') {
@@ -214,32 +215,6 @@ Docx.prototype = {
             }
         });
         return dirMaps;
-    },
-
-    /**
-     * markdown文件转html处理
-     *
-     * @param {String} content markdown字符串
-     * @return {String} html字符串
-     * */
-    getMarked: function (content) {
-        var renderer = new marked.Renderer();
-
-        // markdown中渲染代码处理
-        renderer.code = function (data, lang) {
-            data = highlight.highlightAuto(data).value;
-            if (lang) {
-                // 超过3行有提示
-                if (data.split(/\n/).length >= 3) {
-                    var html = '<pre><code class="hljs lang-'+ lang +'"><span class="hljs-lang-tips">' + lang + '</span>';
-                    return html + data + '</code></pre>';
-                }
-                return '<pre><code class="hljs lang-${lang}">' + data + '</code></pre>';
-            }
-            return '<pre><code class="hljs">' + data + '</code></pre>';
-        };
-
-        return marked(content, {renderer});
     },
 
     /**

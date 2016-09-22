@@ -6,6 +6,7 @@
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "index": "/readme.md",
+  "cacheDir":"./cache.json",
   "surposEmail": "xx@xxx.com",
   "waringFlag": false,
   "warningEmail": {

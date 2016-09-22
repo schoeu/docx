@@ -5,6 +5,8 @@
 
 var fs = require('fs');
 var path = require('path');
+var highlight = require('highlight.js');
+var marked = require('marked');
 
 module.exports = {
     /**
@@ -34,5 +36,31 @@ module.exports = {
             return '';
         }
 
+    },
+
+    /**
+     * markdown文件转html处理
+     *
+     * @param {String} content markdown字符串
+     * @return {String} html字符串
+     * */
+    getMarked: function (content) {
+        var renderer = new marked.Renderer();
+
+        // markdown中渲染代码处理
+        renderer.code = function (data, lang) {
+            data = highlight.highlightAuto(data).value;
+            if (lang) {
+                // 超过3行有提示
+                if (data.split(/\n/).length >= 3) {
+                    var html = '<pre><code class="hljs lang-'+ lang +'"><span class="hljs-lang-tips">' + lang + '</span>';
+                    return html + data + '</code></pre>';
+                }
+                return '<pre><code class="hljs lang-${lang}">' + data + '</code></pre>';
+            }
+            return '<pre><code class="hljs">' + data + '</code></pre>';
+        };
+
+        return marked(content, {renderer});
     }
 };
