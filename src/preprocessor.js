@@ -22,10 +22,6 @@ function init() {
 
     files.forEach(function (it) {
         it = decodeURIComponent(it);
-        // var file = fs.readFileSync(it);
-        // var fileContent = file.toString() || '';
-        // fileContent.replace(/\r|\n/g,'');
-
 
         var title = utils.getMdTitle(it);
         // var md5Str = md5(title);

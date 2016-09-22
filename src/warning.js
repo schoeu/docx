@@ -5,9 +5,7 @@
  * */
 var nodemailer = require('nodemailer');
 var CONF = require('../docx-conf.json');
-if (CONF.smtps) {
 
-}
 var transporter = nodemailer.createTransport({
     host: CONF.warningEmail.host,
     port: CONF.warningEmail.port,

@@ -11,6 +11,28 @@ var $searchIpt = $('.docx-searchkey');
 var $sug = $('.docx-sug');
 var $sugul = $('.docx-sugul');
 var actCls = 'docx-sugact';
+/**
+ * 兼容老平台
+ * */
+var hash = location.hash || '';
+var path;
+// 兼容老链接
+if (path = /^(^#\/){1}(.+)/.exec(hash)) {
+    if (Array.isArray(path)) {
+        $.getJSON({
+            url: '/javascripts/patch.json'
+        }).done(function (data) {
+            if (!$.isEmptyObject(data)) {
+                var pathStr = path[2] || '';
+                var pathSep = pathStr.split('/');
+                var rsPath = pathSep.map(function (it) {
+                    return data[it.replace('+', ' ')] || it;
+                }).join('/');
+                location.href = rsPath + '.md';
+            }
+        });
+    }
+}
 
 /**
 * pjax委托
