@@ -1,14 +1,15 @@
 {
   "port": "8910",
-  "path": "/Users/memee/Downloads/svn/ps-fe/ps-fe-new",
+  "path": "/Users/memee/Downloads/svn/ps-fe",
   "ignoreDir": ["img",".git",".svn","courseware","headline","imgs","js","less"],
   "debug": true,
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "index": "/readme.md",
   "cacheDir":"./cache.json",
-  "surposEmail": "xx@xxx.com",
+  "supportInfo": "mailto:xx@xxx.com",
   "waringFlag": false,
+  "dirsConfName": "map.json",
   "warningEmail": {
     "host": "smtp.163.com",
     "port": 25,
@@ -22,7 +23,6 @@
     "matchDeep": 2,
     "matchWidth": 120
   },
-  "dirsConfName": "map.json",
   "extUrls": {
     "label": "友情链接",
     "links":[{

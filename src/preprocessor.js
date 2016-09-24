@@ -8,7 +8,6 @@ var fs = require('fs');
 var path = require('path');
 var pinyin = require('pinyin');
 var glob = require('glob');
-var md5 = require('blueimp-md5');
 var utils = require('./utils.js');
 var CONF = require('../docx-conf.json');
 var tempCache = [];
@@ -24,7 +23,6 @@ function init() {
         it = decodeURIComponent(it);
 
         var title = utils.getMdTitle(it);
-        // var md5Str = md5(title);
 
         var initials = pinyin(title,{
             /*heteronym:true,

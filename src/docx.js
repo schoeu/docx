@@ -6,6 +6,7 @@
 var path = require('path');
 var fs = require('fs');
 var url = require('url');
+var child_process = require('child_process');
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
@@ -14,7 +15,6 @@ var exphbs  = require('express-handlebars');
 
 var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
-var update = require('./update.js');
 var utils = require('./utils.js');
 
 // 文件预处理
@@ -26,6 +26,7 @@ var app = express();
 var ignorDor = CONF.ignoreDir || [];
 
 var htmlStr = '';
+var isUpdated = false;
 var headText = CONF.headText || '';
 var headParts = headText.split('-') || [];
 var locals = {
@@ -104,7 +105,7 @@ Docx.prototype = {
 
         // 容错处理
         app.use(function(err, req, res, next) {
-            // 如果开启了错误邮件报警则发错邮件
+            // 如果开启了错误邮件报警则发报警邮件
             if (err && CONF.waringFlag) {
                 warning.sendMail(err.toString());
             }
@@ -141,7 +142,7 @@ Docx.prototype = {
         });
 
         // API: 文档更新钩子
-        app.all('/api/update', update);
+        app.all('/api/update', me.update.bind(me));
 
         // 委托其他静态资源
         app.use('/', serve_static(CONF.path));
@@ -172,9 +173,18 @@ Docx.prototype = {
      * */
     mdHandler: function (req, res) {
         var me = this;
+        if (isUpdated) {
+            // 刷新缓存
+            preprocessor.init();
+
+            // 重新生成DOM树
+            me.getDocTree();
+
+            // 更新状态
+            isUpdated = false;
+        }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-
         var mdPath = path.join(CONF.path, pathName);
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
@@ -348,6 +358,37 @@ Docx.prototype = {
             return fileArr.concat(rs);
         }
         return map;
+    },
+
+    /**
+     * 文档更新钩子
+     *
+     * @param {Object} req 请求对象
+     * @return {Object} res 响应对象
+     * */
+    update: function (req, res) {
+        // 更新代码
+        child_process.exec('git pull', {
+            cwd: CONF.path
+        }, function (err, result) {
+            if (err) {
+                console.error(err);
+            }
+            else {
+                // 删掉缓存
+                child_process.exec('rm cache.json', {
+                    cwd: path.join(__dirname, '../')
+                }, function (err, result) {
+                    if (err) {
+                        console.error(err);
+                    }
+                    else {
+                        isUpdated = true;
+                    }
+                });
+                res.end('ok');
+            }
+        });
     }
 };
 
