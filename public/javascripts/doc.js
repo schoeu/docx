@@ -169,6 +169,10 @@ $searchIpt.on('keydown', function (e) {
         }
     }
     else if (keyCode === 13) {
+        if ($lis.length == 1) {
+            $lis.click();
+            $sug.hide();
+        }
         $act.find('a').click();
     }
 });
