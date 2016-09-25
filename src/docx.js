@@ -36,7 +36,7 @@ var locals = {
     headSub: headParts[1] || '',
     title: CONF.title || headText,
     links: CONF.extUrls.links || [],
-    surposEmail: CONF.surposEmail || '',
+    supportInfo: CONF.supportInfo || '',
     label: CONF.extUrls.label
 };
 
@@ -401,8 +401,10 @@ Docx.prototype = {
                     }
                     else {
                         isUpdated = true;
+                        console.log('rm cache.json');
                     }
                 });
+                console.log('git pull');
                 res.end('ok');
             }
         });
