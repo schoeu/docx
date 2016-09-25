@@ -30,6 +30,7 @@
     "glob": "^7.0.5",
     "highlight.js": "^9.6.0",
     "lodash": "^4.15.0",
+    "lru-cache": "^4.0.1",
     "marked": "^0.3.6",
     "nodemailer": "^2.5.0",
     "pinyin": "^2.8.0",

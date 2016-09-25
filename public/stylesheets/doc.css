@@ -89,10 +89,10 @@
 .docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li>a:before{
     background-color: #666;
 }
-.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
+.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
     padding-left: 10em;
 }
-.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
+.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
     background-color: transparent;
 }
 .docx-submenu a:hover{

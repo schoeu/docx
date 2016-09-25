@@ -7,6 +7,7 @@ var path = require('path');
 var fs = require('fs');
 var url = require('url');
 var child_process = require('child_process');
+var LRU = require("lru-cache")
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
@@ -21,6 +22,7 @@ var utils = require('./utils.js');
 var preprocessor = require('./preprocessor.js');
 preprocessor.init();
 var search = require('./search.js');
+var cache = LRU({max: 500});
 
 var app = express();
 var ignorDor = CONF.ignoreDir || [];
@@ -182,6 +184,11 @@ Docx.prototype = {
 
             // 更新状态
             isUpdated = false;
+
+            // 清除lru缓存
+            cache.reset();
+
+            console.log(isUpdated);
         }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
@@ -189,9 +196,19 @@ Docx.prototype = {
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
             stat && fs.readFile(mdPath, 'utf8', function (err, file) {
+                var content = '';
                 if (file) {
+
+                    if(cache.has(pathName)) {
+                        content = cache.get(pathName);
+                    }
+                    else  {
+                        content = utils.getMarked(file.toString());
+                        cache.set(pathName, content);
+                    }
+
                     // markdown转换成html
-                    var content = utils.getMarked(file.toString());
+                    //var content = utils.getMarked(file.toString());
 
                     // 判断是pjax请求则返回html片段
                     if (req.headers['x-pjax'] === 'true') {

@@ -44,7 +44,7 @@ if ($.support.pjax) {
         var container = $docxBd.find('.docx-marked-wrap');
         $.pjax.click(event, {container: container})
     });*/
-    $(document).on('pjax:success', function() {
+    $(document).on('pjax:complete', function() {
         $('.docx-fade').addClass('docx-fade-active');
         $sug.hide();
     });
