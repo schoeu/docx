@@ -70,6 +70,10 @@ function searchContent(key, content) {
 function search(type, key) {
     key = key || '';
 
+    var keys = segment.doSegment(key, {
+        simple: true
+    });
+
     // 如果有关键词,则开始搜索
     if (!key.trim().length) {
         return [];
@@ -77,7 +81,7 @@ function search(type, key) {
     if (type === 'title') {
         var titleSe = [];
         cache.forEach(function (it) {
-            var em = [key];
+            var em = [key].concat(keys);
             var isGet = false;
             var pos = it.pos || [];
             var title = it.title || '';
@@ -109,28 +113,28 @@ function search(type, key) {
                 isGet = true;
             }
 
-            // 飘红
+            // 去重
             em = _.uniq(em);
-            em.forEach(function (emItem) {
-                var itemReg = new RegExp(emItem, 'img');
-                title = title.replace(itemReg, function (m) {
-                    return '<span class="hljs-string">' + m + '</span>';
-                })
-            });
+            var emkeys = em.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
+            var emReg = new RegExp(emkeys,'img');
 
-            if (isGet) {
+            if (isGet || emReg.exec(title)) {
+
+                // 飘红title关键字
+                var title = title.replace(emReg, function (m) {
+                    return '<span class="hljs-string">' + m + '</span>';
+                });
+
                 titleSe.push({
                     path: it.path,
                     title: title
                 });
             }
         });
+
         return titleSe;
     }
     else {
-        var keys = segment.doSegment(key, {
-            simple: true
-        });
         var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
         var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
