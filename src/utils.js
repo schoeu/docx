@@ -51,11 +51,6 @@ module.exports = {
         renderer.code = function (data, lang) {
             data = highlight.highlightAuto(data).value;
             if (lang) {
-                // 超过3行有提示
-                if (data.split(/\n/).length >= 3) {
-                    var html = '<pre><code class="hljs lang-'+ lang +'"><span class="hljs-lang-tips">' + lang + '</span>';
-                    return html + data + '</code></pre>';
-                }
                 return '<pre><code class="hljs lang-${lang}">' + data + '</code></pre>';
             }
             return '<pre><code class="hljs">' + data + '</code></pre>';
