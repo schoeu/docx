@@ -170,8 +170,12 @@ a, a:hover, a:focus {
     color: #4078c0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+/*h1, h2, h3, h4, h5, h6 {
     color: #5f6468;
+}*/
+
+blockquote{
+    font-size: 14px;
 }
 
 h1 {
