@@ -8,6 +8,13 @@ var path = require('path');
 var highlight = require('highlight.js');
 var marked = require('marked');
 
+// markdown中渲染代码高亮处理
+marked.setOptions({
+    highlight: function (code, lang) {
+        return highlight.highlightAuto(code).value;
+    }
+});
+
 module.exports = {
     /**
      * 获取markdown文件大标题
@@ -45,17 +52,6 @@ module.exports = {
      * @return {String} html字符串
      * */
     getMarked: function (content) {
-        var renderer = new marked.Renderer();
-
-        // markdown中渲染代码处理
-        renderer.code = function (data, lang) {
-            data = highlight.highlightAuto(data).value;
-            if (lang) {
-                return '<pre><code class="hljs lang-${lang}">' + data + '</code></pre>';
-            }
-            return '<pre><code class="hljs">' + data + '</code></pre>';
-        };
-
-        return marked(content, {renderer});
+        return marked(content);
     }
 };

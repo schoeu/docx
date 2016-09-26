@@ -25,16 +25,12 @@ function init() {
         var title = utils.getMdTitle(it);
 
         var initials = pinyin(title,{
-            /*heteronym:true,
-            segment:true,*/
             style:pinyin.STYLE_FIRST_LETTER
         }).join('');
 
         var pos = [];
         var len = 0;
         var spell = pinyin(title,{
-            /*heteronym:true,
-            segment:true,*/
             style:pinyin.STYLE_NORMAL
         }).map(function (s) {
             s = s.toString();

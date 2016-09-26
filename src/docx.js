@@ -7,7 +7,7 @@ var path = require('path');
 var fs = require('fs');
 var url = require('url');
 var child_process = require('child_process');
-var LRU = require("lru-cache")
+var LRU = require("lru-cache");
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
@@ -201,12 +201,10 @@ Docx.prototype = {
                         content = cache.get(pathName);
                     }
                     else  {
+                        // markdown转换成html
                         content = utils.getMarked(file.toString());
                         cache.set(pathName, content);
                     }
-
-                    // markdown转换成html
-                    //var content = utils.getMarked(file.toString());
 
                     // 判断是pjax请求则返回html片段
                     if (req.headers['x-pjax'] === 'true') {
