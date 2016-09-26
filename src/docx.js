@@ -184,9 +184,6 @@ Docx.prototype = {
 
             // 更新状态
             isUpdated = false;
-
-            // 清除lru缓存
-            cache.reset();
         }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
@@ -389,18 +386,26 @@ Docx.prototype = {
                 console.error(err);
             }
             else {
-                // 删掉缓存
-                child_process.exec('rm cache.json', {
-                    cwd: path.join(__dirname, '../')
-                }, function (err, result) {
-                    if (err) {
-                        console.error(err);
-                    }
-                    else {
-                        isUpdated = true;
-                        console.log('rm cache.json');
-                    }
-                });
+                // 清除lru缓存
+                cache.reset();
+
+                // 清除文件缓存
+                var cachePath = path.join(__dirname, '../', CONF.cacheDir);
+                var stat = fs.statSync(cachePath);
+                if (stat) {
+                    child_process.exec('rm cache.json', {
+                        cwd: path.join(__dirname, '../')
+                    }, function (err, result) {
+                        if (err) {
+                            console.error(err);
+                        }
+                        else {
+                            isUpdated = true;
+                            console.log('rm cache.json');
+                        }
+                    });
+                }
+
                 console.log('git pull');
                 res.end('ok');
             }
