@@ -134,10 +134,10 @@
     -moz-transform: translate3d(-10px, 0, 0);
     -m-transform: translate3d(-10px, 0, 0);
     transform: translate3d(-10px, 0, 0);
-    -webkit-transition: all 700ms;
-    -moz-transition: all 700ms;
-    -m-transition: all 700ms;
-    transition: all 700ms;
+    -webkit-transition: all 500ms;
+    -moz-transition: all 500ms;
+    -m-transition: all 500ms;
+    transition: all 500ms;
 }
 .docx-fade-active {
     opacity: 1;
