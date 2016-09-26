@@ -187,8 +187,6 @@ Docx.prototype = {
 
             // 清除lru缓存
             cache.reset();
-
-            console.log(isUpdated);
         }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
@@ -255,6 +253,7 @@ Docx.prototype = {
         var dirRsMap = this.dirSort(dirMap);
 
         // 根据排序后的文档树数据生成文档DOM
+        htmlStr = '';
         this.makeNav(dirRsMap);
     },
 
