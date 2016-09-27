@@ -14,6 +14,12 @@ npm install node-docx
 npm start
 ```
 
+## 说明
+
+
+
+
+
 ## 配置参数
 
 ```
@@ -41,11 +47,16 @@ npm start
 
   // 默认文档路径
   "index": "/readme.md",
+  
+  // 缓存文件路径
+  "cacheDir":"./cache.json",
+    
+  // 技术支持
+  // 邮箱填写: mailto:xx@xxx.com
+  // Hi填写: baidu://message/?id=用户名,可以直接调起Hi
+  "supportInfo": "baidu://:xx@xxx.com",
 
-  // 技术支持邮箱
-  "surposEmail": "xx@xxx.com",
-
-  // 默认false, 开启报错后会发送邮件
+  // 默认false, 开启报警后报错会发送邮件
   "waringFlag": false,
 
   // 报警邮箱配置
@@ -58,6 +69,9 @@ npm start
     "to": "xx@xxx.com", // 收件人
     "subject": "DOCX error"  // 邮件标题
   },
+  
+  // 文件夹命名配置文件路径
+  "dirsConfName": "map.json",
 
   // 链接配置,展示位置为右上角,可以配置其他链接
   "extUrls": {
