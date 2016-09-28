@@ -6,6 +6,7 @@
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "index": "/readme.md",
+  "logLevel": "info",
   "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",
   "waringFlag": false,

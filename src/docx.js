@@ -11,7 +11,6 @@ var LRU = require("lru-cache");
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
-var serve_static = require('serve-static');
 var exphbs  = require('express-handlebars');
 
 var CONF = require('../docx-conf.json');
@@ -105,14 +104,6 @@ Docx.prototype = {
         // 路由处理
         me.routes();
 
-        // 容错处理
-        app.use(function(err, req, res, next) {
-            // 如果开启了错误邮件报警则发报警邮件
-            if (err && CONF.waringFlag) {
-                warning.sendMail(err.toString());
-            }
-        });
-
         // 端口监听
         app.listen(CONF.port || 8910);
     },
@@ -146,8 +137,44 @@ Docx.prototype = {
         // API: 文档更新钩子
         app.all('/api/update', me.update.bind(me));
 
+        app.get('*', function(req, res){
+            res.status(err.status || 404);
+            res.render('error', {title: 'NOTFOUND'});
+        });
+
+
         // 委托其他静态资源
-        app.use('/', serve_static(CONF.path));
+        app.use('/', express.static(CONF.path));
+
+        // 容错处理
+        app.use(function(req, res, next) {
+            var err = new Error('Not Found');
+            err.status = 404;
+            res.render('notfound', {title: 'NOTFOUND'});
+            // 如果开启了错误邮件报警则发报警邮件
+            CONF.waringFlag && warning.sendMail(err.toString());
+            next(err);
+        });
+
+        // 调试模式下错误处理
+        if (app.get('env') === 'development') {
+            app.use(function(err, req, res, next) {
+                res.status(err.status || 500);
+                res.render('error', {
+                    message: err.message,
+                    error: err
+                });
+            });
+        }
+
+        // 生产模式下错误处理
+        app.use(function(err, req, res, next) {
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: {}
+            });
+        });
     },
 
     /**
@@ -165,6 +192,7 @@ Docx.prototype = {
             brandStr += '<li>' + it + '</li>';
         });
         var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
+
         return rsHTML;
     },
 
@@ -173,7 +201,7 @@ Docx.prototype = {
      * @param {Object} req 请求对象
      * @param {Object} res 相应对象
      * */
-    mdHandler: function (req, res) {
+    mdHandler: function (req, res, next) {
         var me = this;
         if (isUpdated) {
             // 刷新缓存
@@ -190,32 +218,39 @@ Docx.prototype = {
         var mdPath = path.join(CONF.path, pathName);
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
-            stat && fs.readFile(mdPath, 'utf8', function (err, file) {
-                var content = '';
-                if (file) {
+            if (stat) {
+                fs.readFile(mdPath, 'utf8', function (err, file) {
+                    var content = '';
+                    if (file) {
 
-                    if(cache.has(pathName)) {
-                        content = cache.get(pathName);
-                    }
-                    else  {
-                        // markdown转换成html
-                        content = utils.getMarked(file.toString());
-                        cache.set(pathName, content);
-                    }
+                        if(cache.has(pathName)) {
+                            content = cache.get(pathName);
+                        }
+                        else  {
+                            // markdown转换成html
+                            content = utils.getMarked(file.toString());
 
-                    // 判断是pjax请求则返回html片段
-                    if (req.headers['x-pjax'] === 'true') {
-                        var rsPjaxDom = me.getPjaxContent(pathName, content);
-                        res.end(rsPjaxDom);
-                    }
+                            // 有内容才缓存
+                            content && cache.set(pathName, content);
+                        }
 
-                    // 否则返回整个模板
-                    else {
-                        var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
-                        res.render('main', parseObj);
+                        // 判断是pjax请求则返回html片段
+                        if (req.headers['x-pjax'] === 'true') {
+                            var rsPjaxDom = me.getPjaxContent(pathName, content);
+                            res.end(rsPjaxDom);
+                        }
+
+                        // 否则返回整个模板
+                        else {
+                            var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
+                            res.render('main', parseObj);
+                        }
                     }
-                }
-            });
+                });
+            }
+            else {
+                next();
+            }
         });
     },
 
