@@ -16,6 +16,7 @@ var exphbs  = require('express-handlebars');
 var CONF = require('../docx-conf.json');
 var warning = require('./warning.js');
 var utils = require('./utils.js');
+var logger = require('./logger.js');
 
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
@@ -153,6 +154,8 @@ Docx.prototype = {
             res.render('notfound', {title: 'NOTFOUND'});
             // 如果开启了错误邮件报警则发报警邮件
             CONF.waringFlag && warning.sendMail(err.toString());
+
+            logger.error({error: err});
             next(err);
         });
 
@@ -203,6 +206,8 @@ Docx.prototype = {
      * */
     mdHandler: function (req, res, next) {
         var me = this;
+        var ua = req.headers['user-agent'] || '';
+
         if (isUpdated) {
             // 刷新缓存
             preprocessor.init();
@@ -222,8 +227,8 @@ Docx.prototype = {
                 fs.readFile(mdPath, 'utf8', function (err, file) {
                     var content = '';
                     if (file) {
-
-                        if(cache.has(pathName)) {
+                        var hasCache = cache.has(pathName);
+                        if(hasCache) {
                             content = cache.get(pathName);
                         }
                         else  {
@@ -245,10 +250,13 @@ Docx.prototype = {
                             var parseObj = Object.assign({}, locals, {navData: htmlStr, mdData: content});
                             res.render('main', parseObj);
                         }
+                        logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua});
                     }
                 });
+
             }
             else {
+                logger.info({'access:': pathName, 'isCache:': hasCache, error: 'not found', ua: ua});
                 next();
             }
         });
@@ -436,12 +444,12 @@ Docx.prototype = {
                         }
                         else {
                             isUpdated = true;
-                            console.log('rm cache.json');
+                            logger.info('rm cache.json');
                         }
                     });
                 }
 
-                console.log('git pull');
+                logger.info('git pull');
                 res.end('ok');
             }
         });
