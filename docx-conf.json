@@ -7,6 +7,7 @@
   "title": "PSFE",
   "index": "/readme.md",
   "logLevel": "info",
+  "theme": "default",
   "logPath": "../log",
   "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",
