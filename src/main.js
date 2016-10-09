@@ -142,6 +142,8 @@ Docx.prototype = {
      * */
     getConf: function (conf) {
         var rs = {};
+
+        conf = conf ? conf : '../docx-conf.json';
         // 配置文件设置
         var confPath = path.join(__dirname, conf);
         // 读取配置内容
