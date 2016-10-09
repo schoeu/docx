@@ -19,7 +19,6 @@ commander.on('--help', function() {
 
 // 配置文件
 if (commander.config) {
-    console.log(commander.config);
     /**
      * 初始化docx
      * */

@@ -4,17 +4,14 @@
  * 邮件报警实现
  * */
 var nodemailer = require('nodemailer');
-var CONF = require('../docx-conf.json');
+var CONF;
+var transporter;
 
-var transporter = nodemailer.createTransport({
-    host: CONF.warningEmail.host,
-    port: CONF.warningEmail.port,
-    auth: {
-        user: CONF.warningEmail.user,
-        pass: CONF.warningEmail.pass
-    }
-});
-
+/**
+ * 发送邮件
+ *
+ * @param {String} content 邮件内容,支持html
+ * */
 function sendMail(content) {
     var mailOptions = {
         from: CONF.warningEmail.from,
@@ -29,4 +26,16 @@ function sendMail(content) {
     });
 }
 
-exports.sendMail = sendMail;
+exports.sendMail = function (conf) {
+    CONF = conf;
+    transporter = nodemailer.createTransport({
+        host: CONF.warningEmail.host,
+        port: CONF.warningEmail.port,
+        auth: {
+            user: CONF.warningEmail.user,
+            pass: CONF.warningEmail.pass
+        }
+    });
+
+    return sendMail;
+};

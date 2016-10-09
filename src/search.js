@@ -9,8 +9,8 @@ var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
 var Segment = require('segment');
-var CONF = require('../docx-conf.json');
-var searchConf = CONF.searchConf || {};
+var CONF;
+var searchConf = {};
 var cache = require('../cache.json');
 
 // 创建实例
@@ -184,4 +184,13 @@ function search(type, key) {
     }
 }
 
-module.exports = search;
+/**
+ * 搜索
+ * @param {String} conf 配置信息
+ * @return {Function} 搜索方法
+ * */
+module.exports = function (conf) {
+    CONF = conf;
+    searchConf = CONF.searchConf || {};
+    return search;
+};

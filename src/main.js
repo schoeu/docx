@@ -15,12 +15,12 @@ var exphbs  = require('express-handlebars');
 
 var warning = require('./warning.js');
 var utils = require('./utils.js');
-var logger = require('./logger.js');
+var log = require('./logger.js');
 
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
-preprocessor.init();
-var search = require('./search.js');
+var searchModule = require('./search.js');
+var search;
 var cache = LRU({max: 500});
 
 var app = express();
@@ -31,7 +31,6 @@ var isUpdated = false;
 var headText = CONF.headText || '';
 
 function Docx(conf) {
-
     // 初始化docx
     this.init(conf);
 }
@@ -65,18 +64,16 @@ Docx.prototype = {
     init: function (conf) {
         var me = this;
 
-        // 配置文件设置
-        var confPath = path.join(__dirname, conf);
-        console.log('confPath-> %s', confPath);
-        // 读取配置内容
-        var content = fs.readFileSync(confPath).toString();
+        // 配置文件处理
+        CONF = me.getConf(conf);
 
-        try {
-            CONF = JSON.parse(content);
-        } catch (e) {
-            throw e;
-        }
+        // 文件预处理
+        preprocessor.init(CONF);
 
+        // 文件夹命名设置默认为空
+        me.dirname = {};
+
+        // 公共变量处理
         if (!_.isEmpty(CONF)) {
             var headText = CONF.headText || '';
             me.ignorDor = CONF.ignoreDir || [];
@@ -87,13 +84,21 @@ Docx.prototype = {
                 supportInfo: CONF.supportInfo || '',
                 label: CONF.extUrls.label
             };
+
+            // 返回搜索方法
+            search = searchModule(CONF);
+
+            // 如果邮件报警开启,则初始化邮件报警模块
+            if (CONF.waringFlag) {
+                me.mail = warning(CONF);
+            }
         }
         else {
             throw new Error('conf file is empty.');
         }
 
-        // 文件夹命名设置默认为空
-        me.dirname = {};
+        // 日志路径设置
+        me.logger = log(path.join(__dirname, CONF.logPath));
 
         // express 视图设置
         if (!CONF.debug) {
@@ -127,6 +132,27 @@ Docx.prototype = {
 
         // 端口监听
         app.listen(CONF.port || 8910);
+    },
+
+    /**
+     * 配置处理
+     *
+     * @param {String} conf 配置文件相对路径
+     * @return {undefined}
+     * */
+    getConf: function (conf) {
+        var rs = {};
+        // 配置文件设置
+        var confPath = path.join(__dirname, conf);
+        // 读取配置内容
+        var content = fs.readFileSync(confPath).toString();
+
+        try {
+            rs = JSON.parse(content);
+        } catch (e) {
+            throw e;
+        }
+        return rs;
     },
 
     /**
@@ -173,9 +199,9 @@ Docx.prototype = {
             err.status = 404;
             res.render('notfound', {title: 'NOTFOUND'});
             // 如果开启了错误邮件报警则发报警邮件
-            CONF.waringFlag && warning.sendMail(err.toString());
+            me.mail && me.mail.sendMail(err.toString());
 
-            logger.error({error: err});
+            me.logger.error({error: err});
             next(err);
         });
 
@@ -230,7 +256,7 @@ Docx.prototype = {
 
         if (isUpdated) {
             // 刷新缓存
-            preprocessor.init();
+            preprocessor.init(CONF);
 
             // 重新生成DOM树
             me.getDocTree();
@@ -270,13 +296,13 @@ Docx.prototype = {
                             var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
                             res.render('main', parseObj);
                         }
-                        logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua});
+                        me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua});
                     }
                 });
 
             }
             else {
-                logger.info({'access:': pathName, 'isCache:': hasCache, error: 'not found', ua: ua});
+                me.logger.info({'access:': pathName, 'isCache:': hasCache, error: 'not found', ua: ua});
                 next();
             }
         });
@@ -464,12 +490,12 @@ Docx.prototype = {
                         }
                         else {
                             isUpdated = true;
-                            logger.info('rm cache.json');
+                            me.logger.info('rm cache.json');
                         }
                     });
                 }
 
-                logger.info('git pull');
+                me.logger.info('git pull');
                 res.end('ok');
             }
         });

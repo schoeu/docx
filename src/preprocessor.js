@@ -9,14 +9,13 @@ var path = require('path');
 var pinyin = require('pinyin');
 var glob = require('glob');
 var utils = require('./utils.js');
-var CONF = require('../docx-conf.json');
 var tempCache = [];
 /**
  * 文件初始化处理
  * **/
-function init() {
-    var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-    var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
+function init(conf) {
+    var mdFiles = glob.sync(path.join(conf.path, '**/*.md')) || [];
+    var htmlFiles = glob.sync(path.join(conf.path, '**/*.html')) || [];
     var files = mdFiles.concat(htmlFiles);
 
     files.forEach(function (it) {
@@ -43,13 +42,13 @@ function init() {
             title: title,
             //content: fileContent,
             pos: pos,
-            path: it.replace(CONF.path, ''),
+            path: it.replace(conf.path, ''),
             spell: spell,
             initials: initials
         });
     });
 
-    var cacheDir = path.join(__dirname, '..', CONF.cacheDir);
+    var cacheDir = path.join(__dirname, '..', conf.cacheDir);
     fs.writeFileSync(cacheDir, JSON.stringify(tempCache));
 }
 

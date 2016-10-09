@@ -9,8 +9,6 @@ var winston = require('winston');
 var moment = require('moment');
 var DailyRotateFile=require('winston-daily-rotate-file');
 
-var CONF = require('../docx-conf.json');
-
 var MAX_SIZE = 1024 * 1024 * 5;
 var ACCESS_LOG_NAME = 'access.log';
 var ERROR_LOG_NAME = 'error.log';
@@ -26,7 +24,7 @@ var dateFormat=function() {
  * @param {Array} errorlog 错误日志路径
  * @return {Object}
  * */
-module.exports = (function (loggerPath) {
+module.exports = function (loggerPath) {
     var accesslog = path.join(loggerPath, ACCESS_LOG_NAME);
     var errorlog = path.join(loggerPath, ERROR_LOG_NAME);
 
@@ -53,4 +51,4 @@ module.exports = (function (loggerPath) {
             errorTransport
         ]
     });
-})(path.join(__dirname, CONF.logPath));
+};
