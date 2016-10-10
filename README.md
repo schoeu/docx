@@ -13,9 +13,23 @@ npm install node-docx
 ```
 npm start
 ```
+Or
+
+```
+// 在安装PM2的情况下 
+// CD到项目根目录下执行下面命令,默认使用项目根目录下的配置文件
+pm2 start src/docx.js
+```
+
+Or
+
+```
+// 在安装PM2的情况下 
+// CD到项目根目录下执行下面命令,使用指定目录下的配置文件
+pm2 start src/docx.js -- ../xxx/conf.json
+```
 
 ## 说明
-
 
 
 
@@ -111,3 +125,7 @@ npm start
     }
 },
 ```
+
+## 主题
+
+默认主题在根目录下的`themes/default`,如想换其他主题请自行替换。
