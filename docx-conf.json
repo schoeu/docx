@@ -8,6 +8,7 @@
   "index": "/readme.md",
   "logLevel": "info",
   "theme": "default",
+  "preprocessScript":"./es6.js",
   "logPath": "../log",
   "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",

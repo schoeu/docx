@@ -64,13 +64,14 @@ Docx.prototype = {
     init: function (conf) {
         var me = this;
 
-        console.log('inti',conf);
-
         // 配置文件处理
         CONF = me.getConf(conf);
 
+        // 日志路径设置
+        me.logger = log(path.join(__dirname, CONF.logPath));
+
         // 文件预处理
-        preprocessor.init(CONF);
+        preprocessor.init(CONF, me.logger);
 
         // 文件夹命名设置默认为空
         me.dirname = {};
@@ -98,9 +99,6 @@ Docx.prototype = {
         else {
             throw new Error('conf file is empty.');
         }
-
-        // 日志路径设置
-        me.logger = log(path.join(__dirname, CONF.logPath));
 
         // express 视图设置
         if (!CONF.debug) {

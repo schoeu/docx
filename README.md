@@ -55,7 +55,13 @@ pm2 start src/docx.js -- ../xxx/conf.json
 
   // header条标题
   "headText": "PSFE-DOC",
-
+  
+  // 展示主题,默认为default
+  "theme": "default",
+  
+  // 预处理脚本定制,填写脚本地址即可
+  "preprocessscript":"",
+    
   // web title
   "title": "PSFE",
 
