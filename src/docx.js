@@ -55,11 +55,16 @@ var htmlCodes = [
     '    </div>'
 ].join('');
 
+// /images/notfound.png
+var errorPage = function (type) {
+    return '<div class="docx-notfound" style="background: url(' + type + ') no-repeat center;"></div>';
+};
+
 Docx.prototype = {
     contributor: Docx,
 
     /**
-     * 初始化DOCX,主要初始化了express
+     * 初始化DOCX,主要初始化了express,日志模块, 预处理模块, 路由绑定等
      * */
     init: function (conf) {
         var me = this;
@@ -305,6 +310,9 @@ Docx.prototype = {
             }
             else {
                 me.logger.info({'access:': pathName, 'isCache:': hasCache, error: 'not found', ua: ua});
+
+                res.end(errorPage('notfound'));
+
                 next();
             }
         });
