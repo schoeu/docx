@@ -55,9 +55,10 @@ var htmlCodes = [
     '    </div>'
 ].join('');
 
-// /images/notfound.png
+//
+var errorType = {'notfound': '/images/notfound.png','othererror': '/images/othererror.png'};
 var errorPage = function (type) {
-    return '<div class="docx-notfound" style="background: url(' + type + ') no-repeat center;"></div>';
+    return '<div class="docx-notfound" style="height: 500px;background: url(' + (errorType[type] || errorType['othererror']) + ') 50% 50% / contain no-repeat;"></div>';
 };
 
 Docx.prototype = {
@@ -274,6 +275,7 @@ Docx.prototype = {
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
         var mdPath = path.join(CONF.path, pathName);
+        var isPjax = req.headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
             if (stat) {
@@ -295,11 +297,10 @@ Docx.prototype = {
                         }
 
                         // 判断是pjax请求则返回html片段
-                        if (req.headers['x-pjax'] === 'true') {
+                        if (isPjax) {
                             var rsPjaxDom = me.getPjaxContent(pathName, content);
                             res.end(rsPjaxDom);
                         }
-
                         // 否则返回整个模板
                         else {
                             var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
@@ -311,11 +312,19 @@ Docx.prototype = {
 
             }
             else {
+                // 错误页面
+                var errPg = errorPage('notfound');
+
+                // 判断是pjax请求则返回html片段
+                if (isPjax) {
+                    res.end(me.getPjaxContent(pathName, errPg));
+                }
+                // 否则返回整个模板
+                else {
+                    var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
+                    res.render('main', errPgObj);
+                }
                 me.logger.info({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua});
-
-                res.end(errorPage('notfound'));
-
-                next();
             }
         });
     },
