@@ -280,7 +280,9 @@ Docx.prototype = {
                 fs.readFile(mdPath, 'utf8', function (err, file) {
                     var content = '';
                     if (file) {
+                        // 请求页面是否在缓存中
                         var hasCache = cache.has(pathName);
+
                         if(hasCache) {
                             content = cache.get(pathName);
                         }
@@ -309,7 +311,7 @@ Docx.prototype = {
 
             }
             else {
-                me.logger.info({'access:': pathName, 'isCache:': hasCache, error: 'not found', ua: ua});
+                me.logger.info({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua});
 
                 res.end(errorPage('notfound'));
 
