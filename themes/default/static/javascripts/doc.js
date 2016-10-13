@@ -45,7 +45,10 @@ if ($.support.pjax) {
         $.pjax.click(event, {container: container})
     });*/
     $(document).on('pjax:complete', function() {
-        $('.docx-fade').addClass('docx-fade-active');
+        // fixed safari animate bug.
+        setTimeout(function () {
+            $('.docx-fade').addClass('docx-fade-active');
+        }, 0);
         $sug.hide();
     });
 }
