@@ -9,9 +9,9 @@ var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
 var Segment = require('segment');
+var cache;
 var CONF;
 var searchConf = {};
-var cache = require('../cache.json');
 
 // 创建实例
 var segment = new Segment();
@@ -191,6 +191,7 @@ function search(type, key) {
  * */
 module.exports = function (conf) {
     CONF = conf;
+    cache = require('../cache.json');
     searchConf = CONF.searchConf || {};
     return search;
 };

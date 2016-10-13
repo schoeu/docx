@@ -11,6 +11,9 @@ var $searchIpt = $('.docx-searchkey');
 var $sug = $('.docx-sug');
 var $sugul = $('.docx-sugul');
 var actCls = 'docx-sugact';
+var winH = $win.outerHeight();
+var lisH = $docxTitle.first().height();
+var $scollapse = $('#sidebar-collapse');
 /**
  * 兼容老平台
  * */
@@ -49,6 +52,10 @@ if ($.support.pjax) {
         setTimeout(function () {
             $('.docx-fade').addClass('docx-fade-active');
         }, 0);
+
+        // 目录切换
+        // changeMenu();
+
         $sug.hide();
     });
 }
@@ -58,10 +65,34 @@ $win.load(function () {
 
     $win.on('resize', function () {
         $docxBd.height($win.height() - $navbarH);
+        winH = $win.outerHeight();
     });
 
     $docxBd.height($win.height() - $navbarH);
+
+    // 目录切换
+    // changeMenu();
+
 });
+
+function changeMenu() {
+    // 打开对应目录
+    var pathname = location.pathname || '';
+    var $pathDom = $('[data-path="'+ pathname +'"]');
+    $pathDom.parents('.docx-submenu').addClass('in');
+    $pathDom.parents('[data-dir]').addClass('active subactive');
+    $docxTitle.removeClass('docx-active');
+    $pathDom.addClass('docx-active').parents().remove('docx-active');
+
+    setTimeout(function () {
+        var crtLis = $('.docx-active');
+        var offsetTop = crtLis.offset().top;
+        // 如果选中目录不在可视范围则滚动到可视范围
+        if (offsetTop > winH - lisH) {
+            $scollapse.animate({scrollTop: offsetTop - winH/2},300);
+        }
+    }, 0);
+}
 
 /**
  * 搜索action
@@ -129,15 +160,6 @@ $docxBd.on('click', '.docx-fullse', function () {
 // 初始化文档目录菜单
 $navs.metisMenu({
     preventDefault: false
-});
-
-$(window).on('load', function(event) {
-    var pathname = location.pathname || '';
-    var $pathDom = $('[data-path="'+ pathname +'"]');
-    $pathDom.parents('.docx-submenu').addClass('in');
-    $pathDom.parents('[data-dir]').addClass('active subactive');
-    $docxTitle.removeClass('docx-active');
-    $pathDom.addClass('docx-active').parents().remove('docx-active');
 });
 
 $docxTitle.add($docxDir).on('click', function () {

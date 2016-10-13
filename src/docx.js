@@ -35,6 +35,7 @@ function Docx(conf) {
     this.init(conf);
 }
 
+// TODO 放到模板中
 var htmlCodes = [
     '<div class="row">',
     '        <ol class="breadcrumb">',
@@ -55,8 +56,8 @@ var htmlCodes = [
     '    </div>'
 ].join('');
 
-//
-var errorType = {'notfound': '/images/notfound.png','othererror': '/images/othererror.png'};
+// TODO 放到模板中
+var errorType = {'notfound': '/images/notfound.png', 'othererror': '/images/othererror.png'};
 var errorPage = function (type) {
     return '<div class="docx-notfound" style="height: 600px;background: url(' + (errorType[type] || errorType['othererror']) + ') 50% 50% / contain no-repeat;"></div>';
 };
@@ -278,6 +279,7 @@ Docx.prototype = {
         var isPjax = req.headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.stat(mdPath, function (err, stat) {
+            // aladdin/wise/devdocs/base_describe.md
             if (stat) {
                 fs.readFile(mdPath, 'utf8', function (err, file) {
                     var content = '';
@@ -488,6 +490,8 @@ Docx.prototype = {
      * @return {Object} res 响应对象
      * */
     update: function (req, res) {
+        var me = this;
+
         // 更新代码
         child_process.exec('git pull', {
             cwd: CONF.path
