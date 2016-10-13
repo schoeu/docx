@@ -58,7 +58,7 @@ var htmlCodes = [
 //
 var errorType = {'notfound': '/images/notfound.png','othererror': '/images/othererror.png'};
 var errorPage = function (type) {
-    return '<div class="docx-notfound" style="height: 500px;background: url(' + (errorType[type] || errorType['othererror']) + ') 50% 50% / contain no-repeat;"></div>';
+    return '<div class="docx-notfound" style="height: 600px;background: url(' + (errorType[type] || errorType['othererror']) + ') 50% 50% / contain no-repeat;"></div>';
 };
 
 Docx.prototype = {
@@ -217,20 +217,20 @@ Docx.prototype = {
         if (app.get('env') === 'development') {
             app.use(function(err, req, res, next) {
                 res.status(err.status || 500);
-                res.render('error', {
-                    message: err.message,
-                    error: err
-                });
+                // 错误页面
+                var errPg = errorPage('othererror');
+                var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
+                res.render('main', errPgObj);
             });
         }
 
         // 生产模式下错误处理
         app.use(function(err, req, res, next) {
             res.status(err.status || 500);
-            res.render('error', {
-                message: err.message,
-                error: {}
-            });
+            // 错误页面
+            var errPg = errorPage('othererror');
+            var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
+            res.render('main', errPgObj);
         });
     },
 
