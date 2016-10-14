@@ -71,11 +71,18 @@ $win.load(function () {
     $docxBd.height($win.height() - $navbarH);
 
     // 目录切换
-    // changeMenu();
+    changeMenu();
 
 });
 
 function changeMenu() {
+    /*var crtLis = $('.docx-active');
+    var offsetTop = crtLis.offset().top;
+    // 如果选中目录不在可视范围则滚动到可视范围
+    if (offsetTop > winH - lisH) {
+        $scollapse.animate({scrollTop: offsetTop - winH/2},300);
+    }*/
+
     // 打开对应目录
     var pathname = location.pathname || '';
     var $pathDom = $('[data-path="'+ pathname +'"]');
@@ -83,15 +90,6 @@ function changeMenu() {
     $pathDom.parents('[data-dir]').addClass('active subactive');
     $docxTitle.removeClass('docx-active');
     $pathDom.addClass('docx-active').parents().remove('docx-active');
-
-    setTimeout(function () {
-        var crtLis = $('.docx-active');
-        var offsetTop = crtLis.offset().top;
-        // 如果选中目录不在可视范围则滚动到可视范围
-        if (offsetTop > winH - lisH) {
-            $scollapse.animate({scrollTop: offsetTop - winH/2},300);
-        }
-    }, 0);
 }
 
 /**
