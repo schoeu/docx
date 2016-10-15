@@ -11,7 +11,7 @@ var LRU = require("lru-cache");
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
-var exphbs  = require('express-handlebars');
+var hbs = require('express-hbs');
 
 var warning = require('./warning.js');
 var utils = require('./utils.js');
@@ -114,9 +114,13 @@ Docx.prototype = {
 
         var themePath = path.join(__dirname, '..', 'themes', CONF.theme);
 
+        app.engine('hbs', hbs.express4({
+            partialsDir: path.join(themePath, 'views')
+        }));
+        app.set('view engine', 'hbs');
         app.set('views', path.join(themePath, 'views'));
-        app.engine('.hbs', exphbs({extname: '.hbs'}));
-        app.set('view engine', '.hbs');
+
+
         app.use(express.static(path.join(themePath, 'static')));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: false}));
@@ -497,7 +501,7 @@ Docx.prototype = {
             cwd: CONF.path
         }, function (err, result) {
             if (err) {
-                console.error(err);
+                me.logger.error(err);
             }
             else {
                 // 清除lru缓存
@@ -511,7 +515,7 @@ Docx.prototype = {
                         cwd: path.join(__dirname, '../')
                     }, function (err, result) {
                         if (err) {
-                            console.error(err);
+                            me.logger.error(err);
                         }
                         else {
                             isUpdated = true;
