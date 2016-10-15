@@ -28,7 +28,8 @@ var app = express();
 var htmlStr = '';
 var CONF = {};
 var isUpdated = false;
-var headText = CONF.headText || '';
+var HBS_EXTNAME = 'hbs';
+
 
 function Docx(conf) {
     // 初始化docx
@@ -94,7 +95,7 @@ Docx.prototype = {
         app.engine('hbs', hbs.express4({
             partialsDir: me.themePath
         }));
-        app.set('view engine', 'hbs');
+        app.set('view engine', HBS_EXTNAME);
         app.set('views', me.themePath);
 
 
@@ -491,7 +492,7 @@ Docx.prototype = {
 
         if (!compiledPageCache[pagePath])  {
             try {
-                var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.hbs')).toString();
+                var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.' + HBS_EXTNAME)).toString();
                 compiledPageCache[pagePath] = hbs.compile(compileStr);
 
             }
