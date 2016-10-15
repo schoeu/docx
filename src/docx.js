@@ -35,32 +35,8 @@ function Docx(conf) {
     this.init(conf);
 }
 
-// TODO 放到模板中
-var htmlCodes = [
-    '<div class="row">',
-    '        <ol class="breadcrumb">',
-    '            <li>' + headText + '</li>',
-    '                {{brandData}}',
-    '        </ol>',
-    '    </div>',
-    '    <div class="row">',
-    '        <div class="col-lg-12 docx-fade">',
-    '            <div class="docx-panel docx-panel-default">',
-    '                <div class="markdown-body">',
-    '                    <div class="docx-marked">',
-    '                        {{mdData}}',
-    '                    </div>',
-    '                </div>',
-    '            </div>',
-    '        </div>',
-    '    </div>'
-].join('');
-
-// TODO 放到模板中
 var errorType = {'notfound': '/images/notfound.png', 'othererror': '/images/othererror.png'};
-var errorPage = function (type) {
-    return '<div class="docx-notfound" style="height: 600px;background: url(' + (errorType[type] || errorType['othererror']) + ') 50% 50% / contain no-repeat;"></div>';
-};
+var compiledPageCache = {};
 
 Docx.prototype = {
     contributor: Docx,
@@ -113,12 +89,13 @@ Docx.prototype = {
         }
 
         var themePath = path.join(__dirname, '..', 'themes', CONF.theme);
+        me.themePath = path.join(themePath, 'views');
 
         app.engine('hbs', hbs.express4({
-            partialsDir: path.join(themePath, 'views')
+            partialsDir: me.themePath
         }));
         app.set('view engine', 'hbs');
-        app.set('views', path.join(themePath, 'views'));
+        app.set('views', me.themePath);
 
 
         app.use(express.static(path.join(themePath, 'static')));
@@ -197,43 +174,14 @@ Docx.prototype = {
         // API: 文档更新钩子
         app.all('/api/update', me.update.bind(me));
 
-        app.get('*', function(req, res){
-            res.status(err.status || 404);
-            res.render('error', {title: 'NOTFOUND'});
-        });
-
-
         // 委托其他静态资源
         app.use('/', express.static(CONF.path));
 
         // 容错处理
-        app.use(function(req, res, next) {
-            var err = new Error('Not Found');
-            err.status = 404;
-            res.render('notfound', {title: 'NOTFOUND'});
-            // 如果开启了错误邮件报警则发报警邮件
-            me.mail && me.mail.sendMail(err.toString());
-
-            me.logger.error({error: err});
-            next(err);
-        });
-
-        // 调试模式下错误处理
-        if (app.get('env') === 'development') {
-            app.use(function(err, req, res, next) {
-                res.status(err.status || 500);
-                // 错误页面
-                var errPg = errorPage('othererror');
-                var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
-                res.render('main', errPgObj);
-            });
-        }
-
-        // 生产模式下错误处理
         app.use(function(err, req, res, next) {
             res.status(err.status || 500);
             // 错误页面
-            var errPg = errorPage('othererror');
+            var errPg = me.compilePre('error', {errorType: errorType['othererror']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
         });
@@ -253,8 +201,8 @@ Docx.prototype = {
         brandData.forEach(function (it) {
             brandStr += '<li>' + it + '</li>';
         });
-        var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
-
+        //var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
+        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content});
         return rsHTML;
     },
 
@@ -319,7 +267,7 @@ Docx.prototype = {
             }
             else {
                 // 错误页面
-                var errPg = errorPage('notfound');
+                var errPg =me.compilePre('error', {errorType: errorType['notfound']});
 
                 // 判断是pjax请求则返回html片段
                 if (isPjax) {
@@ -528,6 +476,31 @@ Docx.prototype = {
                 res.end('ok');
             }
         });
+    },
+
+    /**
+     * 模板异步编译处理
+     *
+     * @param {String} 模板名
+     * @param {Object} data 替换对象
+     * @return {String} html字符串
+     * */
+    compilePre: function (pagePath, data) {
+        var me = this;
+        data = data || {};
+
+        if (!compiledPageCache[pagePath])  {
+            try {
+                var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.hbs')).toString();
+                compiledPageCache[pagePath] = hbs.compile(compileStr);
+
+            }
+            catch (e) {
+                me.logger.error(e);
+                return '';
+            }
+        }
+        return compiledPageCache[pagePath](data);
     }
 };
 
