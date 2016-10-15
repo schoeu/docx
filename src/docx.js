@@ -1,5 +1,6 @@
 /**
  * @file docx.js
+ * @description 文档平台主文件
  * @author schoeu
  * */
 
@@ -30,7 +31,11 @@ var CONF = {};
 var isUpdated = false;
 var HBS_EXTNAME = 'hbs';
 
-
+/**
+ * Docx构造函数
+ *
+ * @param {String} conf 配置文件相对路径
+ * */
 function Docx(conf) {
     // 初始化docx
     this.init(conf);
@@ -490,6 +495,7 @@ Docx.prototype = {
         var me = this;
         data = data || {};
 
+        // 缓存编译模板
         if (!compiledPageCache[pagePath])  {
             try {
                 var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.' + HBS_EXTNAME)).toString();
