@@ -82,19 +82,18 @@ function changeMenu() {
     // 打开对应目录
     var pathname = location.pathname || '';
     var $pathDom = $('[data-path="'+ pathname +'"]');
-    $pathDom.parents('.docx-submenu').addClass('in');
+    $pathDom.parents('.docx-submenu').addClass('in').css('height','auto');
     $pathDom.parents('[data-dir]').addClass('active subactive');
     $docxTitle.removeClass('docx-active');
     $pathDom.addClass('docx-active').parents().remove('docx-active');
 
-
     var crtLis = $('.docx-active');
     var offsetTop = crtLis.offset().top;
     // 如果选中目录不在可视范围则滚动到可视范围
-    if (offsetTop > winH - lisH) {
-        $scollapse.animate({scrollTop: offsetTop - winH/2},300);
+    if (offsetTop > winH - lisH || offsetTop < 0) {
+        // $scollapse.scrollTop(offsetTop - winH/5);
+        $scollapse.animate({scrollTop: offsetTop - winH/5}, 200);
     }
-
 }
 
 /**

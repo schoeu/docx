@@ -388,10 +388,10 @@ Docx.prototype = {
                     continue;
                 }
                 if (item.type === 'file') {
-                    htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
+                    htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '"><span class="fa fa-file-text-o fa-lg"></span>' + item.title + '</a></li>';
                 }
                 else if (item.type === 'dir') {
-                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#" class="docx-dirsa">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
+                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#" class="docx-dirsa"><span class="fa fa-folder fa-lg"></span>' + item.displayName + '</a><ul class="docx-submenu">';
                     this.makeNav(item.child);
                     htmlStr += '</ul></li>';
                 }
