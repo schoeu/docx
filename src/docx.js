@@ -185,12 +185,13 @@ Docx.prototype = {
 
         // 路由容错处理
         app.get('*', function (req, res) {
+            var time = Date.now();
             var ua = req.headers['user-agent'] || '';
             // 错误页面
             var errPg = me.compilePre('error', {errorType: errorType['notfound']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
-            me.logger.error({'access:': req.url, 'isCache:': false, error: 'notfound', ua: ua});
             res.render('main', errPgObj);
+            me.logger.error({'access:': req.url, 'isCache:': false, error: 'notfound', ua: ua, during: Date.now() - time + 'ms'});
         });
 
         // 容错处理
@@ -231,6 +232,7 @@ Docx.prototype = {
     mdHandler: function (req, res, next) {
         var me = this;
         var ua = req.headers['user-agent'] || '';
+        var time = Date.now();
 
         if (isUpdated) {
             // 刷新缓存
@@ -277,7 +279,7 @@ Docx.prototype = {
                             var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
                             res.render('main', parseObj);
                         }
-                        me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua});
+                        me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua, during: Date.now() - time + 'ms'});
                     }
                 });
 
@@ -295,7 +297,7 @@ Docx.prototype = {
                     var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
                     res.render('main', errPgObj);
                 }
-                me.logger.error({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua});
+                me.logger.error({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua, during: Date.now() - time + 'ms'});
             }
         });
     },
@@ -460,6 +462,7 @@ Docx.prototype = {
      * */
     update: function (req, res) {
         var me = this;
+        var time = Date.now();
 
         // 更新代码
         child_process.exec('git pull', {
@@ -484,12 +487,12 @@ Docx.prototype = {
                         }
                         else {
                             isUpdated = true;
-                            me.logger.info('rm cache.json');
+                            me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
                         }
                     });
                 }
 
-                me.logger.info('git pull');
+                me.logger.info({message: 'git pull', during: Date.now() - time + 'ms'});
                 res.end('ok');
             }
         });
@@ -520,6 +523,7 @@ Docx.prototype = {
         }
         return compiledPageCache[pagePath](data);
     }
+
 };
 
 new Docx(process.argv[2]);

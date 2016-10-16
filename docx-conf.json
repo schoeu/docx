@@ -1,7 +1,7 @@
 {
   "port": "8910",
   "path": "/Users/memee/Downloads/svn/ps-fe",
-  "ignoreDir": ["img",".git",".svn","courseware","headline","imgs","js","less"],
+  "ignoreDir": ["img",".git",".svn","courseware","headline","imgs","js","less","assets"],
   "debug": true,
   "headText": "PSFE-DOC",
   "title": "PSFE",
@@ -31,7 +31,7 @@
     "label": "友情链接",
     "links":[{
       "name": "栅格文档PMD",
-      "url": "http://sfe.baidu.com/pmd/doc/"
+      "url": "http://pmd.baidu.com"
     },{
       "name": "MIP文档",
       "url": "http://mip.baidu.com"

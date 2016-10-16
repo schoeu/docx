@@ -39,12 +39,13 @@ module.exports = function (loggerPath) {
         maxsize:MAX_SIZE,
         datePattern:'.yyyy-MM-dd'
     });
-    var errorTransport = new (winston.transports.File)({
+    var errorTransport = new DailyRotateFile({
         name: 'error',
         filename: errorlog,
         timestamp:dateFormat,
         level: 'error',
         colorize:true,
+        maxsize:MAX_SIZE,
         datePattern:'.yyyy-MM-dd'
     });
     return new winston.Logger({
