@@ -200,8 +200,8 @@ Docx.prototype = {
             // 错误页面
             var errPg = me.compilePre('error', {errorType: errorType['othererror']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
-            me.logger.error(err);
             res.render('main', errPgObj);
+            me.logger.error(err);
         });
     },
 
@@ -249,42 +249,37 @@ Docx.prototype = {
         var mdPath = path.join(CONF.path, pathName);
         var isPjax = req.headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
-        fs.stat(mdPath, function (err, stat) {
-            // aladdin/wise/devdocs/base_describe.md
-            if (stat) {
-                fs.readFile(mdPath, 'utf8', function (err, file) {
-                    var content = '';
-                    if (file) {
-                        // 请求页面是否在缓存中
-                        var hasCache = cache.has(pathName);
+        fs.readFile(mdPath, 'utf8', function (err, file) {
+            var content = '';
+            if (file) {
+                // 请求页面是否在缓存中
+                var hasCache = cache.has(pathName);
 
-                        if(hasCache) {
-                            content = cache.get(pathName);
-                        }
-                        else  {
-                            // markdown转换成html
-                            content = utils.getMarked(file.toString());
+                if(hasCache) {
+                    content = cache.get(pathName);
+                }
+                else  {
+                    // markdown转换成html
+                    content = utils.getMarked(file.toString());
 
-                            // 有内容才缓存
-                            content && cache.set(pathName, content);
-                        }
+                    // 有内容才缓存
+                    content && cache.set(pathName, content);
+                }
 
-                        // 判断是pjax请求则返回html片段
-                        if (isPjax) {
-                            var rsPjaxDom = me.getPjaxContent(pathName, content);
-                            res.end(rsPjaxDom);
-                        }
-                        // 否则返回整个模板
-                        else {
-                            var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
-                            res.render('main', parseObj);
-                        }
-                        me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua, during: Date.now() - time + 'ms'});
-                    }
-                });
-
+                // 判断是pjax请求则返回html片段
+                if (isPjax) {
+                    var rsPjaxDom = me.getPjaxContent(pathName, content);
+                    res.end(rsPjaxDom);
+                }
+                // 否则返回整个模板
+                else {
+                    var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
+                    res.render('main', parseObj);
+                }
+                me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua, during: Date.now() - time + 'ms'});
             }
-            else {
+            // 如果找不到文件,则返回错误提示页
+            else if (err) {
                 // 错误页面
                 var errPg =me.compilePre('error', {errorType: errorType['notfound']});
 
@@ -297,7 +292,7 @@ Docx.prototype = {
                     var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
                     res.render('main', errPgObj);
                 }
-                me.logger.error({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua, during: Date.now() - time + 'ms'});
+                me.logger.error(err);
             }
         });
     },
