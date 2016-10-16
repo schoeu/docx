@@ -182,12 +182,24 @@ Docx.prototype = {
         // 委托其他静态资源
         app.use('/', express.static(CONF.path));
 
+
+        // 路由容错处理
+        app.get('*', function (req, res) {
+            var ua = req.headers['user-agent'] || '';
+            // 错误页面
+            var errPg = me.compilePre('error', {errorType: errorType['notfound']});
+            var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
+            me.logger.error({'access:': req.url, 'isCache:': false, error: 'notfound', ua: ua});
+            res.render('main', errPgObj);
+        });
+
         // 容错处理
         app.use(function(err, req, res, next) {
             res.status(err.status || 500);
             // 错误页面
             var errPg = me.compilePre('error', {errorType: errorType['othererror']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
+            me.logger.error(err);
             res.render('main', errPgObj);
         });
     },
@@ -283,7 +295,7 @@ Docx.prototype = {
                     var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
                     res.render('main', errPgObj);
                 }
-                me.logger.info({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua});
+                me.logger.error({'access:': pathName, 'isCache:': false, error: 'not found', ua: ua});
             }
         });
     },

@@ -3,7 +3,7 @@
  * @author schoeu
  * */
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var winston = require('winston');
 var moment = require('moment');
@@ -20,11 +20,13 @@ var dateFormat=function() {
 
 /**
  * 日志方法定义
- * @param {Array} accesslog 访问日志路径
- * @param {Array} errorlog 错误日志路径
+ * @param {String} loggerPath 日志路径
  * @return {Object}
  * */
 module.exports = function (loggerPath) {
+    // 没有该目录则创建
+    fs.mkdirsSync(loggerPath);
+
     var accesslog = path.join(loggerPath, ACCESS_LOG_NAME);
     var errorlog = path.join(loggerPath, ERROR_LOG_NAME);
 
