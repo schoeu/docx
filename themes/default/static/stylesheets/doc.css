@@ -71,6 +71,17 @@
 .docx-submenu>li>.docx-submenu>li>a:before{
     background-color: transparent;
 }
+.docx-submenu>li>a:before,.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
+    position: relative;
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border: 1px solid #666;
+    border-radius: 50%;
+    top: 22px;
+    left: -10px;
+}
 .docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
     padding-left: 7.5em;
 }
@@ -88,20 +99,11 @@
     text-decoration: none;
     background-color: #eee;
 }
-.fa.fa-folder:before {
-    content: "\f07b";
+.active>a>.fa.arrow:before {
+    content: "\f107";
 }
-.fa.fa-folder-open:before {
-    content: "\f07c";
-}
-.fa.fa-file-text-o:before {
-     content: "\f0f6";
-}
-
-
 .fa {
     display: inline-block;
-    width: 18px;
     font: normal normal normal 14px/1 fa;
     font-size: inherit;
     text-rendering: auto;
@@ -109,15 +111,10 @@
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
 }
-
-.fa-lg {
-    font-size: 1.33333333em;
-    line-height: .75em;
-    vertical-align: -15%;
-    margin-right: 7px;
-}
-.active>a>.fa-folder:before{
-    content: "\f07c";
+.sidebar .arrow {
+    position: absolute;
+    right: 16px;
+    top: 12px;
 }
 .docx-active,.docx-active:hover{
     color: #222;
