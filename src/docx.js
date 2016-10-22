@@ -5,7 +5,7 @@
  * */
 
 var path = require('path');
-var fs = require('fs');
+var fs = require('fs-extra');
 var url = require('url');
 var child_process = require('child_process');
 var LRU = require("lru-cache");
@@ -78,7 +78,12 @@ Docx.prototype = {
             };
 
             // 返回搜索方法
-            search = searchModule(CONF);
+            searchFn = searchModule(CONF);
+
+            // 读取缓存,用于搜索
+            searchFn.readCache();
+
+            search = searchFn.search;
 
             // 如果邮件报警开启,则初始化邮件报警模块
             if (CONF.waringFlag) {
@@ -135,10 +140,19 @@ Docx.prototype = {
      * */
     getConf: function (conf) {
         var rs = {};
+        var confPath = '';
 
         conf = conf ? conf : '../docx-conf.json';
-        // 配置文件设置
-        var confPath = path.join(__dirname, conf);
+
+        // 配置文件设置,如果是绝对路径,则使用绝对路径
+        if (path.isAbsolute(conf)) {
+            confPath = conf;
+        }
+        // 如果是相对路径,则计算出最终路径
+        else {
+            confPath = path.join(__dirname, conf);
+        }
+
         // 读取配置内容
         var content = fs.readFileSync(confPath).toString();
 
@@ -474,9 +488,7 @@ Docx.prototype = {
                 var cachePath = path.join(__dirname, '../', CONF.cacheDir);
                 var stat = fs.statSync(cachePath);
                 if (stat) {
-                    child_process.exec('rm cache.json', {
-                        cwd: path.join(__dirname, '../')
-                    }, function (err, result) {
+                    fs.remove(path.join(__dirname, '../', 'cache.json'), function (err) {
                         if (err) {
                             me.logger.error(err);
                         }
@@ -484,7 +496,7 @@ Docx.prototype = {
                             isUpdated = true;
                             me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
                         }
-                    });
+                    })
                 }
 
                 me.logger.info({message: 'git pull', during: Date.now() - time + 'ms'});
@@ -509,7 +521,6 @@ Docx.prototype = {
             try {
                 var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.' + HBS_EXTNAME)).toString();
                 compiledPageCache[pagePath] = hbs.compile(compileStr);
-
             }
             catch (e) {
                 me.logger.error(e);

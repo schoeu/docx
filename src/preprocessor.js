@@ -4,7 +4,7 @@
  * 文件预处理
  * */
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var child_process = require('child_process');
 var pinyin = require('pinyin');
@@ -64,7 +64,7 @@ function init(conf, logger) {
     });
 
     var cacheDir = path.join(__dirname, '..', conf.cacheDir);
-    fs.writeFileSync(cacheDir, JSON.stringify(tempCache));
+    fs.outputJsonSync(cacheDir, tempCache);
 }
 
 module.exports = {

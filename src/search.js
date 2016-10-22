@@ -4,7 +4,7 @@
  * 文件搜索模块
  * */
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
@@ -191,7 +191,11 @@ function search(type, key) {
  * */
 module.exports = function (conf) {
     CONF = conf;
-    cache = require('../cache.json');
     searchConf = CONF.searchConf || {};
-    return search;
+    return {
+        readCache: function () {
+            cache = fs.readJsonSync(path.join(__dirname, '../cache.json'));
+        },
+        search: search
+    };
 };
