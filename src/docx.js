@@ -150,7 +150,7 @@ Docx.prototype = {
         }
         // 如果是相对路径,则计算出最终路径
         else {
-            confPath = path.join(__dirname, conf);
+            confPath = path.join(__dirname, '..', conf);
         }
 
         // 读取配置内容
