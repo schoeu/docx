@@ -9,7 +9,7 @@
   "logLevel": "info",
   "theme": "default",
   "preprocessScript":"",
-  "logPath": "../log",
+  "logPath": "./log",
   "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",
   "waringFlag": false,

@@ -144,7 +144,7 @@ Docx.prototype = {
      * */
     getConf: function (conf) {
 
-        conf = conf ? conf : '../docx-conf.json';
+        conf = conf ? conf : './docx-conf.json';
 
         // 配置文件设置,如果是绝对路径,则使用绝对路径,如果是相对路径,则计算出最终路径
         if (!path.isAbsolute(conf)) {
@@ -242,7 +242,7 @@ Docx.prototype = {
 
         if (isUpdated) {
             // 刷新缓存
-            preprocessor.init(CONF);
+            preprocessor.init(CONF, me.logger);
 
             // 重新生成DOM树
             me.getDocTree();
@@ -477,24 +477,14 @@ Docx.prototype = {
                 cache.reset();
 
                 // 清除文件缓存
-                var cachePath = path.join(__dirname, '../', CONF.cacheDir);
-                var stat = fs.statSync(cachePath);
-                if (stat) {
-                    fs.remove(path.join(__dirname, '../', 'cache.json'), function (err) {
-                        if (err) {
-                            me.logger.error(err);
-                        }
-                        else {
-                            isUpdated = true;
-                            me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
-                        }
-                    })
-                }
-
-                me.logger.info({message: 'git pull', during: Date.now() - time + 'ms'});
+                isUpdated = true;
+                me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
                 res.end('update cache.');
             }
         });
+
+
+
     },
 
     /**
