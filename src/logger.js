@@ -24,6 +24,12 @@ var dateFormat=function() {
  * @return {Object}
  * */
 module.exports = function (loggerPath) {
+
+    // 日志文件设置,如果是绝对路径,则使用绝对路径, 如果是相对路径,则计算出最终路径
+    if (!path.isAbsolute(loggerPath)) {
+        loggerPath = path.join(process.cwd(), loggerPath);
+    }
+
     // 没有该目录则创建
     fs.mkdirsSync(loggerPath);
 

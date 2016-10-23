@@ -56,8 +56,12 @@ Docx.prototype = {
         // 配置文件处理
         CONF = me.getConf(conf);
 
+        if (!CONF) {
+            throw new Error('not valid conf file.');
+        }
+
         // 日志路径设置
-        me.logger = log(path.join(__dirname, CONF.logPath));
+        me.logger = log(CONF.logPath);
 
         // 文件预处理
         preprocessor.init(CONF, me.logger);
@@ -139,29 +143,18 @@ Docx.prototype = {
      * @return {undefined}
      * */
     getConf: function (conf) {
-        var rs = {};
-        var confPath = '';
 
         conf = conf ? conf : '../docx-conf.json';
 
-        // 配置文件设置,如果是绝对路径,则使用绝对路径
-        if (path.isAbsolute(conf)) {
-            confPath = conf;
-        }
-        // 如果是相对路径,则计算出最终路径
-        else {
-            confPath = path.join(__dirname, '..', conf);
+        // 配置文件设置,如果是绝对路径,则使用绝对路径,如果是相对路径,则计算出最终路径
+        if (!path.isAbsolute(conf)) {
+            conf = path.join(process.cwd(), conf);
         }
 
         // 读取配置内容
-        var content = fs.readFileSync(confPath).toString();
+        var json = fs.readJsonSync(conf);
 
-        try {
-            rs = JSON.parse(content);
-        } catch (e) {
-            throw e;
-        }
-        return rs;
+        return json || '';
     },
 
     /**
@@ -195,7 +188,6 @@ Docx.prototype = {
 
         // 委托其他静态资源
         app.use('/', express.static(CONF.path));
-
 
         // 路由容错处理
         app.get('*', function (req, res) {
@@ -500,7 +492,7 @@ Docx.prototype = {
                 }
 
                 me.logger.info({message: 'git pull', during: Date.now() - time + 'ms'});
-                res.end('ok');
+                res.end('update cache.');
             }
         });
     },
