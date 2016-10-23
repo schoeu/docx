@@ -28,6 +28,7 @@ var app = express();
 
 var htmlStr = '';
 var CONF = {};
+var searchFn = {};
 var isUpdated = false;
 var HBS_EXTNAME = 'hbs';
 
@@ -246,6 +247,9 @@ Docx.prototype = {
 
             // 重新生成DOM树
             me.getDocTree();
+
+            // 重新读取缓存,用于刷新搜索
+            searchFn.readCache();
 
             // 更新状态
             isUpdated = false;
@@ -466,7 +470,7 @@ Docx.prototype = {
         var time = Date.now();
 
         // 更新代码
-        child_process.exec('git pull', {
+        /*child_process.exec('git pull', {
             cwd: CONF.path
         }, function (err, result) {
             if (err) {
@@ -481,7 +485,12 @@ Docx.prototype = {
                 me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
                 res.end('update cache.');
             }
-        });
+        });*/
+
+        // 清除文件缓存
+        isUpdated = true;
+        me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
+        res.end('update cache.');
 
 
 

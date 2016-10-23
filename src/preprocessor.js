@@ -33,6 +33,9 @@ function init(conf, logger) {
     var htmlFiles = glob.sync(path.join(conf.path, '**/*.html')) || [];
     var files = mdFiles.concat(htmlFiles);
 
+    // 清空索引
+    tempCache = [];
+
     files.forEach(function (it) {
         it = decodeURIComponent(it);
 
