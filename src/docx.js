@@ -470,7 +470,7 @@ Docx.prototype = {
         var time = Date.now();
 
         // 更新代码
-        /*child_process.exec('git pull', {
+        child_process.exec('git pull', {
             cwd: CONF.path
         }, function (err, result) {
             if (err) {
@@ -485,15 +485,7 @@ Docx.prototype = {
                 me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
                 res.end('update cache.');
             }
-        });*/
-
-        // 清除文件缓存
-        isUpdated = true;
-        me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
-        res.end('update cache.');
-
-
-
+        });
     },
 
     /**
