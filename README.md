@@ -126,7 +126,7 @@ pm2 start src/docx.js -- ../xxx/conf.json
     "dir3": {
       "name": "dir3"
     }
-},
+}
 ```
 
 ## 主题
