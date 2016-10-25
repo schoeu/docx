@@ -32,6 +32,23 @@ var searchFn = {};
 var isUpdated = false;
 var HBS_EXTNAME = 'hbs';
 
+// 默认配置,减少配置文件条目数,增加易用性与容错
+var defaultOptions = {
+    logPath: './log',
+    dirsConfName: 'map.json',
+    port: '8910',
+    logLevel: 'info',
+    index: '/readme.md',
+    theme: 'default',
+    preprocessScript: '',
+    cacheDir: './cache.json',
+    searchConf: {
+        matchDeep: 2,
+        matchWidth: 120
+    }
+
+};
+
 /**
  * Docx构造函数
  *
@@ -54,15 +71,16 @@ Docx.prototype = {
     init: function (conf) {
         var me = this;
 
-        // 配置文件处理
-        CONF = me.getConf(conf);
+        // 获取配置
+        var confPara = me.getConf(conf);
+        CONF = Object.assign({}, defaultOptions, confPara);
 
-        if (!CONF) {
+        if (!CONF.path) {
             throw new Error('not valid conf file.');
         }
 
         // 日志路径设置
-        me.logger = log(CONF.logPath);
+        me.logger = log(CONF);
 
         // 文件预处理
         preprocessor.init(CONF, me.logger);
@@ -118,7 +136,7 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        var dirsConf = path.join(CONF.path, CONF.dirsConfName || 'map.json');
+        var dirsConf = path.join(CONF.path, CONF.dirsConfName);
         try {
             var stat = fs.statSync(dirsConf);
             if (stat) {
@@ -482,7 +500,7 @@ Docx.prototype = {
 
                 // 清除文件缓存
                 isUpdated = true;
-                me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
+                me.logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});
                 res.end('update cache.');
             }
         });

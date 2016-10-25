@@ -57,7 +57,9 @@
                 <ul class="nav menu metismenu docx-navs" id="docx-navs">
                     {{{navData}}}
                     <li role="presentation" class="divider"></li>
-                    <li><a href="{{supportInfo}}"> 支持 </a></li>
+                    {{#if supportInfo}}
+                        <li><a href="{{supportInfo}}"> 支持 </a></li>
+                    {{/if}}
                 </ul>
             </div>
         </div><!--/.sidebar-->
