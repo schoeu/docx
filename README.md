@@ -47,9 +47,6 @@ pm2 start src/docx.js -- ../xxx/conf.json
   // 需要忽略的目录名
   "ignoreDir": ["img",".git",".svn"],
 
-  // 缓存路径
-  "cacheDir":"./cache.json",
-
   // 是否debug状态, 非debug状态会启用缓存
   "debug": true,
 
@@ -129,7 +126,7 @@ pm2 start src/docx.js -- ../xxx/conf.json
     "dir3": {
       "name": "dir3"
     }
-},
+}
 ```
 
 ## 主题
