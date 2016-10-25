@@ -2,22 +2,11 @@
   "port": "8910",
   "path": "/Users/memee/Downloads/svn/ps-fe-new",
   "ignoreDir": ["img",".git",".svn","courseware","headline","imgs","js","less","assets"],
-  "debug": true,
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "logPath": "./log",
-  "cacheDir":"../t5/3he.json",
+  "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",
-  "waringFlag": false,
-  "warningEmail": {
-    "host": "smtp.163.com",
-    "port": 25,
-    "user": "xx@163.com",
-    "pass": "password",
-    "from": "xx@163.com",
-    "to": "xx@xxx.com",
-    "subject": "DOCX error"
-  },
   "extUrls": {
     "label": "友情链接",
     "links":[{

@@ -45,8 +45,10 @@ var defaultOptions = {
     searchConf: {
         matchDeep: 2,
         matchWidth: 120
-    }
-
+    },
+    extUrls: {},
+    waringFlag: false,
+    debug: true
 };
 
 /**

@@ -23,18 +23,20 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/">{{headText}}</a>
-                    <ul class="user-menu">
-                        <li class="dropdown pull-right">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}}<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                {{#each links}}
-                                    <li>
-                                        <a href="{{url}}">{{name}}</a>
-                                    </li>
-                                {{/each}}
-                            </ul>
-                        </li>
-                    </ul>
+                    {{#if links}}
+                        <ul class="user-menu">
+                            <li class="dropdown pull-right">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}}<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    {{#each links}}
+                                        <li>
+                                            <a href="{{url}}">{{name}}</a>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </li>
+                        </ul>
+                    {{/if}}
                 </div>
             </div><!-- /.container-fluid -->
         </nav>
