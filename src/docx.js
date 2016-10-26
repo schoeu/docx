@@ -48,7 +48,8 @@ var defaultOptions = {
     },
     extUrls: {},
     waringFlag: false,
-    debug: true
+    debug: true,
+    ignoreDir: []
 };
 
 /**
@@ -104,7 +105,7 @@ Docx.prototype = {
         // 公共变量处理
         if (!_.isEmpty(CONF)) {
             var headText = CONF.headText || '';
-            me.ignorDor = CONF.ignoreDir || [];
+            me.ignorDor = CONF.ignoreDir;
             me.locals = {
                 headText: headText || '',
                 title: CONF.title || headText,
