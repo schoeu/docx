@@ -100,7 +100,7 @@ Docx.prototype = {
         preprocessor.init(CONF, me.logger);
 
         // 文件夹命名设置默认为空
-        me.dirname = {};
+        me.dirname = [];
 
         // 公共变量处理
         if (!_.isEmpty(CONF)) {
@@ -154,7 +154,7 @@ Docx.prototype = {
         try {
             var stat = fs.statSync(dirsConf);
             if (stat) {
-                me.dirname = require(dirsConf);
+                me.dirname = fs.readJsonSync(dirsConf);
             }
         }
         catch (e) {}
@@ -259,7 +259,7 @@ Docx.prototype = {
             brandStr += '<li>' + it + '</li>';
         });
         //var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
-        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content});
+        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: CONF.headText});
         return rsHTML;
     },
 
@@ -350,8 +350,7 @@ Docx.prototype = {
         var dirMaps = [];
         breadcrumb.forEach(function (it) {
             if (it && it.indexOf('.md') < 0) {
-                var nameMap = me.dirname[it] || {};
-                dirMaps.push(nameMap.name || '');
+                dirMaps.push(me.dirnameMap[it] || '');
             }
         });
         return dirMaps;
@@ -364,12 +363,12 @@ Docx.prototype = {
         // 根据markdown文档生成文档树
         var dirMap = this.walker(CONF.docPath);
 
-        // 根据配置规则对文档进行排序
-        var dirRsMap = this.dirSort(dirMap);
+        // 数据排序处理
+        var sortedData = this.dirSort(dirMap);
 
         // 根据排序后的文档树数据生成文档DOM
         htmlStr = '';
-        this.makeNav(dirRsMap);
+        this.makeNav(sortedData);
     },
 
     /**
@@ -380,8 +379,9 @@ Docx.prototype = {
      * */
     walker: function (dirs) {
         var me = this;
-        var testArr = [];
-        docWalker(dirs, testArr);
+        var walkArr = [];
+        var dirnameMap = {};
+        docWalker(dirs, walkArr);
         function docWalker(dirs, dirCtt) {
             var dirArr = fs.readdirSync(dirs);
             dirArr = dirArr || [];
@@ -389,19 +389,30 @@ Docx.prototype = {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
                 var relPath = childPath.replace(CONF.docPath, '');
+                var confDirname = me.dirname || [];
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
 
                     // 如果是配置中忽略的目录,则跳过
                     if (me.ignorDor.indexOf(it) === -1) {
-                        var dirName = me.dirname[it] || {};
+                        // 文件夹设置名称获取
+                        var crtName = it || '';
+                        for(var index=0, length=confDirname.length; index<length; index++) {
+                            var dnItems = confDirname[index];
+                            if (dnItems[it]) {
+                                crtName = dnItems[it].name;
+                                dirnameMap[it] = crtName;
+                                break;
+                            }
+                        }
+
                         // 如果没有配置文件夹目录名称,则不显示
                         var childArr = [];
                         dirCtt.push({
                             itemName: it,
                             type: 'dir',
                             path: relPath,
-                            displayName: dirName.name || it ||'',
+                            displayName: crtName,
                             child: childArr
                         });
                         docWalker(childPath, childArr);
@@ -423,7 +434,8 @@ Docx.prototype = {
                 }
             });
         }
-        return testArr;
+        me.dirnameMap = dirnameMap;
+        return walkArr;
     },
 
     /**
@@ -456,39 +468,30 @@ Docx.prototype = {
      * @param {Object} map 文档结构数据
      * @return {Object} rs 排序后的文档结构数组
      * */
-    dirSort: function (map) {
+    dirSort: function (dirMap) {
         var me = this;
-        map = map || [];
-        var dirname = me.dirname || {};
-        if (!_.isEmpty(dirname)) {
-            var sortMap = [];
-            var rs = [];
-            var fileArr = [];
-            map.forEach(function (it) {
-                var item = dirname[it.itemName] || {};
-                if (it.type !== 'dir') {
-                    item.sort = 0;
-                }
-                sortMap.push(item.sort || 0);
-            });
+        var rs = [];
+        var fileCtt = [];
+        var dirname = me.dirname;
+        dirMap = dirMap || [];
 
-            sortMap.sort(function (a, b) {return a - b});
-
-            map.forEach(function (it) {
-                var itemName = dirname[it.itemName] || {};
-                var sortNum = itemName.sort || 0;
-                if (it.type !== 'dir') {
-                    fileArr.push(it);
+        dirMap.map(function (it) {
+            if (it.type === 'dir') {
+                for(var idx=0, length=dirname.length; idx<length; idx++) {
+                    var item = dirname[idx];
+                    if (item[it.itemName]) {
+                        var matchedName = it;
+                        rs[idx] = matchedName;
+                        break;
+                    }
                 }
-                else {
-                    var index = sortMap.indexOf(sortNum);
-                    rs[index] = it;
-                }
-            });
-
-            return fileArr.concat(rs);
-        }
-        return map;
+            }
+            else {
+                fileCtt.push(it);
+            }
+        });
+        // 合并数据,文档最前
+        return fileCtt.concat(rs);
     },
 
     /**
