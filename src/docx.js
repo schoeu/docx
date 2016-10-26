@@ -75,11 +75,22 @@ Docx.prototype = {
 
         // 获取配置
         var confPara = me.getConf(conf);
-        CONF = Object.assign({}, defaultOptions, confPara);
+        var docPath = confPara.path;
 
-        if (!CONF.path) {
+        if (!docPath) {
             throw new Error('not valid conf file.');
         }
+        else {
+            // 文件绝对&相对路径兼容
+            if (!path.isAbsolute(docPath)) {
+                docPath = path.join(process.cwd(), docPath);
+            }
+        }
+
+        // 合并配置
+        CONF = Object.assign({
+            docPath: docPath
+        }, defaultOptions, confPara);
 
         // 日志路径设置
         me.logger = log(CONF);
@@ -138,7 +149,7 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        var dirsConf = path.join(CONF.path, CONF.dirsConfName);
+        var dirsConf = path.join(CONF.docPath, CONF.dirsConfName);
         try {
             var stat = fs.statSync(dirsConf);
             if (stat) {
@@ -208,7 +219,7 @@ Docx.prototype = {
         app.all('/api/update', me.update.bind(me));
 
         // 委托其他静态资源
-        app.use('/', express.static(CONF.path));
+        app.use('/', express.static(CONF.docPath));
 
         // 路由容错处理
         app.get('*', function (req, res) {
@@ -276,7 +287,7 @@ Docx.prototype = {
         }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-        var mdPath = path.join(CONF.path, pathName);
+        var mdPath = path.join(CONF.docPath, pathName);
         var isPjax = req.headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.readFile(mdPath, 'utf8', function (err, file) {
@@ -350,7 +361,7 @@ Docx.prototype = {
      * */
     getDocTree: function () {
         // 根据markdown文档生成文档树
-        var dirMap = this.walker(CONF.path);
+        var dirMap = this.walker(CONF.docPath);
 
         // 根据配置规则对文档进行排序
         var dirRsMap = this.dirSort(dirMap);
@@ -376,7 +387,7 @@ Docx.prototype = {
             dirArr.forEach(function(it) {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
-                var relPath = childPath.replace(CONF.path, '');
+                var relPath = childPath.replace(CONF.docPath, '');
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
 
@@ -491,7 +502,7 @@ Docx.prototype = {
 
         // 更新代码
         child_process.exec('git pull', {
-            cwd: CONF.path
+            cwd: CONF.docPath
         }, function (err, result) {
             if (err) {
                 me.logger.error(err);

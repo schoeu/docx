@@ -135,8 +135,8 @@ function search(type, key) {
         return titleSe;
     }
     else {
-        var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-        var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
+        var mdFiles = glob.sync(path.join(CONF.docPath, '**/*.md')) || [];
+        var htmlFiles = glob.sync(path.join(CONF.docPath, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
         var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
         var titleReg = /^\s*\#+\s?(.+)/;
@@ -161,7 +161,7 @@ function search(type, key) {
             var contentMt = searchContent(cutkeys, content);
 
             var searchCData = {
-                path: it.replace(CONF.path, ''),
+                path: it.replace(CONF.docPath, ''),
                 title: titleStr,
                 content: contentMt
             };

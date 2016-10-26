@@ -31,8 +31,8 @@ function init(conf, logger) {
         }
     }
 
-    var mdFiles = glob.sync(path.join(conf.path, '**/*.md')) || [];
-    var htmlFiles = glob.sync(path.join(conf.path, '**/*.html')) || [];
+    var mdFiles = glob.sync(path.join(conf.docPath, '**/*.md')) || [];
+    var htmlFiles = glob.sync(path.join(conf.docPath, '**/*.html')) || [];
     var files = mdFiles.concat(htmlFiles);
 
     // 清空索引
@@ -62,7 +62,7 @@ function init(conf, logger) {
             title: title,
             //content: fileContent,
             pos: pos,
-            path: it.replace(conf.path, ''),
+            path: it.replace(conf.docPath, ''),
             spell: spell,
             initials: initials
         });
