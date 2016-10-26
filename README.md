@@ -118,20 +118,20 @@ pm2 start src/docx.js -- ../xxx/conf.json
 `在文档的根目录下生成一个map.json`,json格式即可,
 
 ```
-// 文件夹目录配置,key为对应的真实目录名,name为展示名,sort为根目录文件夹排名权重
-{
-    "dir1": {
+// 文件夹目录配置,key为对应的真实目录名,name为展示名,文件夹展现顺序依照该配置文件配置顺序
+[
+    {"dir1": {
       "name": "dir1",
       "sort": 1
-    },
-    "dir2": {
+    }},
+    {"dir2": {
       "name": "dir2",
       "sort": 2
-    },
-    "dir3": {
+    }},
+    {"dir3": {
       "name": "dir3"
-    }
-}
+    }}
+]
 ```
 
 ## 主题
