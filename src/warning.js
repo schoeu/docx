@@ -28,14 +28,16 @@ function sendMail(content) {
 
 exports.sendMail = function (conf) {
     CONF = conf;
-    transporter = nodemailer.createTransport({
-        host: CONF.warningEmail.host,
-        port: CONF.warningEmail.port,
-        auth: {
-            user: CONF.warningEmail.user,
-            pass: CONF.warningEmail.pass
-        }
-    });
+    if (CONF.warningEmail) {
+        transporter = nodemailer.createTransport({
+            host: CONF.warningEmail.host,
+            port: CONF.warningEmail.port,
+            auth: {
+                user: CONF.warningEmail.user,
+                pass: CONF.warningEmail.pass
+            }
+        });
 
-    return sendMail;
+        return sendMail;
+    }
 };

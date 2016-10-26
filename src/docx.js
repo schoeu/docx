@@ -32,6 +32,26 @@ var searchFn = {};
 var isUpdated = false;
 var HBS_EXTNAME = 'hbs';
 
+// 默认配置,减少配置文件条目数,增加易用性与容错
+var defaultOptions = {
+    logPath: './log',
+    dirsConfName: 'map.json',
+    port: '8910',
+    logLevel: 'info',
+    index: '/readme.md',
+    theme: 'default',
+    preprocessScript: '',
+    cacheDir: './cache.json',
+    searchConf: {
+        matchDeep: 2,
+        matchWidth: 120
+    },
+    extUrls: {},
+    waringFlag: false,
+    debug: true,
+    ignoreDir: []
+};
+
 /**
  * Docx构造函数
  *
@@ -54,26 +74,38 @@ Docx.prototype = {
     init: function (conf) {
         var me = this;
 
-        // 配置文件处理
-        CONF = me.getConf(conf);
+        // 获取配置
+        var confPara = me.getConf(conf);
+        var docPath = confPara.path;
 
-        if (!CONF) {
+        if (!docPath) {
             throw new Error('not valid conf file.');
         }
+        else {
+            // 文件绝对&相对路径兼容
+            if (!path.isAbsolute(docPath)) {
+                docPath = path.join(process.cwd(), docPath);
+            }
+        }
+
+        // 合并配置
+        CONF = Object.assign({
+            docPath: docPath
+        }, defaultOptions, confPara);
 
         // 日志路径设置
-        me.logger = log(CONF.logPath);
+        me.logger = log(CONF);
 
         // 文件预处理
         preprocessor.init(CONF, me.logger);
 
         // 文件夹命名设置默认为空
-        me.dirname = {};
+        me.dirname = [];
 
         // 公共变量处理
         if (!_.isEmpty(CONF)) {
             var headText = CONF.headText || '';
-            me.ignorDor = CONF.ignoreDir || [];
+            me.ignorDor = CONF.ignoreDir;
             me.locals = {
                 headText: headText || '',
                 title: CONF.title || headText,
@@ -118,11 +150,11 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        var dirsConf = path.join(CONF.path, CONF.dirsConfName || 'map.json');
+        var dirsConf = path.join(CONF.docPath, CONF.dirsConfName);
         try {
             var stat = fs.statSync(dirsConf);
             if (stat) {
-                me.dirname = require(dirsConf);
+                me.dirname = fs.readJsonSync(dirsConf);
             }
         }
         catch (e) {}
@@ -188,7 +220,7 @@ Docx.prototype = {
         app.all('/api/update', me.update.bind(me));
 
         // 委托其他静态资源
-        app.use('/', express.static(CONF.path));
+        app.use('/', express.static(CONF.docPath));
 
         // 路由容错处理
         app.get('*', function (req, res) {
@@ -227,7 +259,7 @@ Docx.prototype = {
             brandStr += '<li>' + it + '</li>';
         });
         //var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
-        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content});
+        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: CONF.headText});
         return rsHTML;
     },
 
@@ -256,7 +288,7 @@ Docx.prototype = {
         }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-        var mdPath = path.join(CONF.path, pathName);
+        var mdPath = path.join(CONF.docPath, pathName);
         var isPjax = req.headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.readFile(mdPath, 'utf8', function (err, file) {
@@ -318,8 +350,7 @@ Docx.prototype = {
         var dirMaps = [];
         breadcrumb.forEach(function (it) {
             if (it && it.indexOf('.md') < 0) {
-                var nameMap = me.dirname[it] || {};
-                dirMaps.push(nameMap.name || '');
+                dirMaps.push(me.dirnameMap[it] || '');
             }
         });
         return dirMaps;
@@ -330,14 +361,14 @@ Docx.prototype = {
      * */
     getDocTree: function () {
         // 根据markdown文档生成文档树
-        var dirMap = this.walker(CONF.path);
+        var dirMap = this.walker(CONF.docPath);
 
-        // 根据配置规则对文档进行排序
-        var dirRsMap = this.dirSort(dirMap);
+        // 数据排序处理
+        var sortedData = this.dirSort(dirMap);
 
         // 根据排序后的文档树数据生成文档DOM
         htmlStr = '';
-        this.makeNav(dirRsMap);
+        this.makeNav(sortedData);
     },
 
     /**
@@ -348,28 +379,40 @@ Docx.prototype = {
      * */
     walker: function (dirs) {
         var me = this;
-        var testArr = [];
-        docWalker(dirs, testArr);
+        var walkArr = [];
+        var dirnameMap = {};
+        docWalker(dirs, walkArr);
         function docWalker(dirs, dirCtt) {
             var dirArr = fs.readdirSync(dirs);
             dirArr = dirArr || [];
             dirArr.forEach(function(it) {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
-                var relPath = childPath.replace(CONF.path, '');
+                var relPath = childPath.replace(CONF.docPath, '');
+                var confDirname = me.dirname || [];
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
 
                     // 如果是配置中忽略的目录,则跳过
                     if (me.ignorDor.indexOf(it) === -1) {
-                        var dirName = me.dirname[it] || {};
+                        // 文件夹设置名称获取
+                        var crtName = it || '';
+                        for(var index=0, length=confDirname.length; index<length; index++) {
+                            var dnItems = confDirname[index];
+                            if (dnItems[it]) {
+                                crtName = dnItems[it].name;
+                                dirnameMap[it] = crtName;
+                                break;
+                            }
+                        }
+
                         // 如果没有配置文件夹目录名称,则不显示
                         var childArr = [];
                         dirCtt.push({
                             itemName: it,
                             type: 'dir',
                             path: relPath,
-                            displayName: dirName.name || it ||'',
+                            displayName: crtName,
                             child: childArr
                         });
                         docWalker(childPath, childArr);
@@ -391,7 +434,8 @@ Docx.prototype = {
                 }
             });
         }
-        return testArr;
+        me.dirnameMap = dirnameMap;
+        return walkArr;
     },
 
     /**
@@ -424,39 +468,30 @@ Docx.prototype = {
      * @param {Object} map 文档结构数据
      * @return {Object} rs 排序后的文档结构数组
      * */
-    dirSort: function (map) {
+    dirSort: function (dirMap) {
         var me = this;
-        map = map || [];
-        var dirname = me.dirname || {};
-        if (!_.isEmpty(dirname)) {
-            var sortMap = [];
-            var rs = [];
-            var fileArr = [];
-            map.forEach(function (it) {
-                var item = dirname[it.itemName] || {};
-                if (it.type !== 'dir') {
-                    item.sort = 0;
-                }
-                sortMap.push(item.sort || 0);
-            });
+        var rs = [];
+        var fileCtt = [];
+        var dirname = me.dirname;
+        dirMap = dirMap || [];
 
-            sortMap.sort(function (a, b) {return a - b});
-
-            map.forEach(function (it) {
-                var itemName = dirname[it.itemName] || {};
-                var sortNum = itemName.sort || 0;
-                if (it.type !== 'dir') {
-                    fileArr.push(it);
+        dirMap.map(function (it) {
+            if (it.type === 'dir') {
+                for(var idx=0, length=dirname.length; idx<length; idx++) {
+                    var item = dirname[idx];
+                    if (item[it.itemName]) {
+                        var matchedName = it;
+                        rs[idx] = matchedName;
+                        break;
+                    }
                 }
-                else {
-                    var index = sortMap.indexOf(sortNum);
-                    rs[index] = it;
-                }
-            });
-
-            return fileArr.concat(rs);
-        }
-        return map;
+            }
+            else {
+                fileCtt.push(it);
+            }
+        });
+        // 合并数据,文档最前
+        return fileCtt.concat(rs);
     },
 
     /**
@@ -471,7 +506,7 @@ Docx.prototype = {
 
         // 更新代码
         child_process.exec('git pull', {
-            cwd: CONF.path
+            cwd: CONF.docPath
         }, function (err, result) {
             if (err) {
                 me.logger.error(err);
@@ -482,7 +517,7 @@ Docx.prototype = {
 
                 // 清除文件缓存
                 isUpdated = true;
-                me.logger.info({message: 'rm cache.json', during: Date.now() - time + 'ms'});
+                me.logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});
                 res.end('update cache.');
             }
         });

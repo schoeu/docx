@@ -135,8 +135,8 @@ function search(type, key) {
         return titleSe;
     }
     else {
-        var mdFiles = glob.sync(path.join(CONF.path, '**/*.md')) || [];
-        var htmlFiles = glob.sync(path.join(CONF.path, '**/*.html')) || [];
+        var mdFiles = glob.sync(path.join(CONF.docPath, '**/*.md')) || [];
+        var htmlFiles = glob.sync(path.join(CONF.docPath, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
         var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
         var titleReg = /^\s*\#+\s?(.+)/;
@@ -161,7 +161,7 @@ function search(type, key) {
             var contentMt = searchContent(cutkeys, content);
 
             var searchCData = {
-                path: it.replace(CONF.path, ''),
+                path: it.replace(CONF.docPath, ''),
                 title: titleStr,
                 content: contentMt
             };
@@ -194,7 +194,13 @@ module.exports = function (conf) {
     searchConf = CONF.searchConf || {};
     return {
         readCache: function () {
-            cache = fs.readJsonSync(path.join(__dirname, '../cache.json'));
+            var cacheDir = conf.cacheDir;
+
+            // 缓存文件设置,如果是绝对路径,则使用绝对路径, 如果是相对路径,则计算出最终路径
+            if (!path.isAbsolute(cacheDir)) {
+                cacheDir = path.join(process.cwd(), cacheDir);
+            }
+            cache = fs.readJsonSync(cacheDir);
         },
         search: search
     };

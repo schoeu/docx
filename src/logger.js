@@ -23,8 +23,8 @@ var dateFormat=function() {
  * @param {String} loggerPath 日志路径
  * @return {Object}
  * */
-module.exports = function (loggerPath) {
-
+module.exports = function (conf) {
+    var loggerPath = conf.logPath;
     // 日志文件设置,如果是绝对路径,则使用绝对路径, 如果是相对路径,则计算出最终路径
     if (!path.isAbsolute(loggerPath)) {
         loggerPath = path.join(process.cwd(), loggerPath);
@@ -40,7 +40,7 @@ module.exports = function (loggerPath) {
         name: 'access',
         filename: accesslog,
         timestamp:dateFormat,
-        level: 'info',
+        level: conf.logLevel,
         colorize:true,
         maxsize:MAX_SIZE,
         datePattern:'.yyyy-MM-dd'
