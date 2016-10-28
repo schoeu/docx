@@ -49,6 +49,7 @@ var defaultOptions = {
     extUrls: {},
     waringFlag: false,
     debug: true,
+    usePinyin: true,
     ignoreDir: []
 };
 
@@ -97,7 +98,8 @@ Docx.prototype = {
         me.logger = log(CONF);
 
         // 文件预处理
-        preprocessor.init(CONF, me.logger);
+        me.preRun = preprocessor.init(CONF, me.logger);
+        me.preRun();
 
         // 文件夹命名设置默认为空
         me.dirname = [];
@@ -276,7 +278,7 @@ Docx.prototype = {
 
         if (isUpdated) {
             // 刷新缓存
-            preprocessor.init(CONF, me.logger);
+            me.preRun();
 
             // 重新生成DOM树
             me.getDocTree();
