@@ -131,7 +131,7 @@ Docx.prototype = {
             throw new Error('conf file is empty.');
         }
 
-        // express 视图设置
+        // express 视图缓存
         if (!CONF.debug) {
             app.enable('view cache');
         }
@@ -230,7 +230,7 @@ Docx.prototype = {
             var errPg = me.compilePre('error', {errorType: errorType['notfound']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
-            me.logger.error({'access:': req.url, 'isCache:': false, error: 'notfound', ua: ua, during: Date.now() - time + 'ms'});
+            me.logger.error({access: req.url, isCache: false, error: 'notfound', referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'});
         });
 
         // 容错处理
@@ -270,7 +270,8 @@ Docx.prototype = {
      * */
     mdHandler: function (req, res, next) {
         var me = this;
-        var ua = req.headers['user-agent'] || '';
+        var headers = req.headers;
+        var ua = headers['user-agent'] || '';
         var time = Date.now();
 
         if (isUpdated) {
@@ -289,7 +290,7 @@ Docx.prototype = {
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
         var mdPath = path.join(CONF.docPath, pathName);
-        var isPjax = req.headers['x-pjax'] === 'true';
+        var isPjax = headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.readFile(mdPath, 'utf8', function (err, file) {
             var content = '';
@@ -318,7 +319,7 @@ Docx.prototype = {
                     var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
                     res.render('main', parseObj);
                 }
-                me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, ua: ua, during: Date.now() - time + 'ms'});
+                me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, referer: headers.referer, ua: ua, during: Date.now() - time + 'ms'});
             }
             // 如果找不到文件,则返回错误提示页
             else if (err) {
