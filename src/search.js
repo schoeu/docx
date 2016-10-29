@@ -8,15 +8,14 @@ var fs = require('fs-extra');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
-var Segment = require('segment');
 var cache;
 var CONF;
 var searchConf = {};
+var usePinyin;
 
 // 创建实例
-var segment = new Segment();
-// 使用默认的识别模块及字典
-segment.useDefault();
+var segment;
+
 
 /**
  * 内容搜索
@@ -69,68 +68,90 @@ function searchContent(key, content) {
 
 function search(type, key) {
     key = key || '';
-
-    var keys = segment.doSegment(key, {
-        simple: true
-    });
-
+    var titleSe = [];
     // 如果有关键词,则开始搜索
     if (!key.trim().length) {
         return [];
     }
     if (type === 'title') {
-        var titleSe = [];
-        cache.forEach(function (it) {
-            var em = [key].concat(keys);
-            var isGet = false;
-            var pos = it.pos || [];
-            var title = it.title || '';
-            var initials = it.initials || '';
+        // 启用拼音搜索
+        if (usePinyin) {
+            var titleKeys = segment.doSegment(key, {
+                simple: true
+            });
+            cache.forEach(function (it) {
+                var em = [key].concat(titleKeys);
+                var isGet = false;
+                var pos = it.pos || [];
+                var title = it.title || '';
+                var initials = it.initials || '';
 
-            // spell检索
-            var sIdx = it.spell.indexOf(key);
-            if (sIdx > -1) {
-                var pIdx = pos.indexOf(sIdx);
-                if (pIdx > -1) {
-                    var wordCount = 0;
-                    for (var i=pIdx; i<pos.length; i++) {
-                        if ((sIdx + key.length) <= pos[i]) {
-                            break;
+                // spell检索
+                var sIdx = it.spell.indexOf(key);
+                if (sIdx > -1) {
+                    var pIdx = pos.indexOf(sIdx);
+                    if (pIdx > -1) {
+                        var wordCount = 0;
+                        for (var i=pIdx; i<pos.length; i++) {
+                            if ((sIdx + key.length) <= pos[i]) {
+                                break;
+                            }
+                            wordCount ++;
                         }
-                        wordCount ++;
+                        var sele = title.substr(pIdx, wordCount);
+                        em.push(sele);
+                        isGet = true;
                     }
-                    var sele = title.substr(pIdx, wordCount);
-                    em.push(sele);
+                }
+
+                // initials检索
+                var iIdex = initials.indexOf(key);
+                if (iIdex > -1) {
+                    var iele = title.substr(iIdex, key.length);
+                    em.push(iele);
                     isGet = true;
                 }
-            }
 
-            // initials检索
-            var iIdex = initials.indexOf(key);
-            if (iIdex > -1) {
-                var iele = title.substr(iIdex, key.length);
-                em.push(iele);
-                isGet = true;
-            }
+                // 去重
+                em = _.uniq(em);
+                var emkeys = em.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
+                var emReg = new RegExp(emkeys,'img');
 
-            // 去重
-            em = _.uniq(em);
-            var emkeys = em.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
-            var emReg = new RegExp(emkeys,'img');
+                if (isGet || emReg.exec(title)) {
 
-            if (isGet || emReg.exec(title)) {
+                    // 飘红title关键字
+                    var title = title.replace(emReg, function (m) {
+                        return '<span class="hljs-string">' + m + '</span>';
+                    });
 
-                // 飘红title关键字
-                var title = title.replace(emReg, function (m) {
+                    titleSe.push({
+                        path: it.path,
+                        title: title
+                    });
+                }
+            });
+        }
+        // 字母搜索,适合无中文环境
+        else {
+            var forReg = new RegExp(key,'ig');
+            var forIsMatched = false;
+            cache.forEach(function (it) {
+                var title = it.title || '';
+                forIsMatched = false;
+                // 飘红内容关键字
+                var forTitle = title.replace(forReg, function (m) {
+                    forIsMatched = true;
                     return '<span class="hljs-string">' + m + '</span>';
                 });
-
-                titleSe.push({
-                    path: it.path,
-                    title: title
-                });
-            }
-        });
+                if (forIsMatched) {
+                    // 保存匹配结果
+                    titleSe.push({
+                        path: it.path,
+                        title: forTitle
+                    });
+                }
+            });
+        }
 
         return titleSe;
     }
@@ -138,7 +159,13 @@ function search(type, key) {
         var mdFiles = glob.sync(path.join(CONF.docPath, '**/*.md')) || [];
         var htmlFiles = glob.sync(path.join(CONF.docPath, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
-        var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
+        var cutkeys = key;
+        if (usePinyin) {
+            var titleKeys = segment.doSegment(key, {
+                simple: true
+            });
+            cutkeys = titleKeys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
+        }
         var titleReg = /^\s*\#+\s?(.+)/;
         var reg = new RegExp(cutkeys,'img');
         var searchRs = [];
@@ -191,7 +218,17 @@ function search(type, key) {
  * */
 module.exports = function (conf) {
     CONF = conf;
+    usePinyin = CONF.usePinyin;
     searchConf = CONF.searchConf || {};
+
+    if (usePinyin) {
+        var Segment = require('segment');
+        // 创建实例
+        segment = new Segment();
+        // 使用默认的识别模块及字典
+        segment.useDefault();
+    }
+
     return {
         readCache: function () {
             var cacheDir = conf.cacheDir;
