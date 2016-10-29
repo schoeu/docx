@@ -76,7 +76,7 @@ Docx.prototype = {
         var me = this;
 
         // 获取配置
-        var confPara = me.getConf(conf);
+        var confPara = utils.getConf(conf);
         var docPath = confPara.path;
 
         if (!docPath) {
@@ -169,27 +169,6 @@ Docx.prototype = {
 
         // 端口监听
         app.listen(CONF.port || 8910);
-    },
-
-    /**
-     * 配置处理
-     *
-     * @param {String} conf 配置文件相对路径
-     * @return {undefined}
-     * */
-    getConf: function (conf) {
-
-        conf = conf ? conf : './docx-conf.json';
-
-        // 配置文件设置,如果是绝对路径,则使用绝对路径,如果是相对路径,则计算出最终路径
-        if (!path.isAbsolute(conf)) {
-            conf = path.join(process.cwd(), conf);
-        }
-
-        // 读取配置内容
-        var json = fs.readJsonSync(conf);
-
-        return json || '';
     },
 
     /**

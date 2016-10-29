@@ -3,7 +3,7 @@
  * @author schoeu
  * */
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
 var highlight = require('highlight.js');
 var marked = require('marked');
@@ -52,5 +52,26 @@ module.exports = {
      * */
     getMarked: function (content) {
         return marked(content);
+    },
+
+    /**
+     * 配置处理
+     *
+     * @param {String} conf 配置文件相对路径
+     * @return {undefined}
+     * */
+    getConf: function (conf) {
+
+        conf = conf ? conf : './docx-conf.json';
+
+        // 配置文件设置,如果是绝对路径,则使用绝对路径,如果是相对路径,则计算出最终路径
+        if (!path.isAbsolute(conf)) {
+            conf = path.join(process.cwd(), conf);
+        }
+
+        // 读取配置内容
+        var json = fs.readJsonSync(conf);
+
+        return json || '';
     }
 };
