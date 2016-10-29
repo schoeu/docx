@@ -74,12 +74,13 @@ function search(type, key) {
         return [];
     }
     if (type === 'title') {
+        // 启用拼音搜索
         if (usePinyin) {
-            var keys = segment.doSegment(key, {
+            var titleKeys = segment.doSegment(key, {
                 simple: true
             });
             cache.forEach(function (it) {
-                var em = [key].concat(keys);
+                var em = [key].concat(titleKeys);
                 var isGet = false;
                 var pos = it.pos || [];
                 var title = it.title || '';
@@ -130,12 +131,14 @@ function search(type, key) {
                 }
             });
         }
+        // 字母搜索,适合无中文环境
         else {
             var forReg = new RegExp(key,'ig');
+            var forIsMatched = false;
             cache.forEach(function (it) {
                 var title = it.title || '';
+                forIsMatched = false;
                 // 飘红内容关键字
-                var forIsMatched = false;
                 var forTitle = title.replace(forReg, function (m) {
                     forIsMatched = true;
                     return '<span class="hljs-string">' + m + '</span>';
@@ -156,7 +159,13 @@ function search(type, key) {
         var mdFiles = glob.sync(path.join(CONF.docPath, '**/*.md')) || [];
         var htmlFiles = glob.sync(path.join(CONF.docPath, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
-        var cutkeys = keys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
+        var cutkeys = key;
+        if (usePinyin) {
+            var titleKeys = segment.doSegment(key, {
+                simple: true
+            });
+            cutkeys = titleKeys.join(' ').replace(/\s+/img, '|').replace(/^(\|)*|(\|)*$/img, '');
+        }
         var titleReg = /^\s*\#+\s?(.+)/;
         var reg = new RegExp(cutkeys,'img');
         var searchRs = [];

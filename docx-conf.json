@@ -5,6 +5,7 @@
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "logPath": "./log",
+  "usePinyin": false,
   "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",
   "extUrls": {
