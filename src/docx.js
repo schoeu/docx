@@ -29,7 +29,6 @@ var app = express();
 var htmlStr = '';
 var CONF = {};
 var searchFn = {};
-var isUpdated = false;
 var HBS_EXTNAME = 'hbs';
 
 // 默认配置,减少配置文件条目数,增加易用性与容错
@@ -152,14 +151,7 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        var dirsConf = path.join(CONF.docPath, CONF.dirsConfName);
-        try {
-            var stat = fs.statSync(dirsConf);
-            if (stat) {
-                me.dirname = fs.readJsonSync(dirsConf);
-            }
-        }
-        catch (e) {}
+        me.getDirsConf();
 
         // 根据文档获取文档结构树
         me.getDocTree();
@@ -255,19 +247,6 @@ Docx.prototype = {
         var ua = headers['user-agent'] || '';
         var time = Date.now();
 
-        if (isUpdated) {
-            // 刷新缓存
-            me.preRun();
-
-            // 重新生成DOM树
-            me.getDocTree();
-
-            // 重新读取缓存,用于刷新搜索
-            searchFn.readCache();
-
-            // 更新状态
-            isUpdated = false;
-        }
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
         var mdPath = path.join(CONF.docPath, pathName);
@@ -363,6 +342,7 @@ Docx.prototype = {
         var me = this;
         var walkArr = [];
         var dirnameMap = {};
+        var confDirname = me.dirname || [];
         docWalker(dirs, walkArr);
         function docWalker(dirs, dirCtt) {
             var dirArr = fs.readdirSync(dirs);
@@ -371,7 +351,6 @@ Docx.prototype = {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
                 var relPath = childPath.replace(CONF.docPath, '');
-                var confDirname = me.dirname || [];
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
 
@@ -379,6 +358,7 @@ Docx.prototype = {
                     if (me.ignorDor.indexOf(it) === -1) {
                         // 文件夹设置名称获取
                         var crtName = it || '';
+
                         for(var index=0, length=confDirname.length; index<length; index++) {
                             var dnItems = confDirname[index];
                             if (dnItems[it]) {
@@ -490,18 +470,28 @@ Docx.prototype = {
         child_process.exec('git pull', {
             cwd: CONF.docPath
         }, function (err, result) {
+            // 清除lru缓存
+            cache.reset();
+
+            // 重新生成搜索缓存文件
+            me.preRun();
+
+            // 更新文件名命令配置
+            me.getDirsConf();
+
+            // 重新生成DOM树
+            me.getDocTree();
+
+            // 重新读取缓存,用于刷新搜索
+            searchFn.readCache();
+
+            // 清除文件缓存
+            me.logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});
+
             if (err) {
                 me.logger.error(err);
             }
-            else {
-                // 清除lru缓存
-                cache.reset();
-
-                // 清除文件缓存
-                isUpdated = true;
-                me.logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});
-                res.end('update cache.');
-            }
+            res.end('update cache.');
         });
     },
 
@@ -528,6 +518,24 @@ Docx.prototype = {
             }
         }
         return compiledPageCache[pagePath](data);
+    },
+
+    /**
+     * 更新文件夹名配置缓存
+     *
+     * @return {undefined} undefined
+     * */
+    getDirsConf: function () {
+        var me = this;
+
+        var dirsConf = path.join(CONF.docPath, CONF.dirsConfName);
+        try {
+            var stat = fs.statSync(dirsConf);
+            if (stat) {
+                me.dirname = fs.readJsonSync(dirsConf);
+            }
+        }
+        catch (e) {}
     }
 
 };
