@@ -1,5 +1,5 @@
 /**
- * @file docx.js
+ * @file index.js
  * @description 文档平台主文件
  * @author schoeu
  * */
@@ -137,7 +137,7 @@ Docx.prototype = {
             app.enable('view cache');
         }
 
-        var themePath = path.join(__dirname, '..', 'themes', CONF.theme);
+        var themePath = path.join(__dirname, '../..', 'themes', CONF.theme);
         me.themePath = path.join(themePath, 'views');
 
         app.engine('hbs', hbs.express4({
@@ -540,4 +540,5 @@ Docx.prototype = {
 
 };
 
-new Docx(process.argv[2]);
+
+module.exports = Docx;
