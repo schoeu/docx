@@ -9,15 +9,20 @@ var express = require('express');
 var hbs = require('express-hbs');
 var bodyParser = require('body-parser');
 
+
 var HBS_EXTNAME = 'hbs';
 var app = express();
 
 module.exports = {
     start: function (port) {
-        app.enable('view cache');
-        app.set('view engine', HBS_EXTNAME);
-        app.set('views', path.join(__dirname, '../../', 'views'));
+        var viewsPath = path.join(__dirname, '../../', 'views');
 
+        //app.enable('view cache');
+        app.set('view engine', HBS_EXTNAME);
+        app.set('views', viewsPath);
+        app.engine('hbs', hbs.express4({
+            partialsDir: viewsPath
+        }));
         app.use(express.static(path.join(__dirname, '../../', 'public')));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: false}));
@@ -31,6 +36,6 @@ module.exports = {
 function routes() {
     // 文档主路径
     app.get('/', function (req, res) {
-        res.end('111');
+        res.render('index');
     });
 }
