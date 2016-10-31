@@ -35,7 +35,7 @@ module.exports = {
             // /^\s*\#+\s?(.+)/
             // /^\s*#+\s?([^#\s]+)/
             // /^\s*\#+\s?([^\#]+)\s*\#?/
-            titleArr =  /^\s*#+\s?([^#\s]+)/.exec(content) || [];
+            titleArr =  /^\s*#+\s?([^#\r\n]+)/.exec(content) || [];
             return titleArr[1] || '';
         }
         else if (ext === '.html' || ext === '.htm'){
