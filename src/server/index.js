@@ -104,7 +104,8 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        config.refresh();
+        //config.refresh();
+        me.getDirsConf();
 
         // 根据文档获取文档结构树
         me.getDocTree();
@@ -434,7 +435,8 @@ Docx.prototype = {
             preprocessor();
 
             // 更新文件名命令配置
-            config.refresh();
+            //config.refresh();
+            me.getDirsConf();
 
             // 重新生成DOM树
             me.getDocTree();
@@ -475,6 +477,24 @@ Docx.prototype = {
             }
         }
         return compiledPageCache[pagePath](data);
+    },
+
+    /**
+     * 更新文件夹名配置缓存
+     *
+     * @return {undefined} undefined
+     * */
+    getDirsConf: function () {
+        var me = this;
+
+        var dirsConf = path.join(config.get('docPath'), config.get('dirsConfName'));
+        try {
+            var stat = fs.statSync(dirsConf);
+            if (stat) {
+                me.dirname = fs.readJsonSync(dirsConf);
+            }
+        }
+        catch (e) {}
     }
 };
 
