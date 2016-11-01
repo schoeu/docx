@@ -7,7 +7,10 @@ var fs = require('fs-extra');
 var path = require('path');
 var highlight = require('highlight.js');
 var marked = require('marked');
+var logger = require('./logger.js');
 var config = require('../config');
+var HBS_EXTNAME = 'hbs';
+var compiledPageCache = {};
 
 // markdown中渲染代码高亮处理
 marked.setOptions({
@@ -198,5 +201,30 @@ module.exports = {
         });
         // 合并数据,文档最前
         return fileCtt.concat(rs);
+    },
+
+    /**
+     * 模板异步编译处理
+     *
+     * @param {String} 模板名
+     * @param {Object} data 替换对象
+     * @return {String} html字符串
+     * */
+    compilePre: function (pagePath, data) {
+        var me = this;
+        data = data || {};
+
+        // 缓存编译模板
+        if (!compiledPageCache[pagePath])  {
+            try {
+                var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.' + HBS_EXTNAME)).toString();
+                compiledPageCache[pagePath] = hbs.compile(compileStr);
+            }
+            catch (e) {
+                logger.error(e);
+                return '';
+            }
+        }
+        return compiledPageCache[pagePath](data);
     }
 };

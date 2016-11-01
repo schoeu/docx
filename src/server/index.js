@@ -40,7 +40,6 @@ function Docx(conf) {
 }
 
 var errorType = {'notfound': '/images/notfound.png', 'othererror': '/images/othererror.png'};
-var compiledPageCache = {};
 
 Docx.prototype = {
     contributor: Docx,
@@ -153,7 +152,7 @@ Docx.prototype = {
             var time = Date.now();
             var ua = req.headers['user-agent'] || '';
             // 错误页面
-            var errPg = me.compilePre('error', {errorType: errorType['notfound']});
+            var errPg = utils.compilePre('error', {errorType: errorType['notfound']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
             logger.error({access: req.url, isCache: false, error: 'notfound', referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'});
@@ -163,7 +162,7 @@ Docx.prototype = {
         app.use(function(err, req, res, next) {
             res.status(err.status || 500);
             // 错误页面
-            var errPg = me.compilePre('error', {errorType: errorType['othererror']});
+            var errPg = utils.compilePre('error', {errorType: errorType['othererror']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
             logger.error(err);
@@ -189,7 +188,7 @@ Docx.prototype = {
             brandStr += '<li>' + it + '</li>';
         });
         //var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
-        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: config.get('headText')});
+        var rsHTML = utils.compilePre('pjax', {brandData: brandStr, mdData: content, headText: config.get('headText')});
         return rsHTML;
     },
 
@@ -241,7 +240,7 @@ Docx.prototype = {
             // 如果找不到文件,则返回错误提示页
             else if (err) {
                 // 错误页面
-                var errPg =me.compilePre('error', {errorType: errorType['notfound']});
+                var errPg = utils.compilePre('error', {errorType: errorType['notfound']});
 
                 // 判断是pjax请求则返回html片段
                 if (isPjax) {
@@ -353,31 +352,6 @@ Docx.prototype = {
             }
             res.end('update cache.');
         });
-    },
-
-    /**
-     * 模板异步编译处理
-     *
-     * @param {String} 模板名
-     * @param {Object} data 替换对象
-     * @return {String} html字符串
-     * */
-    compilePre: function (pagePath, data) {
-        var me = this;
-        data = data || {};
-
-        // 缓存编译模板
-        if (!compiledPageCache[pagePath])  {
-            try {
-                var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.' + HBS_EXTNAME)).toString();
-                compiledPageCache[pagePath] = hbs.compile(compileStr);
-            }
-            catch (e) {
-                logger.error(e);
-                return '';
-            }
-        }
-        return compiledPageCache[pagePath](data);
     }
 };
 
