@@ -1,13 +1,19 @@
 var path = require('path');
 var fs = require('fs-extra');
 
-var confFile = './docx-conf.json';
-var confPath = path.join('../..', confFile);
+var confFile = '../../docx-conf.json';
+var conf = getConf();
+
 
 // 获取配置
 function getConf() {
     // 读取配置内容
-    var consJson = fs.readJsonSync(confPath);
+    var confJson = fs.readJsonSync(path.join(__dirname, confFile));
+
+    var docPath = confJson.path;
+    if (!path.isAbsolute(docPath)) {
+        docPath = path.join(process.cwd(), docPath);
+    }
 
     // 默认配置,减少配置文件条目数,增加易用性与容错
     var defaultOptions = {
@@ -28,26 +34,26 @@ function getConf() {
         debug: true,
         usePinyin: true,
         ignoreDir: [],
-        docPath: consJson.path
+        docPath: docPath
     };
 
     // 合并配置
-    return Object.assign({}, defaultOptions, consJson);
+    return Object.assign({}, defaultOptions, confJson);
 
 }
 
 module.exports = {
-    conf: getConf(),
+    conf: conf,
     set: function (key, value) {
-        if (consJson && key) {
-            consJson[key] = value;
+        if (conf && key) {
+            conf[key] = value;
             return true;
         }
         return false;
     },
     get: function (key) {
-        if (consJson && key) {
-            var confItem = consJson[key];
+        if (conf && key) {
+            var confItem = conf[key];
             if (confItem) {
                 return confItem;
             }
@@ -55,6 +61,7 @@ module.exports = {
         return '';
     },
     refresh: function () {
-        this.conf = getConf();
+        getConf();
+        this.conf = conf;
     }
 };

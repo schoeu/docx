@@ -27,7 +27,6 @@ var cache = LRU({max: 500});
 var app = express();
 
 var htmlStr = '';
-var CONF = {};
 var HBS_EXTNAME = 'hbs';
 
 /**
