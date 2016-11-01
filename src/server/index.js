@@ -17,6 +17,7 @@ var hbs = require('express-hbs');
 var warning = require('./warning.js');
 var utils = require('./utils.js');
 var log = require('./logger.js');
+var config = require('../config');
 
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
@@ -30,27 +31,6 @@ var htmlStr = '';
 var CONF = {};
 var searchFn = {};
 var HBS_EXTNAME = 'hbs';
-
-// 默认配置,减少配置文件条目数,增加易用性与容错
-var defaultOptions = {
-    logPath: './log',
-    dirsConfName: 'map.json',
-    port: '8910',
-    logLevel: 'info',
-    index: '/readme.md',
-    theme: 'default',
-    preprocessScript: '',
-    cacheDir: './cache.json',
-    searchConf: {
-        matchDeep: 2,
-        matchWidth: 120
-    },
-    extUrls: {},
-    waringFlag: false,
-    debug: true,
-    usePinyin: true,
-    ignoreDir: []
-};
 
 /**
  * Docx构造函数
@@ -75,8 +55,7 @@ Docx.prototype = {
         var me = this;
 
         // 获取配置
-        var confPara = utils.getConf(conf);
-        var docPath = confPara.path;
+        var docPath = config.get('docPath');
 
         if (!docPath) {
             throw new Error('not valid conf file.');
@@ -88,10 +67,8 @@ Docx.prototype = {
             }
         }
 
-        // 合并配置
-        CONF = Object.assign({
-            docPath: docPath
-        }, defaultOptions, confPara);
+
+        CONF = config.conf;
 
         // 日志路径设置
         me.logger = log(CONF);
@@ -105,14 +82,14 @@ Docx.prototype = {
 
         // 公共变量处理
         if (!_.isEmpty(CONF)) {
-            var headText = CONF.headText || '';
-            me.ignorDor = CONF.ignoreDir;
+            var headText = config.get('headText');
+            me.ignorDor = config.get('ignoreDir');
             me.locals = {
-                headText: headText || '',
-                title: CONF.title || headText,
-                links: CONF.extUrls.links || [],
-                supportInfo: CONF.supportInfo || '',
-                label: CONF.extUrls.label
+                headText: headText,
+                title: config.get('title') || headText,
+                links: config.get('extUrls').links || [],
+                supportInfo: config.get('supportInfo'),
+                label: config.get('extUrls').label
             };
 
             // 返回搜索方法
@@ -193,7 +170,7 @@ Docx.prototype = {
         app.all('/api/update', me.update.bind(me));
 
         // 委托其他静态资源
-        app.use('/', express.static(CONF.docPath));
+        app.use('/', express.static(config.get('docPath')));
 
         // 路由容错处理
         app.get('*', function (req, res) {
