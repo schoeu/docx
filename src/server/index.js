@@ -16,20 +16,18 @@ var hbs = require('express-hbs');
 
 var warning = require('./warning.js');
 var utils = require('./utils.js');
-var log = require('./logger.js');
+var logger = require('./logger.js');
 var config = require('../config');
 
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
-var searchModule = require('./search.js');
-var search;
+var search = require('./search.js');
 var cache = LRU({max: 500});
 
 var app = express();
 
 var htmlStr = '';
 var CONF = {};
-var searchFn = {};
 var HBS_EXTNAME = 'hbs';
 
 /**
@@ -68,14 +66,8 @@ Docx.prototype = {
         }
 
 
-        CONF = config.conf;
-
-        // 日志路径设置
-        me.logger = log(CONF);
-
         // 文件预处理
-        me.preRun = preprocessor.init(CONF, me.logger);
-        me.preRun();
+        preprocessor();
 
         // 文件夹命名设置默认为空
         me.dirname = [];
@@ -92,13 +84,8 @@ Docx.prototype = {
                 label: config.get('extUrls').label
             };
 
-            // 返回搜索方法
-            searchFn = searchModule(CONF);
-
             // 读取缓存,用于搜索
-            searchFn.readCache();
-
-            search = searchFn.search;
+            search.readCache();
 
             // 如果邮件报警开启,则初始化邮件报警模块
             if (CONF.waringFlag) {
@@ -158,7 +145,7 @@ Docx.prototype = {
         app.post('/api/search', function (req, res) {
             var key = req.body.name;
             var searchType = req.body.type;
-            var searchRs = search(searchType, key);
+            var searchRs = search.search(searchType, key);
 
             // 搜索成功,返回内容
             res.json({
@@ -180,7 +167,7 @@ Docx.prototype = {
             var errPg = me.compilePre('error', {errorType: errorType['notfound']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
-            me.logger.error({access: req.url, isCache: false, error: 'notfound', referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'});
+            logger.error({access: req.url, isCache: false, error: 'notfound', referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'});
         });
 
         // 容错处理
@@ -190,7 +177,7 @@ Docx.prototype = {
             var errPg = me.compilePre('error', {errorType: errorType['othererror']});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
-            me.logger.error(err);
+            logger.error(err);
         });
     },
 
@@ -256,7 +243,7 @@ Docx.prototype = {
                     var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
                     res.render('main', parseObj);
                 }
-                me.logger.info({'access:': pathName, 'isCache:': hasCache, error: null, referer: headers.referer, ua: ua, during: Date.now() - time + 'ms'});
+                logger.info({'access:': pathName, 'isCache:': hasCache, error: null, referer: headers.referer, ua: ua, during: Date.now() - time + 'ms'});
             }
             // 如果找不到文件,则返回错误提示页
             else if (err) {
@@ -272,7 +259,7 @@ Docx.prototype = {
                     var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
                     res.render('main', errPgObj);
                 }
-                me.logger.error(err);
+                logger.error(err);
             }
         });
     },
@@ -451,7 +438,7 @@ Docx.prototype = {
             cache.reset();
 
             // 重新生成搜索缓存文件
-            me.preRun();
+            preprocessor();
 
             // 更新文件名命令配置
             me.getDirsConf();
@@ -460,13 +447,13 @@ Docx.prototype = {
             me.getDocTree();
 
             // 重新读取缓存,用于刷新搜索
-            searchFn.readCache();
+            search.readCache();
 
             // 清除文件缓存
-            me.logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});
+            logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});
 
             if (err) {
-                me.logger.error(err);
+                logger.error(err);
             }
             res.end('update cache.');
         });
@@ -490,7 +477,7 @@ Docx.prototype = {
                 compiledPageCache[pagePath] = hbs.compile(compileStr);
             }
             catch (e) {
-                me.logger.error(e);
+                logger.error(e);
                 return '';
             }
         }
