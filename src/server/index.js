@@ -14,7 +14,7 @@ var bodyParser = require('body-parser');
 var _ = require('lodash');
 var hbs = require('express-hbs');
 
-var warning = require('./warning.js');
+var sendMail = require('./warning.js');
 var utils = require('./utils.js');
 var logger = require('./logger.js');
 var config = require('../config');
@@ -73,35 +73,25 @@ Docx.prototype = {
         me.dirname = [];
 
         // 公共变量处理
-        if (!_.isEmpty(CONF)) {
-            var headText = config.get('headText');
-            me.ignorDor = config.get('ignoreDir');
-            me.locals = {
-                headText: headText,
-                title: config.get('title') || headText,
-                links: config.get('extUrls').links || [],
-                supportInfo: config.get('supportInfo'),
-                label: config.get('extUrls').label
-            };
+        var headText = config.get('headText');
+        me.ignorDor = config.get('ignoreDir');
+        me.locals = {
+            headText: headText,
+            title: config.get('title') || headText,
+            links: config.get('extUrls').links || [],
+            supportInfo: config.get('supportInfo'),
+            label: config.get('extUrls').label
+        };
 
-            // 读取缓存,用于搜索
-            search.readCache();
-
-            // 如果邮件报警开启,则初始化邮件报警模块
-            if (CONF.waringFlag) {
-                me.mail = warning(CONF);
-            }
-        }
-        else {
-            throw new Error('conf file is empty.');
-        }
+        // 读取缓存,用于搜索
+        search.readCache();
 
         // express 视图缓存
-        if (!CONF.debug) {
+        if (!config.get('debug')) {
             app.enable('view cache');
         }
 
-        var themePath = path.join(__dirname, '../..', 'themes', CONF.theme);
+        var themePath = path.join(__dirname, '../..', 'themes', config.get('theme'));
         me.themePath = path.join(themePath, 'views');
 
         app.engine('hbs', hbs.express4({
@@ -115,7 +105,7 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        me.getDirsConf();
+        config.refresh();
 
         // 根据文档获取文档结构树
         me.getDocTree();
@@ -124,7 +114,7 @@ Docx.prototype = {
         me.routes();
 
         // 端口监听
-        app.listen(CONF.port || 8910);
+        app.listen(config.get('port') || 8910);
     },
 
     /**
@@ -135,7 +125,7 @@ Docx.prototype = {
 
         // 文档主路径
         app.get('/', function (req, res) {
-            res.redirect(CONF.index);
+            res.redirect(config.get('index'));
         });
 
         // markdown文件路由
@@ -178,6 +168,10 @@ Docx.prototype = {
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
             logger.error(err);
+            // 如果邮件报警开启,则初始化邮件报警模块
+            if (config.get('waringFlag')) {
+                warning(err.toString());
+            }
         });
     },
 
@@ -196,7 +190,7 @@ Docx.prototype = {
             brandStr += '<li>' + it + '</li>';
         });
         //var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
-        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: CONF.headText});
+        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: config.get('headText')});
         return rsHTML;
     },
 
@@ -213,7 +207,7 @@ Docx.prototype = {
 
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-        var mdPath = path.join(CONF.docPath, pathName);
+        var mdPath = path.join(config.get('docPath'), pathName);
         var isPjax = headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.readFile(mdPath, 'utf8', function (err, file) {
@@ -286,7 +280,7 @@ Docx.prototype = {
      * */
     getDocTree: function () {
         // 根据markdown文档生成文档树
-        var dirMap = this.walker(CONF.docPath);
+        var dirMap = this.walker(config.get('docPath'));
 
         // 数据排序处理
         var sortedData = this.dirSort(dirMap);
@@ -314,7 +308,7 @@ Docx.prototype = {
             dirArr.forEach(function(it) {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
-                var relPath = childPath.replace(CONF.docPath, '');
+                var relPath = childPath.replace(config.get('docPath'), '');
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
 
@@ -432,7 +426,7 @@ Docx.prototype = {
 
         // 更新代码
         child_process.exec('git pull', {
-            cwd: CONF.docPath
+            cwd: config.get('docPath')
         }, function (err, result) {
             // 清除lru缓存
             cache.reset();
@@ -441,7 +435,7 @@ Docx.prototype = {
             preprocessor();
 
             // 更新文件名命令配置
-            me.getDirsConf();
+            config.refresh();
 
             // 重新生成DOM树
             me.getDocTree();
@@ -482,26 +476,7 @@ Docx.prototype = {
             }
         }
         return compiledPageCache[pagePath](data);
-    },
-
-    /**
-     * 更新文件夹名配置缓存
-     *
-     * @return {undefined} undefined
-     * */
-    getDirsConf: function () {
-        var me = this;
-
-        var dirsConf = path.join(CONF.docPath, CONF.dirsConfName);
-        try {
-            var stat = fs.statSync(dirsConf);
-            if (stat) {
-                me.dirname = fs.readJsonSync(dirsConf);
-            }
-        }
-        catch (e) {}
     }
-
 };
 
 
