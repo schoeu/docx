@@ -14,7 +14,7 @@ var bodyParser = require('body-parser');
 var _ = require('lodash');
 var hbs = require('express-hbs');
 
-var sendMail = require('./warning.js');
+var warning = require('./warning.js');
 var utils = require('./utils.js');
 var logger = require('./logger.js');
 var config = require('../config');
@@ -173,24 +173,6 @@ Docx.prototype = {
         });
     },
 
-    /**
-     * 处理&组装面包屑数据
-     * @param {String} pathName 文件路径
-     * @param {String} content markdown内容
-     * @return {String} 转换为中文的HTML字符串
-     * */
-    getPjaxContent: function (pathName, content) {
-        var me = this;
-        var brandStr = '';
-        var pathArr = pathName.split('/');
-        var brandData = me.processBreadcrumb(pathArr);
-        brandData.forEach(function (it) {
-            brandStr += '<li>' + it + '</li>';
-        });
-        //var rsHTML = htmlCodes.replace('{{brandData}}', brandStr).replace('{{mdData}}', content);
-        var rsHTML = utils.compilePre('pjax', {brandData: brandStr, mdData: content, headText: config.get('headText')});
-        return rsHTML;
-    },
 
     /**
      * 处理mardown文档请求
@@ -227,7 +209,7 @@ Docx.prototype = {
 
                 // 判断是pjax请求则返回html片段
                 if (isPjax) {
-                    var rsPjaxDom = me.getPjaxContent(pathName, content);
+                    var rsPjaxDom = utils.getPjaxContent(pathName, content);
                     res.end(rsPjaxDom);
                 }
                 // 否则返回整个模板
@@ -244,7 +226,7 @@ Docx.prototype = {
 
                 // 判断是pjax请求则返回html片段
                 if (isPjax) {
-                    res.end(me.getPjaxContent(pathName, errPg));
+                    res.end(utils.getPjaxContent(pathName, errPg));
                 }
                 // 否则返回整个模板
                 else {
@@ -254,23 +236,6 @@ Docx.prototype = {
                 logger.error(err);
             }
         });
-    },
-
-    /**
-     * 处理&组装面包屑数据
-     * @param {Array} breadcrumb 面包屑原始数据
-     * @return {Array} 转换为中文的数据
-     * */
-    processBreadcrumb: function(breadcrumb) {
-        var me = this;
-        breadcrumb = breadcrumb || [];
-        var dirMaps = [];
-        breadcrumb.forEach(function (it) {
-            if (it && it.indexOf('.md') < 0) {
-                dirMaps.push(me.dirnameMap[it] || '');
-            }
-        });
-        return dirMaps;
     },
 
     /**
@@ -335,7 +300,6 @@ Docx.prototype = {
             preprocessor();
 
             // 更新文件名命令配置
-            //config.refresh();
             me.dirname = utils.getDirsConf();
 
             // 重新生成DOM树
@@ -354,6 +318,5 @@ Docx.prototype = {
         });
     }
 };
-
 
 module.exports = Docx;

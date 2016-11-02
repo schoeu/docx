@@ -5,12 +5,17 @@
 
 var fs = require('fs-extra');
 var path = require('path');
+var hbs = require('express-hbs');
 var highlight = require('highlight.js');
 var marked = require('marked');
 var logger = require('./logger.js');
 var config = require('../config');
 var HBS_EXTNAME = 'hbs';
 var compiledPageCache = {};
+
+// 获取主题路径
+var themePath = path.join(__dirname, '../..', 'themes', config.get('theme'));
+var themeViews = path.join(themePath, 'views');
 
 // markdown中渲染代码高亮处理
 marked.setOptions({
@@ -167,6 +172,9 @@ module.exports = {
                 }
             });
         }
+
+        me.dirnameMap = dirnameMap;
+
         return {
             walkArr: walkArr,
             dirnameMap: dirnameMap
@@ -217,7 +225,7 @@ module.exports = {
         // 缓存编译模板
         if (!compiledPageCache[pagePath])  {
             try {
-                var compileStr = fs.readFileSync(path.join(me.themePath, pagePath + '.' + HBS_EXTNAME)).toString();
+                var compileStr = fs.readFileSync(path.join(themeViews, pagePath + '.' + HBS_EXTNAME)).toString();
                 compiledPageCache[pagePath] = hbs.compile(compileStr);
             }
             catch (e) {
@@ -226,5 +234,41 @@ module.exports = {
             }
         }
         return compiledPageCache[pagePath](data);
+    },
+
+    /**
+     * 处理&组装面包屑数据
+     * @param {Array} breadcrumb 面包屑原始数据
+     * @return {Array} 转换为中文的数据
+     * */
+    processBreadcrumb: function(breadcrumb) {
+        var me = this;
+        breadcrumb = breadcrumb || [];
+        var dirMaps = [];
+        breadcrumb.forEach(function (it) {
+            if (it && it.indexOf('.md') < 0) {
+                dirMaps.push(me.dirnameMap[it] || '');
+            }
+        });
+        return dirMaps;
+    },
+
+    /**
+     * 处理&组装面包屑数据
+     * @param {String} pathName 文件路径
+     * @param {String} content markdown内容
+     * @return {String} 转换为中文的HTML字符串
+     * */
+    getPjaxContent: function (pathName, content) {
+        var me = this;
+        var brandStr = '';
+        var pathArr = pathName.split('/');
+        var brandData = me.processBreadcrumb(pathArr);
+        brandData.forEach(function (it) {
+            brandStr += '<li>' + it + '</li>';
+        });
+
+        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: config.get('headText')});
+        return rsHTML;
     }
 };
