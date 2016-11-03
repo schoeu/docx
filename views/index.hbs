@@ -27,12 +27,19 @@
                 <li role="presentation"><a href="#Docx" data-toggle="tab" class="docx-setuptab">Docx setup</a></li>
                 <li role="presentation"><a href="#Dirs" data-toggle="tab" class="docx-dirstab">Dirs</a></li>
                 <li role="presentation"><a href="#Code" data-toggle="tab" class="docx-codetab">Code</a></li>
+                <li role="presentation"><a href="#Start" data-toggle="tab" class="docx-starttab">Start</a></li>
             </ul>
         </div>
         <div class="col-md-10">
             <div id="myTabContent" class="tab-content">
                 <div class="tab-pane fade in active" id="Docx">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal docx-confform" role="form">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label">实例名称</label>
+                            <div class="col-sm-9 ">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="必填">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="path" class="col-sm-3 control-label">文档路径</label>
                             <div class="col-sm-9 ">
@@ -247,6 +254,15 @@
                         </div>
                     </form>
                 </div>
+                <div class="tab-pane fade" id="Start">
+                    <form class="form-horizontal docx-startform" role="form" action="javascript:void(0)">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9 ">
+                                <button type="submit" class="btn btn-default docx-startbtn">Start Docx!</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -293,7 +309,27 @@
     });
 
     $('.docx-confbtn').on('click', function () {
+        var data = $('.docx-confform').serialize();
+        $.ajax({
+            url: '/setup/conf',
+            data: data
+        }).done(function (data) {
+            console.log(data);
+        });
         $dirstab.tab('show');
+    });
+
+    $('.docx-startbtn').on('click', function () {
+        $.ajax({
+            url: 'setup/start'
+        }).done(function (data) {
+           if (data.errno == 0) {
+               alert('启动成功!');
+           }
+           else {
+               alert('启动失败,错误: ' + data.errmsg || '');
+           }
+        });
     });
 </script>
 </body>

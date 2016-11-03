@@ -319,4 +319,4 @@ Docx.prototype = {
     }
 };
 
-module.exports = Docx;
+new Docx(process.argv[2]);
