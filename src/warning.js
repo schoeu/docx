@@ -4,7 +4,7 @@
  * 邮件报警实现
  * */
 
-var config = require('../config');
+var config = require('./config');
 var warnEmail = config.get('warningEmail');
 var waringFlag = config.get('waringFlag');
 

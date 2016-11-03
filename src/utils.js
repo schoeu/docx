@@ -9,12 +9,12 @@ var hbs = require('express-hbs');
 var highlight = require('highlight.js');
 var marked = require('marked');
 var logger = require('./logger.js');
-var config = require('../config');
+var config = require('./config');
 var HBS_EXTNAME = 'hbs';
 var compiledPageCache = {};
 
 // 获取主题路径
-var themePath = path.join(__dirname, '../..', 'themes', config.get('theme'));
+var themePath = path.join(__dirname, '..', 'themes', config.get('theme'));
 var themeViews = path.join(themePath, 'views');
 
 // markdown中渲染代码高亮处理

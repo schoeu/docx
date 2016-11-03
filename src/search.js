@@ -8,7 +8,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
-var config = require('../config');
+var config = require('./config');
 var cache;
 
 // 创建实例

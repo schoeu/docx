@@ -9,7 +9,7 @@ var winston = require('winston');
 var moment = require('moment');
 var DailyRotateFile=require('winston-daily-rotate-file');
 
-var config = require('../config');
+var config = require('./config');
 
 var MAX_SIZE = 1024 * 1024 * 5;
 var ACCESS_LOG_NAME = 'access.log';

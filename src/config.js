@@ -1,7 +1,13 @@
+/**
+ * @file index.js
+ * @description 文档平台主文件
+ * @author schoeu
+ * */
+
 var path = require('path');
 var fs = require('fs-extra');
 
-var confFile = '../../docx-conf.json';
+var confFile = '../docx-conf.json';
 var conf = getConf();
 
 

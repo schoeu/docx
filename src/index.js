@@ -17,7 +17,7 @@ var hbs = require('express-hbs');
 var warning = require('./warning.js');
 var utils = require('./utils.js');
 var logger = require('./logger.js');
-var config = require('../config');
+var config = require('./config');
 
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
@@ -88,7 +88,7 @@ Docx.prototype = {
             app.enable('view cache');
         }
 
-        var themePath = path.join(__dirname, '../..', 'themes', config.get('theme'));
+        var themePath = path.join(__dirname, '..', 'themes', config.get('theme'));
         me.themePath = path.join(themePath, 'views');
 
         app.engine('hbs', hbs.express4({
@@ -319,4 +319,4 @@ Docx.prototype = {
     }
 };
 
-new Docx(process.argv[2]);
+module.exports = Docx;
