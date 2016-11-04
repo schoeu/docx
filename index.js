@@ -4,8 +4,9 @@
  * @author schoeu
  * */
 
-var Docx = require('./src/index');
+// 配置现行
 var config = require('./src/config');
-new Docx(process.argv[2]);
+config.init(process.argv[2]);
 
-//
+var Docx = require('./src/index');
+new Docx();

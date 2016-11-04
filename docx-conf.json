@@ -5,8 +5,6 @@
   "headText": "PSFE-DOC",
   "title": "PSFE",
   "logPath": "./log",
-  "usePinyin": true,
-  "cacheDir":"./cache.json",
   "supportInfo": "mailto:xx@xxx.com",
   "extUrls": {
     "label": "友情链接",

@@ -5,5 +5,8 @@
  * */
 
 module.exports = function (req, res) {
-
+    var method = req.method;
+    if (method === 'GET') {
+        res.render('setup');
+    }
 };

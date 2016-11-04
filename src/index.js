@@ -14,10 +14,11 @@ var bodyParser = require('body-parser');
 var _ = require('lodash');
 var hbs = require('express-hbs');
 
+// 初始化日志
+var config = require('./config');
 var warning = require('./warning.js');
 var utils = require('./utils.js');
 var logger = require('./logger.js');
-var config = require('./config');
 
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
@@ -34,9 +35,9 @@ var HBS_EXTNAME = 'hbs';
  *
  * @param {String} conf 配置文件相对路径
  * */
-function Docx(conf) {
+function Docx() {
     // 初始化docx
-    this.init(conf);
+    this.init();
 }
 
 var errorType = {'notfound': '/images/notfound.png', 'othererror': '/images/othererror.png'};
@@ -47,7 +48,7 @@ Docx.prototype = {
     /**
      * 初始化DOCX,主要初始化了express,日志模块, 预处理模块, 路由绑定等
      * */
-    init: function (conf) {
+    init: function () {
         var me = this;
 
         // 获取配置
@@ -146,6 +147,11 @@ Docx.prototype = {
 
         // 委托其他静态资源
         app.use('/', express.static(config.get('docPath')));
+
+        app.all('/settings/', function () {
+
+        });
+
 
         // 路由容错处理
         app.get('*', function (req, res) {
