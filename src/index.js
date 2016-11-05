@@ -148,11 +148,6 @@ Docx.prototype = {
         // 委托其他静态资源
         app.use('/', express.static(config.get('docPath')));
 
-        app.all('/settings/', function () {
-
-        });
-
-
         // 路由容错处理
         app.get('*', function (req, res) {
             var time = Date.now();

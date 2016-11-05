@@ -7,6 +7,5 @@
 // 配置现行
 var config = require('./src/config');
 config.init(process.argv[2]);
-
 var Docx = require('./src/index');
 new Docx();
