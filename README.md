@@ -69,9 +69,6 @@ pm2 start src/docx.js -- ../xxx/conf.json
 
   // 默认文档路径,支持相对,绝对路径,可选
   "index": "/readme.md",
-  
-  // 缓存文件路径,支持相对,绝对路径,可选
-  "cacheDir":"./cache.json",
     
   // 技术支持,可选
   // 邮箱填写: mailto:xx@xxx.com
