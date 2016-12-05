@@ -66,7 +66,7 @@ Docx.prototype = {
 
 
         // 文件预处理
-        preprocessor();
+        var preData = preprocessor();
 
         // 文件夹命名设置默认为空
         me.dirname = [];
@@ -82,7 +82,7 @@ Docx.prototype = {
         };
 
         // 读取缓存,用于搜索
-        search.readCache();
+        search.readCache(preData);
 
         // express 视图缓存
         if (!config.get('debug')) {
@@ -298,7 +298,7 @@ Docx.prototype = {
             cache.reset();
 
             // 重新生成搜索缓存文件
-            preprocessor();
+            var preData = preprocessor();
 
             // 更新文件名命令配置
             me.dirname = utils.getDirsConf();
@@ -307,7 +307,7 @@ Docx.prototype = {
             me.getDocTree();
 
             // 重新读取缓存,用于刷新搜索
-            search.readCache();
+            search.readCache(preData);
 
             // 清除文件缓存
             logger.info({message: 'update cache.json', during: Date.now() - time + 'ms'});

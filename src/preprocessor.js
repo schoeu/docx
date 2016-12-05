@@ -13,7 +13,6 @@ var utils = require('./utils.js');
 var logger = require('./logger.js');
 var config = require('./config');
 var tempCache = [];
-var cacheDir = config.get('cacheDir');
 var usePinyin = config.get('usePinyin');
 if (usePinyin) {
     pinyin = require('pinyin');
