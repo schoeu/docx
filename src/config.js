@@ -35,7 +35,6 @@ module.exports = {
             index: '/readme.md',
             theme: 'default',
             preprocessScript: '',
-            cacheDir: './cache.json',
             searchConf: {
                 matchDeep: 2,
                 matchWidth: 120

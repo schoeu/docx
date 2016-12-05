@@ -77,14 +77,5 @@ module.exports = function () {
         });
     });
 
-    // 缓存文件设置,如果是绝对路径,则使用绝对路径, 如果是相对路径,则计算出最终路径
-    if (!path.isAbsolute(cacheDir)) {
-        cacheDir = path.join(process.cwd(), cacheDir);
-    }
-
-    // 没有该目录则创建
-    fs.mkdirsSync(path.dirname(cacheDir));
-
-    // 写入文件
-    fs.outputJsonSync(cacheDir, tempCache);
+    return tempCache;
 };
