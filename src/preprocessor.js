@@ -4,7 +4,6 @@
  * 文件预处理
  * */
 
-var fs = require('fs-extra');
 var path = require('path');
 var child_process = require('child_process');
 var pinyin = {};
