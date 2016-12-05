@@ -8,13 +8,22 @@ var fs = require('fs-extra');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
+var config = require('./config');
 var cache;
-var CONF;
-var searchConf = {};
-var usePinyin;
 
 // 创建实例
 var segment;
+
+var usePinyin = config.get('usePinyin');
+var searchConf = config.get('searchConf') || {};
+
+if (usePinyin) {
+    var Segment = require('segment');
+    // 创建实例
+    segment = new Segment();
+    // 使用默认的识别模块及字典
+    segment.useDefault();
+}
 
 
 /**
@@ -156,8 +165,9 @@ function search(type, key) {
         return titleSe;
     }
     else {
-        var mdFiles = glob.sync(path.join(CONF.docPath, '**/*.md')) || [];
-        var htmlFiles = glob.sync(path.join(CONF.docPath, '**/*.html')) || [];
+        var docPath = config.get('docPath');
+        var mdFiles = glob.sync(path.join(docPath, '**/*.md')) || [];
+        var htmlFiles = glob.sync(path.join(docPath, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
         var cutkeys = key;
         if (usePinyin) {
@@ -188,7 +198,7 @@ function search(type, key) {
             var contentMt = searchContent(cutkeys, content);
 
             var searchCData = {
-                path: it.replace(CONF.docPath, ''),
+                path: it.replace(docPath, ''),
                 title: titleStr,
                 content: contentMt
             };
@@ -213,32 +223,12 @@ function search(type, key) {
 
 /**
  * 搜索
- * @param {String} conf 配置信息
+ * @return {Function} 更新搜索缓存方法
  * @return {Function} 搜索方法
  * */
-module.exports = function (conf) {
-    CONF = conf;
-    usePinyin = CONF.usePinyin;
-    searchConf = CONF.searchConf || {};
-
-    if (usePinyin) {
-        var Segment = require('segment');
-        // 创建实例
-        segment = new Segment();
-        // 使用默认的识别模块及字典
-        segment.useDefault();
-    }
-
-    return {
-        readCache: function () {
-            var cacheDir = conf.cacheDir;
-
-            // 缓存文件设置,如果是绝对路径,则使用绝对路径, 如果是相对路径,则计算出最终路径
-            if (!path.isAbsolute(cacheDir)) {
-                cacheDir = path.join(process.cwd(), cacheDir);
-            }
-            cache = fs.readJsonSync(cacheDir);
-        },
-        search: search
-    };
+module.exports = {
+    readCache: function (data) {
+        cache = data || {};
+    },
+    search: search
 };

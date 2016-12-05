@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>{{title}}</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+    <style>
+        .docx-emailpanel{
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Docx Setting</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked" role="tablist">
+                <li role="presentation"><a href="#Docx" data-toggle="tab" class="docx-setuptab">Docx setup</a></li>
+                <li role="presentation"><a href="#Dirs" data-toggle="tab" class="docx-dirstab">Dirs</a></li>
+                <li role="presentation"><a href="#Code" data-toggle="tab" class="docx-codetab">Code</a></li>
+                <li role="presentation"><a href="#Start" data-toggle="tab" class="docx-starttab">Start</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10">
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="Docx">
+                    <form class="form-horizontal docx-confform" role="form">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label">实例名称</label>
+                            <div class="col-sm-9 ">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="必填">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="path" class="col-sm-3 control-label">文档路径</label>
+                            <div class="col-sm-9 ">
+                                <input type="text" class="form-control" id="path" name="path" placeholder="必填,支持绝对&相对路径">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9 ">
+                                <button type="button" class="btn btn-primary" data-toggle="collapse"
+                                        data-target="#paraaccordion">
+                                    配置其他可选参数
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-group" id="paraaccordion">
+                            <div class="panel">
+                                <div id="collapseOne" class="panel-collapse collapse in">
+                                    <div class="form-group">
+                                        <label for="port" class="col-sm-3 control-label">端口</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="port" name="port" placeholder="请输入端口,默认8910">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ignoreDir" class="col-sm-3 control-label">忽略文件夹</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="ignoreDir" name="ignoreDir" placeholder="选填,文件夹名用逗号隔开">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="debug" class="col-sm-3 control-label">debug模式</label>
+                                        <div class="col-sm-9 ">
+                                            <span class="radio">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" id="debug" value="1">启用
+                                                </label>
+                                            </span>
+                                            <span class="radio">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" id="debug" value="0" checked>禁止
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="headText" class="col-sm-3 control-label">header标题</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="headText" name="headText" placeholder="选填">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="headText" class="col-sm-3 control-label">主题</label>
+                                        <div class="col-sm-9 ">
+                                            <select class="form-control">
+                                                <option value="default">default</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="preprocessscript" class="col-sm-3 control-label">预处理脚本</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="preprocessscript" name="preprocessscript" placeholder="选填,支持绝对&相对路径">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title" class="col-sm-3 control-label">网页标题</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="title" name="title" placeholder="选填,默认为Docx">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="index" class="col-sm-3 control-label">首页路径</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="index" name="index" placeholder="选填,默认为/readme.md">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="waringFlag" class="col-sm-3 control-label">邮件报警</label>
+                                        <div class="col-sm-9 ">
+                                            <span class="radio">
+                                                <label>
+                                                    <input type="radio" name="waringFlag" id="waringFlagy" value="1">启用
+                                                </label>
+                                            </span>
+                                            <span class="radio">
+                                                <label>
+                                                    <input type="radio" name="waringFlag" id="waringFlagn" value="0" checked>禁止
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-group" id="emailaccordion">
+                                        <div class="panel panel-default docx-emailpanel">
+                                            <div id="emailcollapse" class="panel-collapse collapse emailcollapse">
+                                                <div class="form-group">
+                                                    <label for="emailHost" class="col-sm-3 control-label">Email Host</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailHost" name="emailHost" placeholder="邮件服务器">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="emailPort" class="col-sm-3 control-label">Email Port</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailPort" name="emailPort" placeholder="邮件服务器端口">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="emailuser" class="col-sm-3 control-label">Email User</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailuser" name="emailuser" placeholder="用户">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="emailpass" class="col-sm-3 control-label">Password</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailpass" name="emailpass" placeholder="密码">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="emailform" class="col-sm-3 control-label">From</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailform" name="emailform" placeholder="发件人">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="emailto" class="col-sm-3 control-label">To</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailto" name="emailto" placeholder="收件人">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="emailsubject" class="col-sm-3 control-label">Email Subject</label>
+                                                    <div class="col-sm-9 ">
+                                                        <input type="text" class="form-control" id="emailsubject" name="emailsubject" placeholder="邮件标题">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="extUrlsLabel" class="col-sm-3 control-label">友链标签</label>
+                                        <div class="col-sm-9 ">
+                                            <input type="text" class="form-control" id="extUrlsLabel" name="extUrlsLabel" placeholder="选填,链接标签">
+                                        </div>
+                                    </div>
+                                    <div class="panel-group" id="docx-extUrls">
+                                        <div class="panel panel-default docx-emailpanel">
+                                            <div id="docx-eucollapse" class="panel-collapse collapse docx-eucollapse">
+                                                <div class="form-group  docx-flinks">
+                                                    <label for="extUrlsLinks" class="col-sm-3 control-label docx-fllabel">友链</label>
+                                                    <div class="col-sm-9 ">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="extUrlsLinks" name="extUrlsLinks" placeholder="链接">
+                                                            <span class="input-group-btn docx-flbtn">
+                                                                <button class="btn btn-default" type="button">
+                                                                    <span class="glyphicon glyphicon-plus docx-urlsicon"></span>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9 ">
+                                <button type="button" class="btn btn-default docx-confbtn">下一步</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="Dirs">
+                    <form class="form-horizontal" role="form">
+                        <div class="input-group">
+                            <span class="input-group-addon">@</span>
+                            <input type="text" class="form-control" placeholder="Twitterhandle">
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="Code">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-3 control-label">名字</label>
+                            <div class="col-sm-9 ">
+                                <input type="text" class="form-control" id="firstname" placeholder="请输入名字">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-3 control-label">姓</label>
+                            <div class="col-sm-9 ">
+                                <input type="text" class="form-control" id="lastname" placeholder="请输入姓">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9 ">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox">请记住我
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9 ">
+                                <button type="submit" class="btn btn-default">登录</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="Start">
+                    <form class="form-horizontal docx-startform" role="form" action="javascript:void(0)">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9 ">
+                                <button type="submit" class="btn btn-default docx-startbtn">Start Docx!</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/javascripts/jq.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+    var $emailcoll = $('.emailcollapse');
+    var $eucollapse = $('.docx-eucollapse');
+    var $flinks = $('.docx-flinks');
+    var $dirstab = $('.docx-dirstab');
+    $('[name= waringFlag]').on('change', function (e) {
+        var crtVal = $(this).val();
+        if (crtVal === '1') {
+            $emailcoll.collapse('show');
+        }
+        else {
+            $emailcoll.collapse('hide');
+        }
+    });
+
+    $('#extUrlsLabel').on('input', function () {
+        if ($(this).val().length> 1) {
+            $eucollapse.collapse('show');
+        }
+        else {
+            $eucollapse.collapse('hide');
+        }
+
+    });
+
+    // 添加友链
+    $('body').on('click', '.docx-flbtn', function () {
+        var $target = $(this).parents('.docx-flinks');
+        if ($target.is($eucollapse.children().last())) {
+            var $cloneEle = $($flinks.last().get(0).outerHTML);
+            $cloneEle.appendTo($eucollapse);
+            $('.docx-urlsicon').addClass('glyphicon-minus').last().removeClass('glyphicon-minus').addClass('glyphicon-plus');
+        }
+        else {
+            $target.remove();
+        }
+    });
+
+    $('.docx-confbtn').on('click', function () {
+        var data = $('.docx-confform').serialize();
+        $.ajax({
+            url: '/setup/conf',
+            data: data
+        }).done(function (data) {
+            console.log(data);
+        });
+        $dirstab.tab('show');
+    });
+
+    $('.docx-startbtn').on('click', function () {
+        $.ajax({
+            url: 'setup/start'
+        }).done(function (data) {
+           if (data.errno == 0) {
+               alert('启动成功!');
+           }
+           else {
+               alert('启动失败,错误: ' + data.errmsg || '');
+           }
+        });
+    });
+</script>
+</body>
+
+</html>

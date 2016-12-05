@@ -3,41 +3,40 @@
  * @author schoeu
  * 邮件报警实现
  * */
-var nodemailer = require('nodemailer');
-var CONF;
-var transporter;
 
-/**
- * 发送邮件
- *
- * @param {String} content 邮件内容,支持html
- * */
-function sendMail(content) {
-    var mailOptions = {
-        from: CONF.warningEmail.from,
-        to: CONF.warningEmail.to,
-        subject: CONF.warningEmail.subject,
-        text: content || ''
-    };
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            console.log(error);
+var config = require('./config');
+var warnEmail = config.get('warningEmail');
+var waringFlag = config.get('waringFlag');
+
+if (waringFlag) {
+    var nodemailer = require('nodemailer');
+    /**
+     * 发送邮件
+     *
+     * @param {String} content 邮件内容,支持html
+     * */
+    exports.sendMail = function (content) {
+        if (warnEmail) {
+            var transporter = nodemailer.createTransport({
+                host: warnEmail.host,
+                port: warnEmail.port,
+                auth: {
+                    user: warnEmail.user,
+                    pass: warnEmail.pass
+                }
+            });
+
+            var mailOptions = {
+                from: warnEmail.from,
+                to: warnEmail.to,
+                subject: warnEmail.subject,
+                text: content || ''
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    console.log(error);
+                }
+            });
         }
-    });
+    };
 }
-
-exports.sendMail = function (conf) {
-    CONF = conf;
-    if (CONF.warningEmail) {
-        transporter = nodemailer.createTransport({
-            host: CONF.warningEmail.host,
-            port: CONF.warningEmail.port,
-            auth: {
-                user: CONF.warningEmail.user,
-                pass: CONF.warningEmail.pass
-            }
-        });
-
-        return sendMail;
-    }
-};
