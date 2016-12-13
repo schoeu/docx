@@ -9,7 +9,7 @@ npm install node-docx
 ```
 
 ## 启动
-
+git
 
 ```
 cd node-docx
@@ -20,7 +20,7 @@ Or
 ```
 // 在安装PM2的情况下 
 // CD到项目根目录下执行下面命令,默认使用项目根目录下的配置文件
-pm2 start src/docx.js
+pm2 start index.js
 ```
 
 Or
@@ -28,7 +28,7 @@ Or
 ```
 // 在安装PM2的情况下 
 // CD到项目根目录下执行下面命令,使用指定目录下的配置文件
-pm2 start src/docx.js -- ../xxx/conf.json
+pm2 start index.js -- ../xxx/conf.json
 ```
 
 ## 说明
