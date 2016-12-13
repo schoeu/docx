@@ -13,14 +13,8 @@ git
 
 ```
 cd node-docx
-npm start
-```
-Or
-
-```
-// 在安装PM2的情况下 
-// CD到项目根目录下执行下面命令,默认使用项目根目录下的配置文件
-pm2 start index.js
+// 配置文件的路径,支持相对,绝对路径
+npm start /xxx/conf.json
 ```
 
 Or
@@ -28,13 +22,13 @@ Or
 ```
 // 在安装PM2的情况下 
 // CD到项目根目录下执行下面命令,使用指定目录下的配置文件
-pm2 start index.js -- ../xxx/conf.json
+pm2 start index.js -- /xxx/conf.json
 ```
 
 ## 说明
 
 * 配置中的路径均支持相对路径与绝对路径。
-* 配置中只有`path`字段为必须,其他字段都是可选。
+* 启动应用时配置文件路径必填。
 * 该文档平台有独立日志,日志路径可配置
 
 ## 配置参数
@@ -105,30 +99,23 @@ pm2 start index.js -- ../xxx/conf.json
       "name": "SUPERFRAME文档",
       "url": "http://superframe.baidu.com"
     }]
-  }
+  },
+  // 文件夹命名配置
+  "dirNames":[
+         {"dir1": {
+           "name": "dir1",
+           "sort": 1
+         }},
+         {"dir2": {
+           "name": "dir2",
+           "sort": 2
+         }},
+         {"dir3": {
+           "name": "dir3"
+         }}
+     ]
 }
 
-```
-
-## 文件夹命名配置
-
-`在文档的根目录下生成一个map.json`,json格式即可,
-
-```
-// 文件夹目录配置,key为对应的真实目录名,name为展示名,文件夹展现顺序依照该配置文件配置顺序
-[
-    {"dir1": {
-      "name": "dir1",
-      "sort": 1
-    }},
-    {"dir2": {
-      "name": "dir2",
-      "sort": 2
-    }},
-    {"dir3": {
-      "name": "dir3"
-    }}
-]
 ```
 
 ## 主题
