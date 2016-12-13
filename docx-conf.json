@@ -1,6 +1,6 @@
 {
   "port": "8910",
-  "path": "../../weekly",
+  "path": "../../ps-fe",
   "ignoreDir": ["img",".git",".svn","courseware","headline","imgs","js","less","assets"],
   "headText": "PSFE-DOC",
   "title": "PSFE",

@@ -52,7 +52,7 @@ Docx.prototype = {
         var me = this;
 
         // 获取配置
-        var docPath = config.get('docPath');
+        var docPath = config.get('path');
 
         if (!docPath) {
             throw new Error('not valid conf file.');
@@ -104,7 +104,8 @@ Docx.prototype = {
 
         // 在构建doctree前解析文件名命令配置
         //config.refresh();
-        me.dirname = utils.getDirsConf();
+        //me.dirname = utils.getDirsConf();
+        me.dirname = config.get('dirNames');
 
         // 根据文档获取文档结构树
         me.getDocTree();
@@ -146,7 +147,7 @@ Docx.prototype = {
         app.all('/api/update', me.update.bind(me));
 
         // 委托其他静态资源
-        app.use('/', express.static(config.get('docPath')));
+        app.use('/', express.static(config.get('path')));
 
         // 路由容错处理
         app.get('*', function (req, res) {
@@ -188,7 +189,7 @@ Docx.prototype = {
 
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-        var mdPath = path.join(config.get('docPath'), pathName);
+        var mdPath = path.join(config.get('path'), pathName);
         var isPjax = headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.readFile(mdPath, 'utf8', function (err, file) {
@@ -245,7 +246,7 @@ Docx.prototype = {
     getDocTree: function () {
         var me = this;
         // 根据markdown文档生成文档树
-        var walkData = utils.walker(config.get('docPath'), me.dirname);
+        var walkData = utils.walker(config.get('path'), me.dirname);
         var dirMap = walkData.walkArr;
         me.dirnameMap = walkData.dirnameMap;
         // 数据排序处理
@@ -292,7 +293,7 @@ Docx.prototype = {
 
         // 更新代码
         child_process.exec('git pull', {
-            cwd: config.get('docPath')
+            cwd: config.get('path')
         }, function (err, result) {
             // 清除lru缓存
             cache.reset();
@@ -301,7 +302,8 @@ Docx.prototype = {
             var preData = preprocessor();
 
             // 更新文件名命令配置
-            me.dirname = utils.getDirsConf();
+            // me.dirname = utils.getDirsConf();
+            me.dirname = config.get('dirNames');
 
             // 重新生成DOM树
             me.getDocTree();

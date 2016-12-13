@@ -14,18 +14,6 @@ module.exports = {
 
         conf = conf ? conf : confFile;
 
-        if (!path.isAbsolute(conf)) {
-            conf = path.join(process.cwd(), conf);
-        }
-
-        // 读取配置内容
-        var confJson = fs.readJsonSync(conf);
-
-        var docPath = confJson.path;
-        if (!path.isAbsolute(docPath)) {
-            docPath = path.join(process.cwd(), docPath);
-        }
-
         // 默认配置,减少配置文件条目数,增加易用性与容错
         var defaultOptions = {
             logPath: './log',
@@ -46,6 +34,21 @@ module.exports = {
             ignoreDir: [],
             docPath: docPath
         };
+
+        if (!path.isAbsolute(conf)) {
+            conf = path.join(process.cwd(), conf);
+        }
+
+        // 读取配置内容
+        if (path.extname(conf).trim === "") {
+            conf = path.join(conf, defaultOptions.dirsConfName);
+        }
+        var confJson = fs.readJsonSync(conf);
+
+        var docPath = confJson.path;
+        if (!path.isAbsolute(docPath)) {
+            docPath = path.join(process.cwd(), docPath);
+        }
 
         // 合并配置
         var reConf =  Object.assign({}, defaultOptions, confJson);

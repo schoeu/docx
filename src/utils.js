@@ -88,26 +88,6 @@ module.exports = {
     },
 
     /**
-     * 更新文件夹名配置缓存
-     *
-     * @return {Array} dirname
-     * */
-    getDirsConf: function () {
-        var dirname = [];
-
-        var dirsConf = path.join(config.get('docPath'), config.get('dirsConfName'));
-        try {
-            var stat = fs.statSync(dirsConf);
-            if (stat) {
-                dirname = fs.readJsonSync(dirsConf);
-            }
-        }
-        catch (e) {}
-
-        return dirname;
-    },
-
-    /**
      * 获取文件目录树
      *
      * @param {String} 文档根目录路径
@@ -126,7 +106,7 @@ module.exports = {
             dirArr.forEach(function(it) {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
-                var relPath = childPath.replace(config.get('docPath'), '');
+                var relPath = childPath.replace(config.get('path'), '');
                 // 如果是文件夹就递归查找
                 if (stat.isDirectory()) {
 
@@ -219,7 +199,6 @@ module.exports = {
      * @return {String} html字符串
      * */
     compilePre: function (pagePath, data) {
-        var me = this;
         data = data || {};
 
         // 缓存编译模板

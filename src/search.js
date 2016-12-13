@@ -165,7 +165,7 @@ function search(type, key) {
         return titleSe;
     }
     else {
-        var docPath = config.get('docPath');
+        var docPath = config.get('path');
         var mdFiles = glob.sync(path.join(docPath, '**/*.md')) || [];
         var htmlFiles = glob.sync(path.join(docPath, '**/*.html')) || [];
         var files = mdFiles.concat(htmlFiles);
