@@ -1,7 +1,7 @@
 /**
  * @file search.js
  * @author schoeu
- * 文件搜索模块
+ * @description 文件搜索模块
  * */
 
 var fs = require('fs-extra');

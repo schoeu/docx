@@ -1,6 +1,7 @@
 /**
  * @file utils.js
  * @author schoeu
+ * @description 工具模块
  * */
 
 var fs = require('fs-extra');

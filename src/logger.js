@@ -1,5 +1,6 @@
 /**
  * @file logger.js
+ * @description 日志模块
  * @author schoeu
  * */
 

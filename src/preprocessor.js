@@ -1,7 +1,7 @@
 /**
  * @file preprocessor.js
  * @author schoeu
- * 文件预处理
+ * @description 文件预处理
  * */
 
 var path = require('path');

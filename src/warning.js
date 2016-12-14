@@ -1,7 +1,7 @@
 /**
  * @file warning.js
  * @author schoeu
- * 邮件报警实现
+ * @description 邮件报警实现
  * */
 
 var config = require('./config');

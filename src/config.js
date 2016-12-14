@@ -1,6 +1,6 @@
 /**
- * @file index.js
- * @description 文档平台主文件
+ * @file config.js
+ * @description 配置操作
  * @author schoeu
  * */
 
