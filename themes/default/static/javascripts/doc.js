@@ -14,34 +14,12 @@ var actCls = 'docx-sugact';
 var winH = $win.outerHeight();
 var lisH = $docxTitle.first().height();
 var $scollapse = $('#sidebar-collapse');
-/**
- * 兼容老平台
- * */
-var hash = location.hash || '';
-var path;
-// 兼容老链接
-if (path = /^(^#\/){1}(.+)/.exec(hash)) {
-    if (Array.isArray(path)) {
-        $.getJSON({
-            url: '/javascripts/patch.json'
-        }).done(function (data) {
-            if (!$.isEmptyObject(data)) {
-                var pathStr = path[2] || '';
-                var pathSep = pathStr.split('/');
-                var rsPath = pathSep.map(function (it) {
-                    return data[it.replace('+', ' ')] || it;
-                }).join('/');
-                location.href = rsPath + '.md';
-            }
-        });
-    }
-}
 
 /**
 * pjax委托
 * */
 if ($.support.pjax) {
-    $(document).pjax('a[href^="/"]', '.docx-marked-wrap');
+    $(document).pjax('a[href^="/"]', '.docx-marked-wrap', {timeout: 1200});
     // 使用pjax更底层的方法,可控性更强
     /*$(document).on('click', 'a[href^="/"]', function(event) {
         var container = $docxBd.find('.docx-marked-wrap');
@@ -60,20 +38,18 @@ if ($.support.pjax) {
     });
 }
 
-$win.load(function () {
-    $('.docx-fade').addClass('docx-fade-active');
 
+$(function (){
+    $('.docx-fade').addClass('docx-fade-active');
     $win.on('resize', function () {
         $docxBd.height($win.height() - $navbarH);
         winH = $win.outerHeight();
     });
 
     $docxBd.height($win.height() - $navbarH);
-
-    // 目录切换
-    changeMenu();
-
 });
+
+$win.load(changeMenu);
 
 function changeMenu() {
     $('.active,.subactive').removeClass('active subactive');

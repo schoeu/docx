@@ -123,15 +123,16 @@ Docx.prototype = {
         var me = this;
 
         // 文档主路径
-        app.get('/', function (req, res) {
+        app.get('/', function (req, res, next) {
             res.redirect(config.get('index'));
+            next();
         });
 
         // markdown文件路由
         app.get(/.+.md$/, me.mdHandler.bind(me));
 
         // API: 搜索功能
-        app.post('/api/search', function (req, res) {
+        app.post('/api/search', function (req, res, next) {
             var key = req.body.name;
             var searchType = req.body.type;
             var searchRs = search.search(searchType, key);
@@ -140,6 +141,8 @@ Docx.prototype = {
             res.json({
                 data: searchRs
             });
+
+            next();
         });
 
         // API: 文档更新钩子
@@ -149,7 +152,7 @@ Docx.prototype = {
         app.use('/', express.static(config.get('path')));
 
         // 路由容错处理
-        app.get('*', function (req, res) {
+        app.get('*', function (req, res, next) {
             var time = Date.now();
             var ua = req.headers['user-agent'] || '';
             // 错误页面
@@ -157,6 +160,7 @@ Docx.prototype = {
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
             logger.error({access: req.url, isCache: false, error: 'notfound', referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'});
+            next();
         });
 
         // 容错处理
@@ -171,9 +175,9 @@ Docx.prototype = {
             if (config.get('waringFlag')) {
                 warning(err.toString());
             }
+            next();
         });
     },
-
 
     /**
      * 处理mardown文档请求
@@ -235,6 +239,7 @@ Docx.prototype = {
                     res.render('main', errPgObj);
                 }
                 logger.error(err);
+                next();
             }
         });
     },
