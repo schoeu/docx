@@ -31,8 +31,7 @@ module.exports = {
             waringFlag: false,
             debug: true,
             usePinyin: true,
-            ignoreDir: [],
-            docPath: docPath
+            ignoreDir: []
         };
 
         if (!path.isAbsolute(conf)) {
