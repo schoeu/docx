@@ -64,7 +64,6 @@ Docx.prototype = {
             }
         }
 
-
         // 文件预处理
         var preData = preprocessor();
 

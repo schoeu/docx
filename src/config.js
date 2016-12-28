@@ -10,9 +10,11 @@ var fs = require('fs-extra');
 module.exports = {
     init: function (conf) {
         var me = this;
-        var confFile = './docx-conf.json';
 
-        conf = conf ? conf : confFile;
+        conf = conf || '';
+        if (!conf.trim()) {
+            throw new Error('not valid conf file.');
+        }
 
         // 默认配置,减少配置文件条目数,增加易用性与容错
         var defaultOptions = {
@@ -43,11 +45,6 @@ module.exports = {
             conf = path.join(conf, defaultOptions.dirsConfName);
         }
         var confJson = fs.readJsonSync(conf);
-
-        var docPath = confJson.path;
-        if (!path.isAbsolute(docPath)) {
-            docPath = path.join(process.cwd(), docPath);
-        }
 
         // 合并配置
         var reConf =  Object.assign({}, defaultOptions, confJson);
