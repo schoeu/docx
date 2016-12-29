@@ -9,12 +9,14 @@ npm install node-docx
 ```
 
 ## 启动
-git
+
+复制一份`map.example.json`,更改上面的参数配置,文件放置位置随意,配置参数具体意义参考下文。
+
 
 ```
 cd node-docx
 // 配置文件的路径,支持相对,绝对路径
-npm start /xxx/conf.json
+npm start /xxx/map.json
 ```
 
 Or
@@ -22,7 +24,8 @@ Or
 ```
 // 在安装PM2的情况下 
 // CD到项目根目录下执行下面命令,使用指定目录下的配置文件
-pm2 start index.js -- /xxx/conf.json
+// -- 后面是配置文件的路径
+pm2 start index.js -- /xxx/map.json
 ```
 
 ## 说明
