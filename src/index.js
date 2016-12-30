@@ -125,7 +125,6 @@ Docx.prototype = {
         // 文档主路径
         app.get('/', function (req, res, next) {
             res.redirect(config.get('index'));
-            next();
         });
 
         // markdown文件路由
