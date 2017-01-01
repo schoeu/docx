@@ -25,10 +25,10 @@ if ($.support.pjax) {
         var container = $docxBd.find('.docx-marked-wrap');
         $.pjax.click(event, {container: container})
     });*/
+
     $(document).on('pjax:complete', function() {
         // 目录切换
         changeMenu();
-
         $sug.hide();
     });
 }
