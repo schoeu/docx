@@ -54,10 +54,6 @@
 
                     <ul class="nav menu metismenu docx-navs" id="docx-navs">
                         {{{navData}}}
-                        <li role="presentation" class="divider"></li>
-                        {{#if supportInfo}}
-                            <li><a href="{{supportInfo}}"> 支持 </a></li>
-                        {{/if}}
                     </ul>
                 </div>
             </div><!--/.sidebar-->
@@ -84,6 +80,12 @@
         </footer>
 
     </div>
+    <div id="docx-progress" style="transition: none; opacity: 1;">
+        <div class="docx-pbar"  style="transform: translate3d(-65%, 0px, 0px);transition: all 200ms ease;">
+            <div class="docx-ppeg"></div>
+        </div>
+    </div>
+
 </div>
 <script src="/javascripts/jq.min.js"></script>
 <script src="/javascripts/metisMenu.min.js"></script>
