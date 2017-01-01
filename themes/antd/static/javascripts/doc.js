@@ -71,6 +71,9 @@ function changeMenu() {
  * */
 $searchIpt.on('input', function (e) {
     var key =$searchIpt.val();
+    if (!key.trim()) {
+        return;
+    }
     key ? $sug.show() : $sug.hide();
     $.ajax({
         url: '/api/search',

@@ -174,7 +174,6 @@ Docx.prototype = {
             if (config.get('waringFlag')) {
                 warning(err.toString());
             }
-            next();
         });
     },
 
