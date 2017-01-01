@@ -23,7 +23,7 @@
 .docx-head{
     height: 55px;
     background: #222;
-    color: #FFF;
+    color: rgb(101,102,102);
     line-height: 55px;
     padding: 0 25px;
     font-weight: bold;
@@ -71,17 +71,6 @@
 .docx-submenu>li>.docx-submenu>li>a:before{
     background-color: transparent;
 }
-.docx-submenu>li>a:before,.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before,.docx-submenu>li.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
-    position: relative;
-    content: '';
-    display: block;
-    width: 4px;
-    height: 4px;
-    border: 1px solid #666;
-    border-radius: 50%;
-    top: 22px;
-    left: -10px;
-}
 .docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a{
     padding-left: 7.5em;
 }
@@ -94,10 +83,6 @@
 }
 .docx-submenu>li>.docx-submenu>li>.docx-submenu>li>.docx-submenu>li>a:before{
     background-color: transparent;
-}
-.docx-submenu a:hover{
-    text-decoration: none;
-    background-color: #eee;
 }
 .active>a>.fa.arrow:before {
     content: "\f107";
@@ -137,8 +122,7 @@
     transform: translate3d(0, 0, 0);
 }
 .docx-dir>a:hover {
-    color: #222;
-    background-color: #e9ecf2!important;
+    color: #108ee9;
 }
 .sidebar ul.nav .active.subactive a{
     background-color: transparent;
@@ -194,6 +178,9 @@ h3, h4 {
     font-family: 'Raleway', 'Hiragino Sans GB', sans-serif;
     text-transform: uppercase;
     color: #108ee9;
+    height: 80px;
+    line-height: 80px;
+    padding: 0;
 }
 
 /*Panels*/
@@ -225,27 +212,24 @@ h3, h4 {
     border: 0;
 }
 
-.navbar input {
+.navbar input, .navbar input:focus {
     border: 0;
-    background: #444;
-    color: #fff;
-}
-
-.navbar input:focus {
-    color: #fff;
-    background: #555;
-    border: 1px solid #222;
-    outline: 0;
-    box-shadow: inset 0px 0px 0px 1px #222;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    box-shadow: none;
+    background: transparent;
+    margin: 25px auto 0;
 }
 
 .user-menu {
-    display: inline-block;
-    margin-top: 14px;
-    margin-right: 10px;
-    float: right;
-    list-style: none;
-    padding: 0;
+    display: none;
+    /* margin-top: 14px; */
+    /* margin-right: 10px; */
+    /* float: right; */
+    /* list-style: none; */
+    /* padding: 0; */
 }
 
 .user-menu a {
@@ -403,9 +387,6 @@ h3, h4 {
     line-height: 27px;
     border-radius: 3px;
 }
-.docx-submenu a{
-    color: #333!important;
-}
 .docx-sug>ul{
     padding: 5px 0;
     margin: 2px 0 0;
@@ -415,13 +396,14 @@ h3, h4 {
     background-color: #fff;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
 }
 .docx-searchForm{
     position: relative;
+    width: 230px;
+    margin-bottom: 0;
 }
 .docx-sug a:hover, .docx-sugactive,.docx-sugact>a{
     color: #262626;
@@ -452,4 +434,18 @@ h3, h4 {
     border-bottom: 1px solid #eee;
     height: 80px;
     line-height: 80px;
+    padding: 0 4%;
+}
+.docx-bd{
+    background: #fff;
+    width: 92%;
+    margin: 0 auto;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 24px 0 0;
+    margin-bottom: 24px;
+    position: relative;
+}
+#docx-navs a:hover {
+    color: #108ee9;
 }
