@@ -55,7 +55,7 @@ pm2 start index.js -- /xxx/map.json
   // header条标题,可选
   "headText": "PSFE-DOC",
   
-  // 展示主题,默认为default,可选
+  // 展示主题,可选, 开箱自带两套皮肤default,antd,默认为default.
   "theme": "default",
   
   // 预处理脚本定制,填写脚本地址即可,可选
