@@ -26,11 +26,6 @@ if ($.support.pjax) {
         $.pjax.click(event, {container: container})
     });*/
     $(document).on('pjax:complete', function() {
-        // fixed safari animate bug.
-        setTimeout(function () {
-            $('.docx-fade').addClass('docx-fade-active');
-        }, 0);
-
         // 目录切换
         changeMenu();
 
@@ -40,7 +35,6 @@ if ($.support.pjax) {
 
 
 $(function (){
-    $('.docx-fade').addClass('docx-fade-active');
     $win.on('resize', function () {
         $docxBd.height($win.height() - $navbarH);
         winH = $win.outerHeight();
