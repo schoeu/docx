@@ -23,7 +23,7 @@
 .docx-head{
     height: 55px;
     background: #222;
-    color: rgb(101,102,102);
+    color: #666;
     line-height: 55px;
     padding: 0 25px;
     font-weight: bold;
@@ -44,7 +44,7 @@
     list-style: none;
 }
 #docx-navs>li ul>li>a {
-    color: rgb(102,102,102);
+    color: #666;
     background-color: inherit;
     line-height: 40px;
     display: block;
@@ -53,10 +53,6 @@
 .docx-submenu>li{
     position: relative;
 }
-/*.nav-title:hover, .nav-title:focus {
-    text-decoration: none;
-    background-color: #e9ecf2;
-}*/
 .docx-submenu{
     padding-left: 0;
 }
@@ -453,5 +449,20 @@ h3, h4 {
 }
 .docx-sugul a:hover{
     background-color: #e7f4fd;
+    color: #666;
+}
+.docx-footer{
+    clear: both;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    background: #fff;
+    position: relative;
+    z-index: 1;
+    color: #666;
+    box-shadow: 0 1000px 0 1000px #fff;
+    padding: 24px 4%;
+    text-align: center;
+}
+.docx-navs a {
     color: #666;
 }
