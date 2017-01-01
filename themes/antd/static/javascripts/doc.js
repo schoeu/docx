@@ -19,7 +19,7 @@ var $scollapse = $('#sidebar-collapse');
 * pjax委托
 * */
 if ($.support.pjax) {
-    $(document).pjax('a[href^="/"]', '.docx-marked-wrap', {timeout: 1200});
+    $(document).pjax('a[href^="/"]', '.docx-marked-wrap', {timeout: 1200, fragment: ''});
     // 使用pjax更底层的方法,可控性更强
     /*$(document).on('click', 'a[href^="/"]', function(event) {
         var container = $docxBd.find('.docx-marked-wrap');
