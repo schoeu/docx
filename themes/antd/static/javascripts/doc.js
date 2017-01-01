@@ -83,7 +83,7 @@ $searchIpt.on('input', function (e) {
         var rsData = data.data;
         var htmlStr = '';
         if (Array.isArray(rsData) && rsData.length) {
-            rsData.slice(0, 10).forEach(function (it) {
+            rsData.forEach(function (it) {
                 htmlStr +=  '<li><a href="'+ it.path +'">'+ it.title +'</a></li>';
             });
         }

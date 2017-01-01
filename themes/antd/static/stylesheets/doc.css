@@ -99,19 +99,16 @@
     right: 16px;
     top: 12px;
 }
-.docx-active,.docx-active:hover{
-    color: #222;
-    background-color: #e9ecf2;
-}
+
 .docx-fade {
     /* padding-top: 15px; */
-    opacity: .3;
-    -webkit-transform: translate3d(-10px, 0, 0);
+    /* opacity: .3; */
+    /* -webkit-transform: translate3d(-10px, 0, 0); */
     -moz-transform: translate3d(-10px, 0, 0);
-    transform: translate3d(-10px, 0, 0);
-    -webkit-transition: all 500ms;
+    /* transform: translate3d(-10px, 0, 0); */
+    /* -webkit-transition: all 500ms; */
     -moz-transition: all 500ms;
-    transition: all 500ms;
+    /* transition: all 500ms; */
     border-left: 1px solid #e9e9e9;
 }
 .docx-dir>a:hover {
@@ -128,10 +125,6 @@ body {
 
 p {
     color: #777;
-}
-
-a, a:hover, a:focus {
-    color: #4078c0;
 }
 
 blockquote{
@@ -317,9 +310,6 @@ h3, h4 {
     border-top: 1px solid #eee;
     font-size: 12px;
 }
-.sidebar a{
-    color: #222;
-}
 
 /*Breadcrumbs*/
 
@@ -398,22 +388,18 @@ h3, h4 {
     text-decoration: none;
     background-color: #f5f5f5;
 }
-.docx-sug a{
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: 400;
-    line-height: 25px;
-    color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 .docx-sug{
     position: absolute;
     z-index: 10;
     width: 100%;
     display: none;
+    height: 200px;
+    overflow: auto;
+    outline: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
 }
 
 /* new style */
@@ -442,8 +428,29 @@ h3, h4 {
     margin-top: 0;
 }
 .docx-active{
+    color: #108ee9!important;
     background-color: #e7f4fd;
     border-right: 3px solid #108ee9;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+}
+.docx-wrapper a, .docx-wrapper a:hover {
+    color: #108ee9;
+}
+.docx-sug a{
+    display: block;
+    clear: both;
+    line-height: 25px;
+    text-overflow: ellipsis;
+    position: relative;
+    padding: 7px 16px;
+    font-weight: normal;
+    color: #666;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.docx-sugul a:hover{
+    background-color: #e7f4fd;
+    color: #666;
 }
