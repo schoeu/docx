@@ -21,28 +21,34 @@
                             <a class="navbar-brand" href="/">{{headText}}</a>
                         </div>
                         <div class="col-sm-10 col-md-10 col-lg-10 col-xs-9">
-                            <form role="search" action="javascript:void(0);">
-                                <div class="form-group docx-searchForm">
-                                    <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key" autocomplete="off" >
-                                    <div class="docx-sug">
-                                        <ul class="docx-sugul"></ul>
-                                    </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                                    <form role="search" action="javascript:void(0);">
+                                        <div class="form-group docx-searchForm">
+                                            <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key" autocomplete="off" >
+                                            <div class="docx-sug">
+                                                <ul class="docx-sugul"></ul>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                            {{#if links}}
-                                <ul class="user-menu">
-                                    <li class="dropdown pull-right">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}}<span class="caret"></span></a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            {{#each links}}
-                                                <li>
-                                                    <a href="{{url}}">{{name}}</a>
-                                                </li>
-                                            {{/each}}
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                                    {{#if links}}
+                                        <ul class="user-menu">
+                                            <li class="dropdown pull-right">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}}<span class="caret"></span></a>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    {{#each links}}
+                                                        <li>
+                                                            <a href="{{url}}">{{name}}</a>
+                                                        </li>
+                                                    {{/each}}
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul>
-                            {{/if}}
+                                    {{/if}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +82,7 @@
         </div>
         <footer class="docx-footer">
             <p>&copy;2017 Baidu, Inc.</p>
-            <p>Powered by <a href="https://www.npmjs.com/package/node-docx">Node-docx</a>.</p>
+            <p>Powered by <a href="https://www.npmjs.com/package/node-docx" target="_blank">Node-docx</a>.</p>
         </footer>
 
     </div>
