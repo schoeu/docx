@@ -9,6 +9,7 @@ var $docxBd = $('.docx-body');
 var $docxDir = $('.docx-dir>a');
 var $searchIpt = $('.docx-searchkey');
 var $sug = $('.docx-sug');
+var $sugH = $('.docx-sug').height;
 var $sugul = $('.docx-sugul');
 var actCls = 'docx-sugact';
 var winH = $win.outerHeight();
