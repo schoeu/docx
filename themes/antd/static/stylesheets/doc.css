@@ -497,3 +497,16 @@ h3, h4 {
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
+.navbar-brand:hover{
+    color: #108ee9!important;
+}
+.panel-default{
+    border: none;
+}
+.panel-default>.panel-heading{
+    background: #f7f7f7;
+    color: #666;
+}
+.panel-default>.panel-heading+.panel-collapse>.panel-body{
+    border: none;
+}

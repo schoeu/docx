@@ -9,7 +9,8 @@ var $docxBd = $('.docx-body');
 var $docxDir = $('.docx-dir>a');
 var $searchIpt = $('.docx-searchkey');
 var $sug = $('.docx-sug');
-var $sugH = $('.docx-sug').height;
+var $sugH = 200;
+var $liHeight = 39;
 var $sugul = $('.docx-sugul');
 var actCls = 'docx-sugact';
 var winH = $win.outerHeight();
@@ -91,8 +92,12 @@ $searchIpt.on('input', function (e) {
         var rsData = data.data;
         var htmlStr = '';
         if (Array.isArray(rsData) && rsData.length) {
-            rsData.forEach(function (it) {
-                htmlStr +=  '<li><a href="'+ it.path +'">'+ it.title +'</a></li>';
+            rsData.forEach(function (it, i) {
+                var sugactCls = '';
+                if (i === 0) {
+                    sugactCls = 'docx-sugact';
+                }
+                htmlStr +=  '<li><a href="'+ it.path +'" class="' + sugactCls + '">'+ it.title +'</a></li>';
             });
         }
         htmlStr += '<li class="docx-fullse"><a href="#">全文搜索<span class="hljs-string">' + key + '</span></a></li>';
@@ -160,6 +165,11 @@ $searchIpt.on('keydown', function (e) {
         else {
             $act.removeClass();
             $lis.last().addClass(actCls);
+            $sug.scrollTop($sugul.height() - $sugH);
+        }
+
+        if ($act.offset() && ($act.offset().top > $sugH)) {
+            $sug.scrollTop($sug.scrollTop() - 39);
         }
     }
     else if(keyCode === 40){
@@ -170,7 +180,12 @@ $searchIpt.on('keydown', function (e) {
         }
         else {
             $act.removeClass();
+            $sug.scrollTop(0);
             $lis.first().addClass(actCls);
+        }
+
+        if ($act.offset() && ($act.offset().top > $sugH)) {
+            $sug.scrollTop($sug.scrollTop() + $liHeight);
         }
     }
     else if (keyCode === 13) {
