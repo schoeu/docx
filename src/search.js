@@ -77,6 +77,8 @@ function searchContent(key, content) {
 
 function search(type, key) {
     key = key || '';
+    key = key.replace(/\./g, '\\.');
+
     var titleSe = [];
     // 如果有关键词,则开始搜索
     if (!key.trim().length) {

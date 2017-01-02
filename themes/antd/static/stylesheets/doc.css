@@ -203,16 +203,9 @@ h3, h4 {
 }
 
 .user-menu {
-    display: none;
-    /* margin-top: 14px; */
-    /* margin-right: 10px; */
-    /* float: right; */
-    /* list-style: none; */
-    /* padding: 0; */
-}
-
-.user-menu a {
-    color: #fff;
+    list-style: none;
+    padding: 0;
+    position: relative;
 }
 
 .user-menu a:hover, .user-menu a:focus {
@@ -445,7 +438,7 @@ h3, h4 {
     white-space: nowrap;
     overflow: hidden;
 }
-.docx-sugul a:hover{
+.docx-sugul a:hover, .docx-dropd>li>a:hover{
     background-color: #e7f4fd;
     color: #666;
 }
@@ -468,4 +461,67 @@ h3, h4 {
 }
 .docx-active a {
     color: #108ee9!important;
+}
+
+.docx-dropd {
+    right: 0;
+    top: 80px;
+    left: inherit;
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+    outline: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+.docx-ddown{
+    font-family: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+    position: relative;
+    border-bottom-width: 3px;
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+    box-sizing: border-box;
+    height: 79px;
+    padding: 0 20px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.docx-dropd>li>a{
+    display: block;
+    clear: both;
+    line-height: 25px;
+    text-overflow: ellipsis;
+    position: relative;
+    padding: 7px 16px;
+    font-weight: normal;
+    color: #666;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.docx-ddown .divider{
+    margin: 0;
+}
+.user-menu a {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.docx-ddown:hover {
+    border-bottom: 2px solid #108ee9;
+    color: #108ee9;
+}
+.docx-ddown>a:hover{
+    color: #108ee9;
+}
+.docx-dropdt{
+    line-height: 80px;
+    height: 80px;
+    display: inline-block;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }

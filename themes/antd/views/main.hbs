@@ -34,15 +34,19 @@
                                 </div>
                                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
                                     {{#if links}}
-                                        <ul class="user-menu">
-                                            <li class="dropdown pull-right">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{label}}<span class="caret"></span></a>
-                                                <ul class="dropdown-menu" role="menu">
+                                        <ul class="user-menu clearfix">
+                                            <li class="dropdown pull-right docx-ddown">
+                                                <a href="#" class="dropdown-toggle docx-dropdt" data-toggle="dropdown">{{label}}</a>
+                                                <ul class="dropdown-menu docx-dropd" role="menu">
                                                     {{#each links}}
                                                         <li>
                                                             <a href="{{url}}">{{name}}</a>
                                                         </li>
                                                     {{/each}}
+                                                    <li role="presentation" class="divider"></li>
+                                                    {{#if supportInfo}}
+                                                        <li><a href="{{supportInfo}}"> 支持 </a></li>
+                                                    {{/if}}
                                                 </ul>
                                             </li>
                                         </ul>
