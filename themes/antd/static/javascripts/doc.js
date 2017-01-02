@@ -72,9 +72,11 @@ function changeMenu() {
 $searchIpt.on('input', function (e) {
     var key =$searchIpt.val();
     if (!key.trim()) {
+        $sug.hide();
         return;
+    } else {
+        $sug.show()
     }
-    key ? $sug.show() : $sug.hide();
     $.ajax({
         url: '/api/search',
         data: {
