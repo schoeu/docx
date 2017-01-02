@@ -123,4 +123,5 @@ pm2 start index.js -- /xxx/map.json
 
 ## 主题
 
-默认主题在根目录下的`themes/default`,如想换其他主题请自行替换。
+开箱自带两套皮肤`default`,`antd`,默认为`default`主题。
+目录为`themes/default`与`themes/antd`,如想换其他主题请自行替换或开发。
