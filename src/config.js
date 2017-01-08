@@ -41,7 +41,7 @@ module.exports = {
         }
 
         // 读取配置内容
-        if (path.extname(conf).trim === "") {
+        if (path.extname(conf).trim === '') {
             conf = path.join(conf, defaultOptions.dirsConfName);
         }
         var confJson = fs.readJsonSync(conf);

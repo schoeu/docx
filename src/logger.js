@@ -8,7 +8,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var winston = require('winston');
 var moment = require('moment');
-var DailyRotateFile=require('winston-daily-rotate-file');
+var DailyRotateFile = require('winston-daily-rotate-file');
 
 var config = require('./config');
 
@@ -17,7 +17,7 @@ var ACCESS_LOG_NAME = 'access.log';
 var ERROR_LOG_NAME = 'error.log';
 
 // 时间格式化方法
-var dateFormat=function() {
+var dateFormat = function () {
     return moment().format('YYYY-MM-DD HH:mm:ss:SSS');
 };
 
@@ -36,20 +36,20 @@ var errorlog = path.join(loggerPath, ERROR_LOG_NAME);
 var accessLoggerTransport = new DailyRotateFile({
     name: 'access',
     filename: accesslog,
-    timestamp:dateFormat,
+    timestamp: dateFormat,
     level: config.get('logLevel'),
-    colorize:true,
-    maxsize:MAX_SIZE,
-    datePattern:'.yyyy-MM-dd'
+    colorize: true,
+    maxsize: MAX_SIZE,
+    datePattern: '.yyyy-MM-dd'
 });
 var errorTransport = new DailyRotateFile({
     name: 'error',
     filename: errorlog,
-    timestamp:dateFormat,
+    timestamp: dateFormat,
     level: 'error',
-    colorize:true,
-    maxsize:MAX_SIZE,
-    datePattern:'.yyyy-MM-dd'
+    colorize: true,
+    maxsize: MAX_SIZE,
+    datePattern: '.yyyy-MM-dd'
 });
 
 /**
