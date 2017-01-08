@@ -4,7 +4,7 @@
  * @author schoeu
  * */
 
-// 配置现行
+// 获取配置信息
 var config = require('./src/config');
 
 config.init(process.argv[2]);
