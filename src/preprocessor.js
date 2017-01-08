@@ -5,7 +5,7 @@
  * */
 
 var path = require('path');
-var child_process = require('child_process');
+var childProcess = require('child_process');
 var pinyin = {};
 var glob = require('glob');
 var utils = require('./utils.js');
@@ -25,10 +25,10 @@ module.exports = function () {
     // 如果有定制脚本则先执行定制脚本
     if (preScript) {
         try {
-            var presInfo = child_process.execFileSync(preScript);
+            var presInfo = childProcess.execFileSync(preScript);
             logger.info({'preprocessInfo: ': presInfo.toString()});
         }
-        catch(e){
+        catch (e) {
             logger.error({'preprocess script error: ': e});
         }
     }

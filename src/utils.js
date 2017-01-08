@@ -26,13 +26,14 @@ marked.setOptions({
 });
 
 module.exports = {
+
     /**
      * 获取markdown文件大标题
      *
-     * @param {String} markdown文件的路径
-     * @return {String} markdown文件大标题
+     * @params {string} markdown文件的路径
+     * @return {string} markdown文件大标题
      * */
-    getMdTitle: function(dir) {
+    getMdTitle: function (dir) {
         if (!dir) {
             return '';
         }
@@ -48,20 +49,18 @@ module.exports = {
             titleArr =  /^\s*#+\s?([^#\r\n]+)/.exec(content) || [];
             return titleArr[1] || '';
         }
-        else if (ext === '.html' || ext === '.htm'){
+        else if (ext === '.html' || ext === '.htm') {
             titleArr = /<title>(.+?)<\/title>/.exec(content) || [];
             return titleArr[1] || '';
         }
-        else {
-            return '';
-        }
+        return '';
     },
 
     /**
      * markdown文件转html处理
      *
-     * @param {String} content markdown字符串
-     * @return {String} html字符串
+     * @param {string} content markdown字符串
+     * @return {string} html字符串
      * */
     getMarked: function (content) {
         return marked(content);
@@ -70,7 +69,7 @@ module.exports = {
     /**
      * 配置处理
      *
-     * @param {String} conf 配置文件相对路径
+     * @param {string} conf 配置文件相对路径
      * @return {undefined}
      * */
     getConf: function (conf) {
@@ -91,7 +90,7 @@ module.exports = {
     /**
      * 获取文件目录树
      *
-     * @param {String} 文档根目录路径
+     * @params {string} 文档根目录路径
      * @return {Object} 文件目录树
      * */
     walker: function (dirs, dirname) {
@@ -104,7 +103,7 @@ module.exports = {
         function docWalker(dirs, dirCtt) {
             var dirArr = fs.readdirSync(dirs);
             dirArr = dirArr || [];
-            dirArr.forEach(function(it) {
+            dirArr.forEach(function (it) {
                 var childPath = path.join(dirs, it);
                 var stat = fs.statSync(childPath);
                 var relPath = childPath.replace(config.get('path'), '');
@@ -116,7 +115,7 @@ module.exports = {
                         // 文件夹设置名称获取
                         var crtName = it || '';
 
-                        for(var index=0, length=confDirname.length; index<length; index++) {
+                        for (var index = 0, length = confDirname.length; index < length; index++) {
                             var dnItems = confDirname[index];
                             if (dnItems[it]) {
                                 crtName = dnItems[it].name;
@@ -165,7 +164,8 @@ module.exports = {
     /**
      * 根据配置对文档进行排序,暂支持根目录文件夹排序
      *
-     * @param {Object} map 文档结构数据
+     * @param {Object} dirMap 文档结构数据
+     * @param {Array} dirname 文件夹名字转换数据
      * @return {Object} rs 排序后的文档结构数组
      * */
     dirSort: function (dirMap, dirname) {
@@ -175,7 +175,7 @@ module.exports = {
 
         dirMap.map(function (it) {
             if (it.type === 'dir') {
-                for(var idx=0, length=dirname.length; idx<length; idx++) {
+                for(var idx = 0, length = dirname.length; idx < length; idx++) {
                     var item = dirname[idx];
                     if (item[it.itemName]) {
                         var matchedName = it;
@@ -195,9 +195,9 @@ module.exports = {
     /**
      * 模板异步编译处理
      *
-     * @param {String} 模板名
+     * @param {string} pagePath 模板名
      * @param {Object} data 替换对象
-     * @return {String} html字符串
+     * @return {string} html字符串
      * */
     compilePre: function (pagePath, data) {
         data = data || {};
@@ -218,10 +218,11 @@ module.exports = {
 
     /**
      * 处理&组装面包屑数据
+     *
      * @param {Array} breadcrumb 面包屑原始数据
      * @return {Array} 转换为中文的数据
      * */
-    processBreadcrumb: function(breadcrumb) {
+    processBreadcrumb: function (breadcrumb) {
         var me = this;
         breadcrumb = breadcrumb || [];
         var dirMaps = [];
@@ -235,9 +236,10 @@ module.exports = {
 
     /**
      * 处理&组装面包屑数据
-     * @param {String} pathName 文件路径
-     * @param {String} content markdown内容
-     * @return {String} 转换为中文的HTML字符串
+     *
+     * @param {string} pathName 文件路径
+     * @param {string} content markdown内容
+     * @return {string} 转换为中文的HTML字符串
      * */
     getPjaxContent: function (pathName, content) {
         var me = this;
