@@ -30,7 +30,7 @@ module.exports = {
     /**
      * 获取markdown文件大标题
      *
-     * @params {string} markdown文件的路径
+     * @params {string} dir markdown文件的路径
      * @return {string} markdown文件大标题
      * */
     getMdTitle: function (dir) {
@@ -90,7 +90,8 @@ module.exports = {
     /**
      * 获取文件目录树
      *
-     * @params {string} 文档根目录路径
+     * @params {string} dirs 文档根目录路径
+     * @params {string} dirname 文档名称数据
      * @return {Object} 文件目录树
      * */
     walker: function (dirs, dirname) {
@@ -175,7 +176,7 @@ module.exports = {
 
         dirMap.map(function (it) {
             if (it.type === 'dir') {
-                for(var idx = 0, length = dirname.length; idx < length; idx++) {
+                for (var idx = 0, length = dirname.length; idx < length; idx++) {
                     var item = dirname[idx];
                     if (item[it.itemName]) {
                         var matchedName = it;
