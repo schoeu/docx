@@ -32,7 +32,7 @@ if (waringFlag) {
                 subject: warnEmail.subject,
                 text: content || ''
             };
-            transporter.sendMail(mailOptions, function(error, info){
+            transporter.sendMail(mailOptions, function(error){
                 if(error){
                     console.log(error);
                 }

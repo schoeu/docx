@@ -11,7 +11,6 @@ var child_process = require('child_process');
 var LRU = require("lru-cache");
 var express = require('express');
 var bodyParser = require('body-parser');
-var _ = require('lodash');
 var hbs = require('express-hbs');
 
 // 初始化日志
