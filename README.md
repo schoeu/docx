@@ -57,10 +57,10 @@ pm2 start index.js -- /xxx/map.json
   // 展示主题,可选, 开箱自带两套皮肤default,antd,默认为default.
   "theme": "default",
   
-  // 预处理脚本定制,填写脚本地址即可,可选
+  // 预处理脚本定制,填写脚本路径即可,可选
   "preprocessscript":"",
     
-  // web title,可选
+  // page title,可选
   "title": "PSFE",
 
   // 默认文档路径,支持相对,绝对路径,可选
@@ -102,15 +102,13 @@ pm2 start index.js -- /xxx/map.json
       "url": "http://superframe.baidu.com"
     }]
   },
-  // 文件夹命名配置
-  "dirNames":[
+  // 文件夹命名配置，顺序即是文件夹展示的顺序
+  "dirNames":[
          {"dir1": {
-           "name": "dir1",
-           "sort": 1
+           "name": "dir1"
          }},
          {"dir2": {
-           "name": "dir2",
-           "sort": 2
+           "name": "dir2"
          }},
          {"dir3": {
            "name": "dir3"
