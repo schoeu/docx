@@ -47,8 +47,7 @@ module.exports = {
         var confJson = fs.readJsonSync(conf);
 
         // 合并配置
-        var reConf =  Object.assign({}, defaultOptions, confJson);
-        me.conf = reConf;
+        me.conf = Object.assign({}, defaultOptions, confJson);
     },
     set: function (key, value) {
         if (this.conf && key) {

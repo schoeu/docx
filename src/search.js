@@ -72,8 +72,8 @@ function searchContent(key, content) {
 
 /**
  * 搜索主方法
- * @param {String} type 搜索类型
- * @param {String} key 关键字
+ * @param {string} type 搜索类型
+ * @param {string} key 关键字
  * @return {Array} 匹配到的文档字符串数组
  * */
 

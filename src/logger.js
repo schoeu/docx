@@ -54,7 +54,7 @@ var errorTransport = new DailyRotateFile({
 
 /**
  * 日志方法定义
- * @param {String} loggerPath 日志路径
+ * @param {string} loggerPath 日志路径
  * @return {Object}
  * */
 module.exports = new winston.Logger({
