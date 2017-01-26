@@ -1,6 +1,7 @@
 /**
  * @file 文档页js
  * */
+
 var $win = $(window);
 var $navs = $('.docx-navs');
 var $navbarH = $('.navbar').height();
@@ -16,7 +17,7 @@ var actCls = 'docx-sugact';
 var winH = $win.outerHeight();
 var lisH = $docxTitle.first().height();
 var $scollapse = $('#sidebar-collapse');
-var $fixedstyle= $('.docx-fixedstyle');
+var $fixedstyle = $('.docx-fixedstyle');
 
 /**
 * pjax委托
@@ -24,12 +25,12 @@ var $fixedstyle= $('.docx-fixedstyle');
 if ($.support.pjax) {
     $(document).pjax('a[href^="/"]', '.docx-marked-wrap', {timeout: 1200});
     // 使用pjax更底层的方法,可控性更强
-    /*$(document).on('click', 'a[href^="/"]', function(event) {
-        var container = $docxBd.find('.docx-marked-wrap');
-        $.pjax.click(event, {container: container})
-    });*/
+    // $(document).on('click', 'a[href^="/"]', function(event) {
+    //     var container = $docxBd.find('.docx-marked-wrap');
+    //     $.pjax.click(event, {container: container})
+    // });
 
-    $(document).on('pjax:complete', function() {
+    $(document).on('pjax:complete', function () {
         // 目录切换
         changeMenu();
         $sug.hide();
@@ -37,7 +38,7 @@ if ($.support.pjax) {
 }
 
 
-$(function (){
+$(function () {
     $win.on('resize', function () {
         $docxBd.height($win.height() - $navbarH);
         winH = $win.outerHeight();
@@ -55,8 +56,8 @@ function changeMenu() {
 
     // 打开对应目录
     var pathname = location.pathname || '';
-    var $pathDom = $('[data-path="'+ pathname +'"]');
-    $pathDom.parents('.docx-submenu').addClass('in').css('height','auto');
+    var $pathDom = $('[data-path="' + pathname + '"]');
+    $pathDom.parents('.docx-submenu').addClass('in').css('height', 'auto');
     $pathDom.parents('[data-dir]').addClass('active subactive');
     $docxTitle.removeClass('docx-active');
     $pathDom.addClass('docx-active').parents().remove('docx-active');
@@ -66,21 +67,20 @@ function changeMenu() {
     // 如果选中目录不在可视范围则滚动到可视范围
     if (offsetTop > winH - lisH || offsetTop < 0) {
         // $scollapse.scrollTop(offsetTop - winH/5);
-        $scollapse.animate({scrollTop: offsetTop - winH/5}, 200);
+        $scollapse.animate({scrollTop: offsetTop - winH / 5}, 200);
     }
 }
 
 /**
  * 搜索action
  * */
-$searchIpt.on('input', function (e) {
-    var key =$searchIpt.val();
+$searchIpt.on('input focus', function (e) {
+    var key = $searchIpt.val();
     if (!key.trim()) {
         $sug.hide();
         return;
-    } else {
-        $sug.show()
     }
+    $sug.show();
     $.ajax({
         url: '/api/search',
         data: {
@@ -97,7 +97,7 @@ $searchIpt.on('input', function (e) {
                 if (i === 0) {
                     sugactCls = 'docx-sugact';
                 }
-                htmlStr +=  '<li><a href="'+ it.path +'" class="' + sugactCls + '">'+ it.title +'</a></li>';
+                htmlStr +=  '<li><a href="' + it.path + '" class="' + sugactCls + '">' + it.title + '</a></li>';
             });
         }
         htmlStr += '<li class="docx-fullse"><a href="#">全文搜索<span class="hljs-string">' + key + '</span></a></li>';
@@ -120,7 +120,7 @@ $docxBd.on('click', '.docx-fullse', function () {
         if (Array.isArray(rsData) && rsData.length) {
             rsData.forEach(function (it) {
                 var content = it.content || '';
-                content = content.replace(/<(table).*?<\/\1>|<table.*?>|<\/table>/g,'');
+                content = content.replace(/<(table).*?<\/\1>|<table.*?>|<\/table>/g, '');
                 htmlStr +=  [
                     '<div class="docx-search-art">',
                     '    <div class="docx-search-title">',
@@ -159,7 +159,8 @@ $searchIpt.on('keydown', function (e) {
     if (keyCode === 38) {
         if ($act.length === 0) {
             $lis.last().addClass(actCls);
-        } else if (!$act.is(':first-child')){
+        }
+        else if (!$act.is(':first-child')) {
             $act.removeClass().prev().addClass(actCls);
         }
         else {
@@ -172,10 +173,11 @@ $searchIpt.on('keydown', function (e) {
             $sug.scrollTop($sug.scrollTop() - 39);
         }
     }
-    else if(keyCode === 40){
+    else if (keyCode === 40) {
         if ($act.length === 0) {
             $lis.first().addClass(actCls);
-        } else if (!$act.is(':last-child')){
+        }
+        else if (!$act.is(':last-child')) {
             $act.removeClass().next().addClass(actCls);
         }
         else {
@@ -189,7 +191,7 @@ $searchIpt.on('keydown', function (e) {
         }
     }
     else if (keyCode === 13) {
-        if ($lis.length == 1) {
+        if ($lis.length === 1) {
             $lis.click();
             $sug.hide();
         }
