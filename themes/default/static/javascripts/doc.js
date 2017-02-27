@@ -14,6 +14,7 @@ var actCls = 'docx-sugact';
 var winH = $win.outerHeight();
 var lisH = $docxTitle.first().height();
 var $scollapse = $('#sidebar-collapse');
+var $fixedstyle = $('.docx-fixedstyle');
 
 /**
 * pjax委托
@@ -45,7 +46,7 @@ $(function () {
         $docxBd.height($win.height() - $navbarH);
         winH = $win.outerHeight();
     });
-
+    $fixedstyle.remove();
     $docxBd.height($win.height() - $navbarH);
 });
 
