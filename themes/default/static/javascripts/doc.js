@@ -65,7 +65,7 @@ function changeMenu() {
     $pathDom.addClass('docx-active').parents().remove('docx-active');
 
     var crtLis = $('.docx-active');
-    var offsetTop = crtLis.offset().top;
+    var offsetTop = crtLis.length && crtLis.offset().top;
     // 如果选中目录不在可视范围则滚动到可视范围
     if (offsetTop > winH - lisH || offsetTop < 0) {
         // $scollapse.scrollTop(offsetTop - winH/5);

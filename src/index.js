@@ -52,7 +52,7 @@ Docx.prototype = {
         var docPath = config.get('path');
 
         if (!docPath) {
-            throw new Error('not valid conf file.');
+            throw new Error('Invalid conf file.');
         }
         else {
             // 文件绝对&相对路径兼容
