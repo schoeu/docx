@@ -1,0 +1,32 @@
+{
+    "port": "8910",
+    "path": "./doc",
+    "ignoreDir": ["img",".git",".svn","imgs","js","less"],
+    "headText": "header",
+    "title": "MY DOCX",
+    "index": "/title.md",
+    "logPath": "./log",
+    "theme": "default",
+    "supportInfo": "mailto:abc@163.com",
+    "extUrls": {
+        "label": "友情链接",
+        "links":[{
+            "name": "友链1",
+            "url": "http://www.baidu.com"
+        },{
+            "name": "友链2",
+            "url": "http://m.baidu.com"
+        }]
+    },
+    "dirNames":[
+        {
+            "dir1": {
+                "name": "规范"
+            }
+        },
+        {
+            "dir2": {
+                "name": "周报"
+            }
+        }]
+}
