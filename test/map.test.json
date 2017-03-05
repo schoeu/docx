@@ -1,6 +1,6 @@
 {
     "port": "8910",
-    "path": "./doc",
+    "path": "./test/docs",
     "ignoreDir": ["img",".git",".svn","imgs","js","less"],
     "headText": "header",
     "title": "MY DOCX",
