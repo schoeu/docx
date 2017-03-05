@@ -9,7 +9,7 @@ var config = require('../src/config');
 var confPath = './test/map.test.json';
 config.init(confPath);
 
-describe('config test', function () {
+describe('config test.', function () {
     it('get config file.', function () {
         expect(config.get('port')).to.be.equal('8910');
     });
