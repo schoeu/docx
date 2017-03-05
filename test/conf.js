@@ -20,4 +20,9 @@ describe('config test', function () {
         config.set('theme', 'newsytle');
         expect(config.get('theme')).to.be.equal('newsytle');
     });
+    it('refresh function', function () {
+        config.set('port', '8911');
+        config.refresh();
+        expect(config.get('port')).to.be.equal('8910');
+    });
 });

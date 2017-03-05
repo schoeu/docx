@@ -6,6 +6,7 @@
 
 var path = require('path');
 var fs = require('fs-extra');
+var confCahe = '';
 
 module.exports = {
     init: function (conf) {
@@ -15,6 +16,8 @@ module.exports = {
         if (!conf.trim()) {
             throw new Error('not valid conf file.');
         }
+        // 缓存参数
+        confCahe = conf;
 
         // 默认配置,减少配置文件条目数,增加易用性与容错
         var defaultOptions = {
@@ -66,6 +69,6 @@ module.exports = {
         return '';
     },
     refresh: function () {
-        this.init();
+        this.init(confCahe);
     }
 };
