@@ -1,6 +1,15 @@
 # node-docx
 
 > markdown文当平台，支持文件夹名配置，文档排序，浏览。
+
+[![NPM Version](https://img.shields.io/npm/v/docx.svg)](https://npmjs.org/package/node-docx)
+[![Linux Build](https://img.shields.io/travis/schoeu/docx/master.svg?label=linux)](https://travis-ci.org/schoeu/docx)
+[![Windows Build](https://img.shields.io/appveyor/ci/schoeu/docx/master.svg?label=windows)](https://ci.appveyor.com/project/schoeu/docx)
+[![Test Coverage](https://img.shields.io/coveralls/schoeu/docx/master.svg)](https://coveralls.io/r/schoeu/docx?branch=master)
+[![star](https://img.shields.io/github/stars/schoeu/docx.svg?style=social&label=Star)](https://github.com/schoeu/docx/stargazers)
+[![Follow](https://img.shields.io/github/followers/schoeu.svg?style=social&label=Follow)](https://github.com/schoeu)
+
+
 ## 安装
 
 ```
