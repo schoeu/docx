@@ -6,7 +6,7 @@
 
 var expect = require('chai').expect;
 var config = require('../src/config');
-var confPath = './map.test.json';
+var confPath = './test/map.test.json';
 config.init(confPath);
 
 describe('config test', function () {

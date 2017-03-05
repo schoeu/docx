@@ -4,7 +4,8 @@
  * @author schoeu
  * */
 
+/*
 var expect = require('chai').expect;
 describe('config test', function () {
     it();
-});
+});*/
