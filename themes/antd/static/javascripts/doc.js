@@ -1,6 +1,7 @@
 /**
  * @file 文档页js
  * */
+
 var $win = $(window);
 var $navs = $('.docx-navs');
 var $navbarH = $('.navbar').height();
@@ -9,6 +10,8 @@ var $docxBd = $('.docx-body');
 var $docxDir = $('.docx-dir>a');
 var $searchIpt = $('.docx-searchkey');
 var $sug = $('.docx-sug');
+var $sugH = 200;
+var $liHeight = 39;
 var $sugul = $('.docx-sugul');
 var actCls = 'docx-sugact';
 var winH = $win.outerHeight();
@@ -26,28 +29,23 @@ if ($.support.pjax) {
     //     var container = $docxBd.find('.docx-marked-wrap');
     //     $.pjax.click(event, {container: container})
     // });
-    $(document).on('pjax:complete', function() {
-        // fixed safari animate bug.
-        setTimeout(function () {
-            $('.docx-fade').addClass('docx-fade-active');
-        }, 0);
 
+    $(document).on('pjax:complete', function () {
         // 目录切换
         changeMenu();
-
         $sug.hide();
     });
 }
 
 
 $(function () {
-    $('.docx-fade').addClass('docx-fade-active');
     $win.on('resize', function () {
         $docxBd.height($win.height() - $navbarH);
         winH = $win.outerHeight();
     });
-    $fixedstyle.remove();
+
     $docxBd.height($win.height() - $navbarH);
+    $fixedstyle.remove();
 });
 
 $win.load(changeMenu);
@@ -78,7 +76,11 @@ function changeMenu() {
  * */
 $searchIpt.on('input focus', function (e) {
     var key = $searchIpt.val();
-    key ? $sug.show() : $sug.hide();
+    if (!key.trim()) {
+        $sug.hide();
+        return;
+    }
+    $sug.show();
     $.ajax({
         url: '/api/search',
         data: {
@@ -90,8 +92,12 @@ $searchIpt.on('input focus', function (e) {
         var rsData = data.data;
         var htmlStr = '';
         if (Array.isArray(rsData) && rsData.length) {
-            rsData.slice(0, 10).forEach(function (it) {
-                htmlStr +=  '<li><a href="' + it.path + '">' + it.title + '</a></li>';
+            rsData.forEach(function (it, i) {
+                var sugactCls = '';
+                if (i === 0) {
+                    sugactCls = 'docx-sugact';
+                }
+                htmlStr +=  '<li><a href="' + it.path + '" class="' + sugactCls + '">' + it.title + '</a></li>';
             });
         }
         htmlStr += '<li class="docx-fullse"><a href="#">全文搜索<span class="hljs-string">' + key + '</span></a></li>';
@@ -160,6 +166,11 @@ $searchIpt.on('keydown', function (e) {
         else {
             $act.removeClass();
             $lis.last().addClass(actCls);
+            $sug.scrollTop($sugul.height() - $sugH);
+        }
+
+        if ($act.offset() && ($act.offset().top > $sugH)) {
+            $sug.scrollTop($sug.scrollTop() - 39);
         }
     }
     else if (keyCode === 40) {
@@ -171,7 +182,12 @@ $searchIpt.on('keydown', function (e) {
         }
         else {
             $act.removeClass();
+            $sug.scrollTop(0);
             $lis.first().addClass(actCls);
+        }
+
+        if ($act.offset() && ($act.offset().top > $sugH)) {
+            $sug.scrollTop($sug.scrollTop() + $liHeight);
         }
     }
     else if (keyCode === 13) {

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{title}}</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/md.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/metisMenu.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/doc.css"/>
+    <style type="text/css" class="docx-fixedstyle">
+        .docx-submenu{
+            height: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+<div class="docx-wrapper">
+    <div class="docx-body clearfix">
+        <nav class="navbar navbar-inverse  docx-navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
+                            <a class="navbar-brand" href="/">{{headText}}</a>
+                        </div>
+                        <div class="col-sm-10 col-md-10 col-lg-10 col-xs-9">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                                    <form role="search" action="javascript:void(0);">
+                                        <div class="form-group docx-searchForm">
+                                            <input type="text" class="form-control docx-searchkey" placeholder="Search" name="key" autocomplete="off" >
+                                            <div class="docx-sug">
+                                                <ul class="docx-sugul"></ul>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                                    {{#if links}}
+                                        <ul class="user-menu clearfix">
+                                            <li class="dropdown pull-right docx-ddown">
+                                                <a href="#" class="dropdown-toggle docx-dropdt" data-toggle="dropdown">{{label}}</a>
+                                                <ul class="dropdown-menu docx-dropd" role="menu">
+                                                    {{#each links}}
+                                                        <li>
+                                                            <a href="{{url}}">{{name}}</a>
+                                                        </li>
+                                                    {{/each}}
+                                                    <li role="presentation" class="divider"></li>
+                                                    {{#if supportInfo}}
+                                                        <li><a href="{{supportInfo}}"> 支持 </a></li>
+                                                    {{/if}}
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div class="row docx-bd">
+            <div id="sidebar-collapse" class="col-sm-3 col-md-3  col-lg-3 sidebar" role="navigation">
+                <div>
+
+                    <ul class="nav menu metismenu docx-navs" id="docx-navs">
+                        {{{navData}}}
+                    </ul>
+                </div>
+            </div><!--/.sidebar-->
+
+            <div class="col-sm-9 col-md-9 col-lg-9 docx-marked-wrap">
+                <div>
+                    <div class="row">
+                        <div class="col-lg-12 docx-fade">
+                            <div class="docx-panel docx-panel-default">
+                                <div class="markdown-body">
+                                    <div class="docx-marked">
+                                        {{{mdData}}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/.row-->
+                </div>
+            </div>	<!--/.main-->
+        </div>
+        <footer class="docx-footer">
+            <p>&copy;2017 Baidu, Inc.</p>
+            <p>Powered by <a href="https://www.npmjs.com/package/node-docx" target="_blank">Node-docx</a>.</p>
+        </footer>
+
+    </div>
+</div>
+<script src="/javascripts/jq.min.js"></script>
+<script src="/javascripts/metisMenu.min.js"></script>
+<script src="/javascripts/jq.pjax.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/doc.js"></script>
+</body>
+
+</html>

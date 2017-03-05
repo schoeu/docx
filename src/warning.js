@@ -1,7 +1,7 @@
 /**
  * @file warning.js
  * @author schoeu
- * 邮件报警实现
+ * @description 邮件报警实现
  * */
 
 var config = require('./config');
@@ -10,10 +10,11 @@ var waringFlag = config.get('waringFlag');
 
 if (waringFlag) {
     var nodemailer = require('nodemailer');
+
     /**
      * 发送邮件
      *
-     * @param {String} content 邮件内容,支持html
+     * @param {string} content 邮件内容,支持html
      * */
     exports.sendMail = function (content) {
         if (warnEmail) {
@@ -32,10 +33,8 @@ if (waringFlag) {
                 subject: warnEmail.subject,
                 text: content || ''
             };
-            transporter.sendMail(mailOptions, function(error, info){
-                if(error){
-                    console.log(error);
-                }
+            transporter.sendMail(mailOptions, function (error) {
+                // 错误处理
             });
         }
     };

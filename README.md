@@ -1,6 +1,12 @@
-# docx
+# node-docx
 
-> markdown文件浏览工具
+> markdown文当平台，支持文件夹名配置，文档排序，浏览。
+
+[![NPM Version](https://img.shields.io/npm/v/docx.svg)](https://npmjs.org/package/node-docx)
+[![Linux Build](https://img.shields.io/travis/schoeu/docx/master.svg?label=linux)](https://travis-ci.org/schoeu/docx)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/node-docx/Lobby)
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 ## 安装
 
@@ -10,17 +16,13 @@ npm install node-docx
 
 ## 启动
 
+复制一份`map.example.json`,更改参数配置,文件放置位置随意,配置参数具体意义参考下文。
+
 
 ```
 cd node-docx
-npm start
-```
-Or
-
-```
-// 在安装PM2的情况下 
-// CD到项目根目录下执行下面命令,默认使用项目根目录下的配置文件
-pm2 start src/docx.js
+// 配置文件的路径,支持相对,绝对路径
+npm start /xxx/map.json
 ```
 
 Or
@@ -28,14 +30,15 @@ Or
 ```
 // 在安装PM2的情况下 
 // CD到项目根目录下执行下面命令,使用指定目录下的配置文件
-pm2 start src/docx.js -- ../xxx/conf.json
+// -- 后面是配置文件的路径
+pm2 start index.js -- /xxx/map.json
 ```
 
 ## 说明
 
 * 配置中的路径均支持相对路径与绝对路径。
-* 配置中只有`path`字段为必须,其他字段都是可选。
-* 该文档平台有独立日志,日志路径可配置
+* 启动应用时配置文件路径必填。
+* docx有独立日志,日志路径可配置
 
 ## 配置参数
 
@@ -58,20 +61,17 @@ pm2 start src/docx.js -- ../xxx/conf.json
   // header条标题,可选
   "headText": "PSFE-DOC",
   
-  // 展示主题,默认为default,可选
+  // 展示主题,可选, 开箱自带两套皮肤default,antd,默认为default.
   "theme": "default",
   
-  // 预处理脚本定制,填写脚本地址即可,可选
+  // 预处理脚本定制,填写脚本路径即可,可选
   "preprocessscript":"",
     
-  // web title,可选
+  // page title,可选
   "title": "PSFE",
 
   // 默认文档路径,支持相对,绝对路径,可选
   "index": "/readme.md",
-  
-  // 缓存文件路径,支持相对,绝对路径,可选
-  "cacheDir":"./cache.json",
     
   // 技术支持,可选
   // 邮箱填写: mailto:xx@xxx.com
@@ -108,32 +108,24 @@ pm2 start src/docx.js -- ../xxx/conf.json
       "name": "SUPERFRAME文档",
       "url": "http://superframe.baidu.com"
     }]
-  }
+  },
+  // 文件夹命名配置，顺序即是文件夹展示的顺序
+  "dirNames":[
+         {"dir1": {
+           "name": "dir1"
+         }},
+         {"dir2": {
+           "name": "dir2"
+         }},
+         {"dir3": {
+           "name": "dir3"
+         }}
+     ]
 }
 
 ```
 
-## 文件夹命名配置
-
-`在文档的根目录下生成一个map.json`,json格式即可,
-
-```
-// 文件夹目录配置,key为对应的真实目录名,name为展示名,文件夹展现顺序依照该配置文件配置顺序
-[
-    {"dir1": {
-      "name": "dir1",
-      "sort": 1
-    }},
-    {"dir2": {
-      "name": "dir2",
-      "sort": 2
-    }},
-    {"dir3": {
-      "name": "dir3"
-    }}
-]
-```
-
 ## 主题
 
-默认主题在根目录下的`themes/default`,如想换其他主题请自行替换。
+开箱自带两套皮肤`default`,`antd`,默认为`default`主题。
+目录为`themes/default`与`themes/antd`,如想换其他主题请自行替换或开发。

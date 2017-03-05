@@ -7,11 +7,10 @@
 var path = require('path');
 var fs = require('fs-extra');
 var url = require('url');
-var child_process = require('child_process');
-var LRU = require("lru-cache");
+var childProcess = require('child_process');
+var lru = require('lru-cache');
 var express = require('express');
 var bodyParser = require('body-parser');
-var _ = require('lodash');
 var hbs = require('express-hbs');
 
 // 初始化日志
@@ -23,7 +22,7 @@ var logger = require('./logger.js');
 // 文件预处理
 var preprocessor = require('./preprocessor.js');
 var search = require('./search.js');
-var cache = LRU({max: 500});
+var cache = lru({max: 500});
 
 var app = express();
 
@@ -32,15 +31,13 @@ var HBS_EXTNAME = 'hbs';
 
 /**
  * Docx构造函数
- *
- * @param {String} conf 配置文件相对路径
  * */
 function Docx() {
     // 初始化docx
     this.init();
 }
 
-var errorType = {'notfound': '/images/notfound.png', 'othererror': '/images/othererror.png'};
+var errorType = {notfound: '/images/notfound.png', othererror: '/images/othererror.png'};
 
 Docx.prototype = {
     contributor: Docx,
@@ -52,10 +49,10 @@ Docx.prototype = {
         var me = this;
 
         // 获取配置
-        var docPath = config.get('docPath');
+        var docPath = config.get('path');
 
         if (!docPath) {
-            throw new Error('not valid conf file.');
+            throw new Error('Invalid conf file.');
         }
         else {
             // 文件绝对&相对路径兼容
@@ -63,7 +60,6 @@ Docx.prototype = {
                 docPath = path.join(process.cwd(), docPath);
             }
         }
-
 
         // 文件预处理
         var preData = preprocessor();
@@ -103,8 +99,9 @@ Docx.prototype = {
         app.use(bodyParser.urlencoded({extended: false}));
 
         // 在构建doctree前解析文件名命令配置
-        //config.refresh();
-        me.dirname = utils.getDirsConf();
+        // config.refresh();
+        // me.dirname = utils.getDirsConf();
+        me.dirname = config.get('dirNames');
 
         // 根据文档获取文档结构树
         me.getDocTree();
@@ -123,7 +120,7 @@ Docx.prototype = {
         var me = this;
 
         // 文档主路径
-        app.get('/', function (req, res) {
+        app.get('/', function (req, res, next) {
             res.redirect(config.get('index'));
         });
 
@@ -131,7 +128,7 @@ Docx.prototype = {
         app.get(/.+.md$/, me.mdHandler.bind(me));
 
         // API: 搜索功能
-        app.post('/api/search', function (req, res) {
+        app.post('/api/search', function (req, res, next) {
             var key = req.body.name;
             var searchType = req.body.type;
             var searchRs = search.search(searchType, key);
@@ -140,30 +137,36 @@ Docx.prototype = {
             res.json({
                 data: searchRs
             });
+
+            next();
         });
 
         // API: 文档更新钩子
         app.all('/api/update', me.update.bind(me));
 
         // 委托其他静态资源
-        app.use('/', express.static(config.get('docPath')));
+        app.use('/', express.static(config.get('path')));
 
         // 路由容错处理
-        app.get('*', function (req, res) {
+        app.get('*', function (req, res, next) {
             var time = Date.now();
             var ua = req.headers['user-agent'] || '';
             // 错误页面
-            var errPg = utils.compilePre('error', {errorType: errorType['notfound']});
+            var errPg = utils.compilePre('error', {errorType: errorType.notfound});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
-            logger.error({access: req.url, isCache: false, error: 'notfound', referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'});
+            logger.error({
+                access: req.url, isCache: false, error: 'notfound',
+                referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'
+            });
+            next();
         });
 
         // 容错处理
-        app.use(function(err, req, res, next) {
+        app.use(function (err, req, res, next) {
             res.status(err.status || 500);
             // 错误页面
-            var errPg = utils.compilePre('error', {errorType: errorType['othererror']});
+            var errPg = utils.compilePre('error', {errorType: errorType.othererror});
             var errPgObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: errPg});
             res.render('main', errPgObj);
             logger.error(err);
@@ -174,11 +177,12 @@ Docx.prototype = {
         });
     },
 
-
     /**
      * 处理mardown文档请求
+     *
      * @param {Object} req 请求对象
      * @param {Object} res 相应对象
+     * @param {Function} next 相应对象
      * */
     mdHandler: function (req, res, next) {
         var me = this;
@@ -188,7 +192,7 @@ Docx.prototype = {
 
         var relativePath = url.parse(req.originalUrl);
         var pathName = relativePath.pathname || '';
-        var mdPath = path.join(config.get('docPath'), pathName);
+        var mdPath = path.join(config.get('path'), pathName);
         var isPjax = headers['x-pjax'] === 'true';
         mdPath = decodeURIComponent(mdPath);
         fs.readFile(mdPath, 'utf8', function (err, file) {
@@ -197,7 +201,7 @@ Docx.prototype = {
                 // 请求页面是否在缓存中
                 var hasCache = cache.has(pathName);
 
-                if(hasCache) {
+                if (hasCache) {
                     content = cache.get(pathName);
                 }
                 else  {
@@ -218,12 +222,19 @@ Docx.prototype = {
                     var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
                     res.render('main', parseObj);
                 }
-                logger.info({'access:': pathName, 'isCache:': hasCache, error: null, referer: headers.referer, ua: ua, during: Date.now() - time + 'ms'});
+                logger.info({
+                    access: pathName,
+                    isCache: hasCache,
+                    error: null,
+                    referer: headers.referer,
+                    ua: ua,
+                    during: Date.now() - time + 'ms'
+                });
             }
             // 如果找不到文件,则返回错误提示页
             else if (err) {
                 // 错误页面
-                var errPg = utils.compilePre('error', {errorType: errorType['notfound']});
+                var errPg = utils.compilePre('error', {errorType: errorType.notfound});
 
                 // 判断是pjax请求则返回html片段
                 if (isPjax) {
@@ -235,6 +246,7 @@ Docx.prototype = {
                     res.render('main', errPgObj);
                 }
                 logger.error(err);
+                next();
             }
         });
     },
@@ -245,7 +257,7 @@ Docx.prototype = {
     getDocTree: function () {
         var me = this;
         // 根据markdown文档生成文档树
-        var walkData = utils.walker(config.get('docPath'), me.dirname);
+        var walkData = utils.walker(config.get('path'), me.dirname);
         var dirMap = walkData.walkArr;
         me.dirnameMap = walkData.dirnameMap;
         // 数据排序处理
@@ -263,16 +275,21 @@ Docx.prototype = {
      * */
     makeNav: function (dirs) {
         if (Array.isArray(dirs) && dirs.length) {
-            for(var i = 0; i< dirs.length; i++) {
+            for (var i = 0; i < dirs.length; i++) {
                 var item = dirs[i] || {};
                 if (!item) {
                     continue;
                 }
                 if (item.type === 'file') {
-                    htmlStr += '<li class="nav nav-title docx-files" data-path="' + item.path + '" data-title="' + item.title + '"><a href="' + item.path + '">' + item.title + '</a></li>';
+                    htmlStr += '<li class="nav nav-title docx-files" data-path="'
+                        + item.path + '" data-title="' + item.title
+                        + '"><a href="' + item.path + '">' + item.title + '</a></li>';
                 }
+
                 else if (item.type === 'dir') {
-                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName + '" class="docx-dir"><a href="#" class="docx-dirsa">' + item.displayName + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
+                    htmlStr += '<li data-dir="' + item.path + '" data-title="' + item.displayName
+                        + '" class="docx-dir"><a href="#" class="docx-dirsa">' + item.displayName
+                        + '<span class="fa arrow"></span></a><ul class="docx-submenu">';
                     this.makeNav(item.child);
                     htmlStr += '</ul></li>';
                 }
@@ -284,15 +301,15 @@ Docx.prototype = {
      * 文档更新钩子
      *
      * @param {Object} req 请求对象
-     * @return {Object} res 响应对象
+     * @param {Object} res 响应对象
      * */
     update: function (req, res) {
         var me = this;
         var time = Date.now();
 
         // 更新代码
-        child_process.exec('git pull', {
-            cwd: config.get('docPath')
+        childProcess.exec('git pull', {
+            cwd: config.get('path')
         }, function (err, result) {
             // 清除lru缓存
             cache.reset();
@@ -301,7 +318,8 @@ Docx.prototype = {
             var preData = preprocessor();
 
             // 更新文件名命令配置
-            me.dirname = utils.getDirsConf();
+            // me.dirname = utils.getDirsConf();
+            me.dirname = config.get('dirNames');
 
             // 重新生成DOM树
             me.getDocTree();
