@@ -5,7 +5,6 @@
 [![NPM Version](https://img.shields.io/npm/v/docx.svg)](https://npmjs.org/package/node-docx)
 [![Linux Build](https://img.shields.io/travis/schoeu/docx/master.svg?label=linux)](https://travis-ci.org/schoeu/docx)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/node-docx/Lobby)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 ## 安装
