@@ -137,8 +137,6 @@ Docx.prototype = {
             res.json({
                 data: searchRs
             });
-
-            next();
         });
 
         // API: 文档更新钩子
@@ -159,7 +157,6 @@ Docx.prototype = {
                 access: req.url, isCache: false, error: 'notfound',
                 referer: req.headers.referer, ua: ua, during: Date.now() - time + 'ms'
             });
-            next();
         });
 
         // 容错处理
@@ -246,7 +243,6 @@ Docx.prototype = {
                     res.render('main', errPgObj);
                 }
                 logger.error(err);
-                next();
             }
         });
     },
