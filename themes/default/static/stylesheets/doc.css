@@ -363,9 +363,9 @@ h3, h4 {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     margin: 0 ;
 }
-@media (min-width: 1500px) {
+@media (min-width: 1200px) {
     .docx-wrapper{
-        max-width: 1500px;
+        max-width: 1200px;
         margin: 0 auto;
         position: relative;
     }

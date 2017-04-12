@@ -9,6 +9,7 @@ var path = require('path');
 var hbs = require('express-hbs');
 var highlight = require('highlight.js');
 var marked = require('marked');
+var renderer = new marked.Renderer();
 var logger = require('./logger.js');
 var config = require('./config');
 var HBS_EXTNAME = 'hbs';
@@ -24,6 +25,10 @@ marked.setOptions({
         return highlight.highlightAuto(code).value;
     }
 });
+
+renderer.heading = function (text, level) {
+    return '<h' + level + ' id="'+ decodeURIComponent(text) +'">' + text + '</h' + level + '>';
+};
 
 module.exports = {
 
@@ -63,7 +68,7 @@ module.exports = {
      * @return {string} html字符串
      * */
     getMarked: function (content) {
-        return marked(content);
+        return marked(content, {renderer: renderer});
     },
 
     /**
