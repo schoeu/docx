@@ -455,3 +455,26 @@ h3, h4 {
     width: 100%;
     display: none;
 }
+.docx-h2 {
+    margin-left: 0;
+}
+.docx-h3 {
+    margin-left: 20px;
+}
+.docx-h4 {
+    margin-left: 40px;
+}
+.docx-h5 {
+    margin-left: 60px;
+}
+.docx-h6 {
+    margin-left: 80px;
+}
+.docx-tips {
+    position: fixed;
+    right: 100px;
+    bottom: 100px;
+}
+.docx-list {
+   display: none;
+}

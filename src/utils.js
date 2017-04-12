@@ -26,6 +26,7 @@ marked.setOptions({
     }
 });
 
+// 定制markdown head
 renderer.heading = function (text, level) {
     return '<h' + level + ' id="'+ decodeURIComponent(text) +'">' + text + '</h' + level + '>';
 };

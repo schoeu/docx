@@ -15,7 +15,7 @@ var winH = $win.outerHeight();
 var lisH = $docxTitle.first().height();
 var $scollapse = $('#sidebar-collapse');
 var $fixedstyle = $('.docx-fixedstyle');
-
+var $docxList = $('.docx-list');
 /**
 * pjax委托
 * */
@@ -30,6 +30,7 @@ if ($.support.pjax) {
         // fixed safari animate bug.
         setTimeout(function () {
             $('.docx-fade').addClass('docx-fade-active');
+            getList();
         }, 0);
 
         // 目录切换
@@ -39,6 +40,15 @@ if ($.support.pjax) {
     });
 }
 
+function getList() {
+    var htmlStr = '';
+    $docxBd.find('h2,h3,h4,h5,h6').each(function (i, item) {
+        var tag = $(item).get(0).localName;
+        var text = $(this).text();
+        htmlStr += '<a class="docx-' + tag + '" href="#'+ text +'">'+ text +'</a></br>';
+    });
+    $docxList.append(htmlStr);
+}
 
 $(function () {
     $('.docx-fade').addClass('docx-fade-active');
@@ -48,6 +58,7 @@ $(function () {
     });
     $fixedstyle.remove();
     $docxBd.height($win.height() - $navbarH);
+    getList();
 });
 
 $win.load(changeMenu);
