@@ -59,6 +59,9 @@ $(function () {
     $fixedstyle.remove();
     $docxBd.height($win.height() - $navbarH);
     getList();
+    $('.docx-tips').on('click', function () {
+        $docxList.toggle();
+    });
 });
 
 $win.load(changeMenu);

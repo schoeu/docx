@@ -474,7 +474,21 @@ h3, h4 {
     position: fixed;
     right: 100px;
     bottom: 100px;
+    width: 50px;
+    height: 50px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAOVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8dlA9AAAAEnRSTlMAwIB/QBDwIKBg0DDgsFBwkI+FQ2/6AAABoklEQVR42u3bW27qQBBF0bLpp59Q8x/slS5RwInoGIWkKLLXDI5ktz+8WwAAAAAAAAAAAAAAsFBnVU1llC+c1Faq0jIO+uYkTauay60dSd8N0jKruSo3xaRXjtLQqblebup1I7sdknTj6HVI0K3B65BFP/A6pN4xpKi55SGPVlBrU5SbdKtIQ5g7UyXvf16CeJWTXpnFr0UvhiiOLek1dojEkv7PqOLfGEIWAAAAAAAAAAAAAAAA4NtCmVS7U5YvHJKaGoK0xPd69CBNVa2lvW188dzGD3qlp41v+J0h04u08aNudV6HBNp4E/vb+KlZCFtLUW6J97Txa6eW0jz+iTb+w6HlV9WL5LopvywZnNfYuZwPrF7ci6GGUQAAAAAAAAAAAAAAz2nnX924HCyto7Tlc3U5HaI0xUmNlceUD72aG3e3KE9ema6766AnH9LvrpKD1yFRt4rXIZ+aRq9D6qvksvd0v0c1Fx5SYuekxmbZ3cb30hBrb2rZ/7lOfqvG7f0Rz1lj3tzo8Sx2epZWce586633+34AAAAAAAAAAICf8Q9vyEq+Kz2MmgAAAABJRU5ErkJggg==);
+    background-repeat: no-repeat;
+    background-size: 50px;
+    cursor: pointer;
 }
 .docx-list {
-   display: none;
+    display: none;
+    position: absolute;
+    padding: 20px;
+    width: 200px;
+    right: 0px;
+    bottom: 59px;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.15);
 }
