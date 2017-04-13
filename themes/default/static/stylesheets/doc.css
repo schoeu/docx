@@ -467,9 +467,6 @@ h3, h4 {
 .docx-h5 {
     margin-left: 60px;
 }
-.docx-h6 {
-    margin-left: 80px;
-}
 .docx-tips {
     position: fixed;
     right: 53px;
@@ -488,9 +485,9 @@ h3, h4 {
     display: none;
     position: absolute;
     padding: 20px;
-    width: 200px;
+    width: 260px;
     right: 0px;
-    bottom: 59px;
+    bottom: 45px;
     border-radius: 6px;
     background-color: #fff;
     box-shadow: 0 4px 4px rgba(0,0,0,0.15);

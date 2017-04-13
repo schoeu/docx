@@ -16,6 +16,20 @@ var lisH = $docxTitle.first().height();
 var $scollapse = $('#sidebar-collapse');
 var $fixedstyle = $('.docx-fixedstyle');
 var $docxList = $('.docx-list');
+
+function itemTip() {
+    $docxList.empty().hide();
+    var htmlStr = '';
+    $docxBd.find('h2,h3,h4').each(function (i, item) {
+        var tag = $(item).get(0).localName;
+        var text = $(this).text();
+        htmlStr += '<a class="docx-' + tag + '" href="#'+ encodeURIComponent(text) +'">'+ text +'</a></br>';
+    });
+    if (!htmlStr) {
+        htmlStr += '<a href="#">暂无标题</a>';
+    }
+    $docxList.append(htmlStr);
+};
 /**
 * pjax委托
 * */
@@ -30,7 +44,7 @@ if ($.support.pjax) {
         // fixed safari animate bug.
         setTimeout(function () {
             $('.docx-fade').addClass('docx-fade-active');
-            getList();
+            itemTip();
         }, 0);
 
         // 目录切换
@@ -38,17 +52,6 @@ if ($.support.pjax) {
 
         $sug.hide();
     });
-}
-
-function getList() {
-    $docxList.empty().hide();
-    var htmlStr = '';
-    $docxBd.find('h2,h3,h4').each(function (i, item) {
-        var tag = $(item).get(0).localName;
-        var text = $(this).text();
-        htmlStr += '<a class="docx-' + tag + '" href="#'+ encodeURIComponent(text) +'">'+ text +'</a></br>';
-    });
-    $docxList.append(htmlStr);
 }
 
 $(function () {
@@ -59,7 +62,7 @@ $(function () {
     });
     $fixedstyle.remove();
     $docxBd.height($win.height() - $navbarH);
-    getList();
+    itemTip();
     $('.docx-tips').on('click', function () {
         $docxList.toggle();
     });

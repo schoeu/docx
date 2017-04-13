@@ -18,7 +18,21 @@ var winH = $win.outerHeight();
 var lisH = $docxTitle.first().height();
 var $scollapse = $('#sidebar-collapse');
 var $fixedstyle = $('.docx-fixedstyle');
+var $docxList = $('.docx-list');
 
+function itemTip() {
+    $docxList.empty().hide();
+    var htmlStr = '';
+    $docxBd.find('h2,h3,h4').each(function (i, item) {
+        var tag = $(item).get(0).localName;
+        var text = $(this).text();
+        htmlStr += '<a class="docx-' + tag + '" href="#'+ encodeURIComponent(text) +'">'+ text +'</a></br>';
+    });
+    if (!htmlStr) {
+        htmlStr += '<a href="#">暂无标题</a>';
+    }
+    $docxList.append(htmlStr);
+};
 /**
 * pjax委托
 * */
@@ -34,6 +48,7 @@ if ($.support.pjax) {
         // 目录切换
         changeMenu();
         $sug.hide();
+        itemTip();
     });
 }
 
@@ -45,6 +60,10 @@ $(function () {
     });
 
     $docxBd.height($win.height() - $navbarH);
+    itemTip();
+    $('.docx-tips').on('click', function () {
+        $docxList.toggle();
+    });
     $fixedstyle.remove();
 });
 
