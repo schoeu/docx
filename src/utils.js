@@ -28,7 +28,7 @@ marked.setOptions({
 
 // 定制markdown head
 renderer.heading = function (text, level) {
-    return '<h' + level + ' id="'+ decodeURIComponent(text) +'">' + text + '</h' + level + '>';
+    return '<h' + level + ' id="'+ encodeURIComponent(text) +'">' + text + '</h' + level + '>';
 };
 
 module.exports = {
@@ -49,9 +49,6 @@ module.exports = {
         var content = fs.readFileSync(dir).toString();
 
         if (ext === '.md') {
-            // /^\s*\#+\s?(.+)/
-            // /^\s*#+\s?([^#\s]+)/
-            // /^\s*\#+\s?([^\#]+)\s*\#?/
             titleArr =  /^\s*#+\s?([^#\r\n]+)/.exec(content) || [];
             return titleArr[1] || '';
         }
@@ -79,7 +76,6 @@ module.exports = {
      * @return {undefined}
      * */
     getConf: function (conf) {
-
         conf = conf ? conf : './docx-conf.json';
 
         // 配置文件设置,如果是绝对路径,则使用绝对路径,如果是相对路径,则计算出最终路径

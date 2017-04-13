@@ -41,11 +41,12 @@ if ($.support.pjax) {
 }
 
 function getList() {
+    $docxList.empty().hide();
     var htmlStr = '';
-    $docxBd.find('h2,h3,h4,h5,h6').each(function (i, item) {
+    $docxBd.find('h2,h3,h4').each(function (i, item) {
         var tag = $(item).get(0).localName;
         var text = $(this).text();
-        htmlStr += '<a class="docx-' + tag + '" href="#'+ text +'">'+ text +'</a></br>';
+        htmlStr += '<a class="docx-' + tag + '" href="#'+ encodeURIComponent(text) +'">'+ text +'</a></br>';
     });
     $docxList.append(htmlStr);
 }
