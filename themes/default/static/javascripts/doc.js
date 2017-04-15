@@ -67,7 +67,7 @@ $(function () {
         $docxList.toggle();
     });
 
-    $('.docx-marked img').fullImage();
+    $('.docx-marked').fullImage();
 });
 
 $win.load(changeMenu);
