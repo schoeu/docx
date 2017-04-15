@@ -66,6 +66,8 @@ $(function () {
     $('.docx-tips').on('click', function () {
         $docxList.toggle();
     });
+
+    $('.docx-marked img').fullImage();
 });
 
 $win.load(changeMenu);
