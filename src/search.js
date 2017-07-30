@@ -11,8 +11,6 @@ var _ = require('lodash');
 var config = require('./config');
 var cache;
 
-var regMeta = ['\\', '^', '$', '*', '+', '?', '.', '[', ']', '|'];
-
 // 创建实例
 var segment;
 
