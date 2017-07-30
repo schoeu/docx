@@ -32,6 +32,7 @@ module.exports = {
                 matchDeep: 2,
                 matchWidth: 120
             },
+            path: path.dirname(conf),
             extUrls: {},
             waringFlag: false,
             debug: true,

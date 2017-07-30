@@ -242,9 +242,10 @@ module.exports = {
      *
      * @param {string} pathName 文件路径
      * @param {string} content markdown内容
+     * @param {Object} editPath 编辑本页链接信息
      * @return {string} 转换为中文的HTML字符串
      * */
-    getPjaxContent: function (pathName, content) {
+    getPjaxContent: function (pathName, content, editPath) {
         var me = this;
         var brandStr = '';
         var pathArr = pathName.split('/');
@@ -253,7 +254,12 @@ module.exports = {
             brandStr += '<li>' + it + '</li>';
         });
 
-        var rsHTML = me.compilePre('pjax', {brandData: brandStr, mdData: content, headText: config.get('headText')});
+        var rsHTML = me.compilePre('pjax', {
+            brandData: brandStr,
+            mdData: content,
+            headText: config.get('headText'),
+            editPath: editPath
+        });
         return rsHTML;
     }
 };

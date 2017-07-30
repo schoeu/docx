@@ -28,6 +28,7 @@ var app = express();
 
 var htmlStr = '';
 var HBS_EXTNAME = 'hbs';
+var editPathRoot = config.get('editPath');
 
 /**
  * Docx构造函数
@@ -209,14 +210,22 @@ Docx.prototype = {
                     content && cache.set(pathName, content);
                 }
 
+                // 编辑页逻辑
+                var editPath =  editPathRoot ? editPathRoot + pathName : '';
+
                 // 判断是pjax请求则返回html片段
                 if (isPjax) {
-                    var rsPjaxDom = utils.getPjaxContent(pathName, content);
+                    var rsPjaxDom = utils.getPjaxContent(pathName, content, editPath);
                     res.end(rsPjaxDom);
                 }
                 // 否则返回整个模板
                 else {
-                    var parseObj = Object.assign({}, me.locals, {navData: htmlStr, mdData: content});
+                    var parseObj = Object.assign(
+                        {}, me.locals,
+                        {navData: htmlStr,
+                            mdData: content,
+                            editPath: editPath
+                        });
                     res.render('main', parseObj);
                 }
                 logger.info({

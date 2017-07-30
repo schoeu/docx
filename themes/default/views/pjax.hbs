@@ -10,6 +10,9 @@
         <div class="docx-panel docx-panel-default">
             <div class="markdown-body">
                 <div class="docx-marked">
+                    {{#if editPath}}
+                        <a class="docx-editPath" href="{{editPath}}">编辑此页</a>
+                    {{/if}}
                     {{{mdData}}}
                 </div>
             </div>
