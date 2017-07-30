@@ -76,6 +76,11 @@ pm2 start index.js -- /xxx/map.json
   // 是否启用拼音搜索, 启用后可以使用全拼或拼音首字母进行搜索, 可选, 默认为false
   "usePinyin": false,
 
+  // 编辑页路径
+  // 如果文档是存放至gitlab等类似的平台上, 对应的假如是"http://xx.xx.com/a/b/edit/master/first/second.md"
+  // 则该属性为除去文件路由剩下的部分 "http://xx.xx.com/a/b/edit/master/", 有该属性后会在文档页添加跳转去编辑页的链接
+  // "editPath": "http://xx.xx.com/a/b/edit/master/",
+
   // 技术支持,可选
   // 邮箱填写: mailto:xx@xxx.com
   // Hi填写: baidu://message/?id=用户名,可以直接调起Hi
