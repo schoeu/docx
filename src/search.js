@@ -11,6 +11,8 @@ var _ = require('lodash');
 var config = require('./config');
 var cache;
 
+var regMeta = ['\\', '^', '$', '*', '+', '?', '.', '[', ']', '|'];
+
 // 创建实例
 var segment;
 
@@ -78,10 +80,12 @@ function searchContent(key, content) {
  * */
 
 function search(type, key) {
-    key = key || '';
-    key = key.replace(/\./g, '\\.');
-
     var titleSe = [];
+    key = key || '';
+    if (key === '') {
+        return titleSe;
+    }
+    key = key.replace(/\./g, '\\.');
     // 如果有关键词,则开始搜索
     if (!key.trim().length) {
         return [];
