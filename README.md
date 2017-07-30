@@ -48,7 +48,8 @@ pm2 start index.js -- /xxx/map.json
   // 监听端口,默认为8910,可选
   "port": "8910",
 
-  // markdown文档路径,支持相对,绝对路径,必选
+  // markdown文档路径,支持相对,绝对路径,可选, 默认为命令调起时配置文件路径的父目录。
+  // 如 `pm2 start index.js -- /a/doc/map.json`  默认则取`/a/doc/`为文档目录, 如果配置有此属性,则以配置为准
   "path": "/home/work/docx",
 
   // 需要忽略的目录名,不能被markdown正确解析的目录都应该加到这里来,可选
@@ -71,7 +72,10 @@ pm2 start index.js -- /xxx/map.json
 
   // 默认文档路径,支持相对,绝对路径,可选
   "index": "/readme.md",
-    
+
+  // 是否启用拼音搜索, 启用后可以使用全拼或拼音首字母进行搜索, 可选, 默认为false
+  "usePinyin": false,
+
   // 技术支持,可选
   // 邮箱填写: mailto:xx@xxx.com
   // Hi填写: baidu://message/?id=用户名,可以直接调起Hi

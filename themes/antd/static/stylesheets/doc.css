@@ -549,3 +549,8 @@ h3, h4 {
     max-height: 600px;
     overflow: auto;
 }
+.docx-editPath {
+    position: absolute;
+    right: 2em;
+    top: 2em;
+}
