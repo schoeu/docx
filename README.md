@@ -32,6 +32,11 @@ npm install
 pm2 start index.js -- /xxx/map.json
 ```
 
+6. 验证
+打开`http://你的机器:配置的端口号(默认为8910)`即可看到文档展示页面。
+更多小彩蛋等着你发现。
+Have fun.
+
 > 如果没有安装pm2
 
 检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
