@@ -7,16 +7,43 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
-## 安装
+## 快速开始
+
+1. 下载docx库
+```
+git clone https://github.com/schoeu/docx.git
+```
+
+2. CD到docx目录下
+```
+cd docx
+```
+
+3. 安装依赖
+```
+npm install
+```
+
+4. 复制目录下的`map.example.json`到想要展示的文档目录下，然后按需要更改其中的信息，字段函数见最后[配置参数](#配置参数)
+
+5. 在安装PM2的情况下 执行。其中`/xxx/map.json`就是刚才改过的配置文件的路径
 
 ```
-npm install node-docx
+pm2 start index.js -- /xxx/map.json
 ```
+
+
+> 如果没有安装pm2
+
+// 检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
+
+使用`npm install -g pm2`来全局安装
+
+
 
 ## 启动
 
 复制一份`map.example.json`,更改参数配置,文件放置位置随意,配置参数具体意义参考下文。
-
 
 ```
 cd node-docx
