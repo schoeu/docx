@@ -32,14 +32,11 @@ npm install
 pm2 start index.js -- /xxx/map.json
 ```
 
-
 > 如果没有安装pm2
 
-// 检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
+检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
 
 使用`npm install -g pm2`来全局安装
-
-
 
 ## 启动
 
