@@ -32,14 +32,17 @@ npm install
 pm2 start index.js -- /xxx/map.json
 ```
 
+6. 验证
 
-> 如果没有安装pm2
-
-// 检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
-
-使用`npm install -g pm2`来全局安装
+打开`http://你的机器:配置的端口号(默认为8910)`即可看到文档展示页面。
 
 
+
+### 如果没有安装pm2
+
+检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
+
+<<<<<<< HEAD
 ## 使用示例
 
 ```
@@ -55,24 +58,18 @@ pm2 start index.js -- ./example/map.example.json
 
 ```
 
+=======
+使用`npm install -g pm2`来全局安装
+>>>>>>> c9ac9898885c94633b750b99a011ca6726668e4d
 
-## 启动
+## 本地测试&调试
 
 复制一份`map.example.json`,更改参数配置,文件放置位置随意,配置参数具体意义参考下文。
 
 ```
-cd node-docx
+cd docx
 // 配置文件的路径,支持相对,绝对路径
 npm start /xxx/map.json
-```
-
-Or
-
-```
-// 在安装PM2的情况下 
-// CD到项目根目录下执行下面命令,使用指定目录下的配置文件
-// -- 后面是配置文件的路径
-pm2 start index.js -- /xxx/map.json
 ```
 
 ## 说明
