@@ -42,7 +42,8 @@ pm2 start index.js -- /xxx/map.json
 
 检测是否安装pm2，可以使用 pm2 -v查看，如果显示出版本号则说明pm2安装ok。
 
-<<<<<<< HEAD
+如果没有安装则使用`npm install -g pm2`来全局安装
+
 ## 使用示例
 
 ```
@@ -57,10 +58,6 @@ node index.js ./example/map.example.json
 pm2 start index.js -- ./example/map.example.json
 
 ```
-
-=======
-使用`npm install -g pm2`来全局安装
->>>>>>> c9ac9898885c94633b750b99a011ca6726668e4d
 
 ## 本地测试&调试
 
