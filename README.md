@@ -40,6 +40,21 @@ pm2 start index.js -- /xxx/map.json
 使用`npm install -g pm2`来全局安装
 
 
+## 使用示例
+
+```
+# 进入docx文件夹
+cd docx
+
+# 使用node命令启动或使用pm2启动查看效果
+node index.js ./example/map.example.json
+
+# or
+
+pm2 start index.js -- ./example/map.example.json
+
+```
+
 
 ## 启动
 

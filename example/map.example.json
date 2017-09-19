@@ -1,0 +1,32 @@
+{
+    "port": "8888",
+    "ignoreDir": ["img",".git",".svn","imgs","js","less"],
+    "path": "/Users/memee/Downloads/svn/git/docx/example",
+    "headText": "BAIDU",
+    "title": "MY DOCX",
+    "index": "/readme.md",
+    "logPath": "./log",
+    "theme": "default",
+    "supportInfo": "mailto:abc@163.com",
+    "extUrls": {
+        "label": "友情链接",
+        "links":[{
+            "name": "友链1",
+            "url": "http://www.baidu.com"
+        },{
+            "name": "友链2",
+            "url": "http://m.baidu.com"
+        }]
+    },
+    "dirNames":[
+        {
+            "a": {
+                "name": "文件夹A"
+            }
+        },
+        {
+            "b": {
+                "name": "名称可定制"
+            }
+        }]
+}

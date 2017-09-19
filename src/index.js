@@ -53,12 +53,12 @@ Docx.prototype = {
         var docPath = config.get('path');
 
         if (!docPath) {
-            throw new Error('Invalid conf file.');
+            throw new Error('Invalid conf file or arguments.');
         }
         else {
             // 文件绝对&相对路径兼容
             if (!path.isAbsolute(docPath)) {
-                docPath = path.join(process.cwd(), docPath);
+                config.set('path', path.join(process.cwd(), docPath));
             }
         }
 
