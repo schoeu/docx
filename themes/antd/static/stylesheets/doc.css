@@ -386,6 +386,7 @@ h3, h4 {
     padding: 24px 0 0;
     margin-bottom: 24px;
     position: relative;
+    min-height: 90%;
 }
 #docx-navs a:hover {
     color: #108ee9;
