@@ -84,7 +84,7 @@ npm start /xxx/map.json
   // 监听端口,默认为8910,可选
   "port": "8910",
 
-  // markdown文档路径,支持相对,绝对路径,可选, 默认为命令调起时配置文件路径的父目录。
+  // markdown文档的绝对路径, 默认为命令调起时配置文件路径的父目录。
   // 如 `pm2 start index.js -- /a/doc/map.json`  默认则取`/a/doc/`为文档目录, 如果配置有此属性,则以配置为准
   "path": "/home/work/docx",
 
