@@ -309,7 +309,7 @@ h3, h4 {
     .docx-marked-wrap {
         margin-left: 345px;
     }
-    .docx-sug {
+    .docx-searchForm .docx-sug {
         z-index: 1001;
     }
 }
