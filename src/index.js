@@ -353,15 +353,16 @@ Docx.prototype = {
      * @param {function} fn 中间件实现
      * */
     use: function (type ,fn) {
-        if (typeof type === 'function') {
-            app.use(type);
-            return;
-        }
+        var me = this;
 
-        if (typeof type === 'string' && typeof fn === 'function') {
-            if (type === 'trees') {
-                this[type] = fn;
-            }
+        // 如果是自定义文档树中间件则走docTree,否则走express.use
+        if (typeof type === 'string' && typeof fn === 'function' && type === 'trees') {
+            me[type] = fn;
+            // 重新生成DOM树
+            me.getDocTree();
+        }
+        else {
+            app.use.call(me, arguments);
         }
     }
 };

@@ -10,10 +10,8 @@ var config = require('./src/config');
 config.init(process.argv[2]);
 var Docx = require('./src/index');
 var ins = new Docx();
-ins.use(function () {
-    return function (req, res) {
-        console.log(req);
-    };
+ins.use(function (req, res) {
+    console.log(req);
 });
 
 ins.use('trees', function (data) {
