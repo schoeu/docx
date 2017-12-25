@@ -362,9 +362,9 @@ Docx.prototype = {
             me.getDocTree();
         }
         else {
-            app.use.call(me, arguments);
+            app.use.apply(app, arguments);
         }
     }
 };
 
-module.exports = Docx;
+module.exports = new Docx();

@@ -8,12 +8,11 @@
 var config = require('./src/config');
 
 config.init(process.argv[2]);
-var Docx = require('./src/index');
-var ins = new Docx();
-ins.use(function (req, res) {
-    console.log(req);
+var docx = require('./src/index');
+docx.use(function (req, res, next) {
+    next();
 });
 
-ins.use('trees', function (data) {
-    console.log(data);
+docx.use('trees', function (data) {
+    return data;
 });
