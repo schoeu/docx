@@ -9,4 +9,13 @@ var config = require('./src/config');
 
 config.init(process.argv[2]);
 var Docx = require('./src/index');
-new Docx();
+var ins = new Docx();
+ins.use(function () {
+    return function (req, res) {
+        console.log(req);
+    };
+});
+
+ins.use('trees', function (data) {
+    console.log(data);
+});

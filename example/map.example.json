@@ -1,5 +1,5 @@
 {
-    "port": "8888",
+    "port": "8910",
     "ignoreDir": ["img",".git",".svn","imgs","js","less"],
     "path": "/Users/memee/Downloads/svn/git/docx/example",
     "headText": "BAIDU",

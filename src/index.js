@@ -268,6 +268,10 @@ Docx.prototype = {
         // 数据排序处理
         var sortedData = utils.dirSort(dirMap, me.dirname);
 
+        if (typeof me.trees === 'function') {
+            sortedData = me.trees(sortedData);
+        }
+
         // 根据排序后的文档树数据生成文档DOM
         htmlStr = '';
         this.makeNav(sortedData);
@@ -315,7 +319,7 @@ Docx.prototype = {
         // 更新代码
         childProcess.exec('git pull', {
             cwd: config.get('path')
-        }, function (err, result) {
+        }, function (err) {
             // 清除lru缓存
             cache.reset();
 
@@ -340,6 +344,25 @@ Docx.prototype = {
             }
             res.end('update cache.');
         });
+    },
+
+    /**
+     * docx中间节接口
+     *
+     * @param {string} type 中间件类型
+     * @param {function} fn 中间件实现
+     * */
+    use: function (type ,fn) {
+        if (typeof type === 'function') {
+            app.use(type);
+            return;
+        }
+
+        if (typeof type === 'string' && typeof fn === 'function') {
+            if (type === 'trees') {
+                this[type] = fn;
+            }
+        }
     }
 };
 
