@@ -269,7 +269,7 @@ Docx.prototype = {
         var sortedData = utils.dirSort(dirMap, me.dirname);
 
         if (typeof me.trees === 'function') {
-            sortedData = me.trees(sortedData);
+            me.trees(sortedData);
         }
 
         // 根据排序后的文档树数据生成文档DOM

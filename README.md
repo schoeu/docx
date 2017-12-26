@@ -169,6 +169,36 @@ npm start /xxx/map.json
 
 ```
 
+## 自定义文档树
+有时我们会对遍历后的文档树做一些自定义处理，然后再展现出来。
+
+```
+var docx = require('./src/index');
+
+docx.use('trees', function (data) {
+    // 文档书数据处理
+    //data.push(data[1]);
+});
+```
+
+## 中间件
+对于自定义路由，或其他数据数量等，我们提供了中间件机制。
+
+```
+docx.use('/user/:id', function (req, res, next) {
+    console.log('Request Type:', req.method);
+    next();
+}
+
+
+docx.use(function (req, res, next) {
+    console.log('Time:', Date.now());
+    next();
+});
+
+```
+
+
 ## 主题
 
 开箱自带两套皮肤`default`,`antd`,默认为`default`主题。

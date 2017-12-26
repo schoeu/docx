@@ -9,10 +9,10 @@ var config = require('./src/config');
 
 config.init(process.argv[2]);
 var docx = require('./src/index');
-docx.use(function (req, res, next) {
-    next();
-});
 
 docx.use('trees', function (data) {
-    return data;
+    data[3] = data[1];
 });
+
+// 导出docx对象
+module.exports = docx;
