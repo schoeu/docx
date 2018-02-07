@@ -6,7 +6,7 @@
     "title": "MY DOCX",
     "index": "/readme.md",
     "logPath": "./log",
-    "theme": "default",
+    "theme": "antd",
     "supportInfo": "mailto:abc@163.com",
     "extUrls": {
         "label": "友情链接",
